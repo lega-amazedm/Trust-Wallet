@@ -1,0 +1,2973 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trust Wallet — Мирзабеков Саид</title>
+  <style>
+    :root { 
+      --bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      --card: rgba(255,255,255,0.05);
+      --card-border: rgba(255,255,255,0.1);
+      --text: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    
+    body.blocked {
+      overflow: hidden;
+    }
+    .container { 
+      max-width: 1400px; 
+      margin: 0 auto; 
+      padding: 24px;
+      min-height: 100vh;
+    }
+    .card { 
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 40px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+    h1 { font-size: 32px; font-weight: 700; margin: 0 0 8px; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .muted { color: var(--text-secondary); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+    @media (min-width: 768px) { .grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+    .stat { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      background: rgba(255,255,255,0.08); 
+      border: 1px solid rgba(255,255,255,0.15); 
+      border-radius: 24px; 
+      padding: 28px; 
+      transition: all 0.3s ease;
+    }
+    .stat:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.25); background: rgba(255,255,255,0.12); }
+    .stat .label { color: var(--text-secondary); font-size: 14px; font-weight: 500; }
+    .stat .value { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; }
+    .ok { color: var(--success); }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .field { display: grid; gap: 8px; }
+    .field label { font-size: 14px; color: var(--text-secondary); font-weight: 500; }
+    select, input { 
+      width: 100%; 
+      background: rgba(255,255,255,0.08); 
+      color: var(--text); 
+      border: 1px solid rgba(255,255,255,0.2); 
+      border-radius: 16px; 
+      padding: 16px 20px; 
+      outline: none; 
+      font-size: 16px; 
+      transition: all 0.3s ease;
+    }
+    select:focus, input:focus { 
+      border-color: var(--accent); 
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.2); 
+      background: rgba(255,255,255,0.12);
+    }
+    
+    /* Стили для выпадающих списков */
+    select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 20px;
+      padding-right: 45px;
+      appearance: none;
+      cursor: pointer;
+    }
+    
+    select:hover {
+      background-color: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.3);
+    }
+    
+    select option {
+      background: #1a1a2e;
+      color: var(--text);
+      padding: 14px 20px;
+      font-size: 15px;
+    }
+    
+    select option:hover {
+      background: var(--accent);
+      color: white;
+    }
+    
+    select option:checked {
+      background: var(--accent);
+      color: white;
+    }
+    
+    select:focus option:checked {
+      background: var(--accent-hover);
+    }
+    .note { margin-top: 12px; font-size: 14px; color: var(--text-secondary); }
+    .hero { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      gap: 16px; 
+      margin-bottom: 32px; 
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .pill { 
+      font-size: 12px; 
+      padding: 8px 16px; 
+      border-radius: 50px; 
+      background: var(--gradient-primary); 
+      color: white; 
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+    }
+    .footer { margin-top: 40px; font-size: 14px; color: var(--text-secondary); text-align: center; }
+
+    .brand { display: flex; align-items: center; gap: 16px; }
+    .logo { 
+      width: 48px; 
+      height: 48px; 
+      border-radius: 16px; 
+      background: var(--gradient-primary); 
+      display: grid; 
+      place-items: center; 
+      box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+    }
+    .logo svg { width: 24px; height: 24px; fill: white; }
+
+    .row { display: grid; gap: 16px; }
+    .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { 
+      appearance: none; 
+      border: none; 
+      padding: 16px 24px; 
+      border-radius: 16px; 
+      font-weight: 600; 
+      font-size: 16px; 
+      cursor: pointer; 
+      color: white; 
+      background: var(--gradient-primary); 
+      box-shadow: 0 8px 25px rgba(99,102,241,0.3); 
+      transition: all 0.3s ease; 
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::before { left: 100%; }
+    .btn:active { transform: translateY(2px); }
+    .btn.secondary { 
+      background: rgba(255,255,255,0.1); 
+      color: var(--text); 
+      border: 1px solid rgba(255,255,255,0.2); 
+      box-shadow: none; 
+    }
+    .btn.warn { 
+      background: var(--gradient-secondary); 
+      color: white; 
+      box-shadow: 0 8px 25px rgba(245,87,108,0.3);
+    }
+    .btn.ok { 
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+      color: white; 
+      box-shadow: 0 8px 25px rgba(16,185,129,0.3);
+    }
+    .btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .badge { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.05); }
+    .badge.ok { border-color: rgba(24,195,125,0.4); background: rgba(24,195,125,0.12); color:#b9f3dc; }
+    .badge.warn { border-color: rgba(255,176,32,0.4); background: rgba(255,176,32,0.12); color:#ffe2a8; }
+    .badge.danger { border-color: rgba(255,107,107,0.5); background: rgba(255,107,107,0.12); color:#ffc9c9; }
+    .error { color: var(--danger); font-size: 13px; }
+
+    .pending { display:none; margin-top:16px; padding:16px; border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); border-radius:14px; }
+    .pending.show { display:block; }
+    .pending .title { font-weight:700; margin-bottom:8px; }
+    .pending .rowline { display:flex; align-items:center; gap:12px; }
+    .spinner { width:16px; height:16px; border:2px solid rgba(255,255,255,0.25); border-top-color:#fff; border-radius:50%; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .dim { opacity:.5; pointer-events:none; filter: grayscale(.2); }
+    .dim #pendingActions,
+    .dim #pendingActions button { pointer-events:auto !important; opacity:1 !important; filter:none !important; }
+    .pending.success { border-color: rgba(24,195,125,0.5); background: rgba(24,195,125,0.12); }
+    
+    .history-section { margin-top: 40px; }
+    .history-title { font-size: 24px; font-weight: 700; margin-bottom: 24px; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .history-item { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 20px 24px; 
+      background: rgba(255,255,255,0.06); 
+      border: 1px solid rgba(255,255,255,0.1); 
+      border-radius: 16px; 
+      margin-bottom: 12px; 
+      transition: all 0.3s ease;
+    }
+    .history-item:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+    .history-item:last-child { margin-bottom: 0; }
+    .history-info { display: flex; flex-direction: column; gap: 6px; }
+    .history-type { font-size: 16px; font-weight: 600; }
+    .history-date { font-size: 14px; color: var(--text-secondary); }
+    .history-amount { font-size: 18px; font-weight: 700; }
+    .history-amount.withdrawal { color: var(--danger); }
+    .history-amount.deposit { color: var(--success); }
+    
+    .trading-section { margin-top: 40px; }
+    .crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
+    .crypto-card { 
+      background: rgba(255,255,255,0.08); 
+      border: 1px solid rgba(255,255,255,0.15); 
+      border-radius: 20px; 
+      padding: 24px; 
+      transition: all 0.3s ease;
+    }
+    .crypto-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.2); }
+    .crypto-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .crypto-icon { 
+      width: 48px; 
+      height: 48px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-weight: 700; 
+      font-size: 18px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .crypto-icon.btc { background: linear-gradient(135deg, #f7931a 0%, #ff6b35 100%); color: white; }
+    .crypto-icon.ton { background: linear-gradient(135deg, #0088cc 0%, #00a8ff 100%); color: white; }
+    .crypto-icon.usdt { background: linear-gradient(135deg, #26a17b 0%, #2dd4bf 100%); color: white; }
+    .crypto-name { font-weight: 700; font-size: 18px; }
+    .crypto-price { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+    .crypto-change { font-size: 14px; font-weight: 600; }
+    .crypto-change.positive { color: var(--success); }
+    .crypto-change.negative { color: var(--danger); }
+    .crypto-balance { font-size: 16px; color: var(--text-secondary); margin-top: 12px; }
+    
+    /* Дополнительные анимации и эффекты */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .card { animation: fadeInUp 0.6s ease-out; }
+    .stat { animation: fadeInUp 0.8s ease-out; }
+    .crypto-card { animation: fadeInUp 1s ease-out; }
+    .history-item { animation: fadeInUp 1.2s ease-out; }
+    
+    .stat:hover .value { animation: pulse 0.6s ease-in-out; }
+    
+    /* Улучшенные скроллбары */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
+    
+    /* Эффект печати для цен */
+    .crypto-price { 
+      font-family: 'Courier New', monospace; 
+      letter-spacing: 1px;
+    }
+    
+    /* Градиентные границы для активных элементов */
+    .field input:focus, .field select:focus {
+      background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.1) 100%);
+    }
+    
+    /* Улучшенные тени */
+    .card { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05); }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      .card { padding: 24px; }
+      .hero { flex-direction: column; text-align: center; }
+      .grid { grid-template-columns: 1fr; }
+      .crypto-grid { grid-template-columns: 1fr; }
+      .btns { justify-content: center; }
+    }
+    
+    /* Стили для полноэкранной блокировки */
+    .account-blocked-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99999;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2d0f0f 50%, #1a0a0a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      animation: fadeIn 0.5s ease-out;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    
+    .account-blocked-modal {
+      max-width: 800px;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(153, 27, 27, 0.15) 100%);
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      border-radius: 32px;
+      padding: 48px;
+      box-shadow: 0 25px 50px -12px rgba(220, 38, 38, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      position: relative;
+      animation: slideUp 0.6s ease-out;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    @keyframes slideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
+    .blocked-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .blocked-logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .blocked-logo-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(99,102,241,0.4);
+      flex-shrink: 0;
+    }
+    
+    .blocked-logo-box svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+    
+    .blocked-logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+    
+    .blocked-icon-large {
+      font-size: 80px;
+      margin-bottom: 24px;
+      animation: pulse 2s infinite;
+      filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.5));
+    }
+    
+    .blocked-title {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #ffffff;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      letter-spacing: 1px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+    
+    .blocked-subtitle {
+      font-size: 20px;
+      color: #fecaca;
+      font-weight: 500;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .blocked-content {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 24px;
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    
+    .blocked-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .blocked-info-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    
+    .blocked-info-icon {
+      font-size: 24px;
+      min-width: 32px;
+    }
+    
+    .blocked-info-text {
+      flex: 1;
+    }
+    
+    .blocked-info-label {
+      font-size: 14px;
+      color: #fecaca;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    
+    .blocked-info-value {
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: 600;
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .blocked-warning-box {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .blocked-warning-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .blocked-warning-text {
+      font-size: 16px;
+      color: #fecaca;
+      line-height: 1.6;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .blocked-deadline-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+      border: 2px solid rgba(245, 158, 11, 0.5);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .blocked-deadline-title {
+      font-size: 16px;
+      color: #fecaca;
+      margin-bottom: 12px;
+      font-weight: 500;
+    }
+    
+    .blocked-deadline-date {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .blocked-deadline-consequence {
+      font-size: 16px;
+      color: #fecaca;
+      font-weight: 600;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    .blocked-balance-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+      border: 2px solid rgba(99, 102, 241, 0.5);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    
+    .blocked-balance-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .blocked-balance-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .blocked-balance-item:last-child {
+      border-bottom: none;
+    }
+    
+    .blocked-balance-label {
+      font-size: 15px;
+      color: #fecaca;
+      font-weight: 500;
+    }
+    
+    .blocked-balance-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    .blocked-balance-value.frozen {
+      color: #fbbf24;
+    }
+    
+    .blocked-footer {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .blocked-footer-text {
+      font-size: 14px;
+      color: #a0a0a0;
+      line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding-top: 0;
+      }
+      .account-blocked-overlay {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+      }
+      .account-blocked-modal {
+        padding: 24px 16px;
+        border-radius: 20px;
+        max-width: 100%;
+        margin: 0;
+        max-height: calc(100vh - 20px);
+      }
+      .blocked-header {
+        margin-bottom: 24px;
+      }
+      .blocked-logo-container {
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .blocked-logo-box {
+        width: 40px;
+        height: 40px;
+      }
+      .blocked-logo-box svg {
+        width: 24px;
+        height: 24px;
+      }
+      .blocked-logo-text {
+        font-size: 20px;
+      }
+      .blocked-title {
+        font-size: 24px;
+        line-height: 1.2;
+      }
+      .blocked-subtitle {
+        font-size: 16px;
+        line-height: 1.3;
+      }
+      .blocked-icon-large {
+        font-size: 50px;
+        margin-bottom: 16px;
+      }
+      .blocked-balance-box {
+        padding: 20px 16px;
+        margin-bottom: 20px;
+      }
+      .blocked-balance-title {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+      .blocked-balance-label {
+        font-size: 14px;
+      }
+      .blocked-balance-value {
+        font-size: 18px;
+      }
+      .blocked-content {
+        padding: 20px 16px;
+        margin-bottom: 20px;
+      }
+      .blocked-info-item {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        gap: 12px;
+      }
+      .blocked-info-icon {
+        font-size: 20px;
+        min-width: 28px;
+      }
+      .blocked-info-label {
+        font-size: 13px;
+        margin-bottom: 4px;
+      }
+      .blocked-info-value {
+        font-size: 15px;
+        line-height: 1.4;
+      }
+      .blocked-warning-box {
+        padding: 20px 16px;
+        margin-bottom: 20px;
+      }
+      .blocked-warning-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .blocked-warning-text {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      .blocked-deadline-box {
+        padding: 20px 16px;
+      }
+      .blocked-deadline-title {
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .blocked-deadline-date {
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+      .blocked-deadline-consequence {
+        font-size: 14px;
+      }
+      .blocked-footer {
+        margin-top: 24px;
+        padding-top: 20px;
+      }
+      .blocked-footer-text {
+        font-size: 13px;
+      }
+    }
+    
+    @media (max-width: 375px) {
+      .account-blocked-overlay {
+        padding: 8px;
+        padding-top: max(15px, env(safe-area-inset-top));
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+        padding-left: max(8px, env(safe-area-inset-left));
+        padding-right: max(8px, env(safe-area-inset-right));
+        min-height: 100vh;
+        min-height: -webkit-fill-available;
+        box-sizing: border-box;
+      }
+      .account-blocked-modal {
+        padding: 20px 12px;
+        border-radius: 16px;
+        max-width: calc(100% - 16px);
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+        max-height: calc(100vh - 16px);
+      }
+      .blocked-header {
+        margin-bottom: 20px;
+      }
+      .blocked-logo-container {
+        gap: 8px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .blocked-logo-box {
+        width: 36px;
+        height: 36px;
+      }
+      .blocked-logo-box svg {
+        width: 20px;
+        height: 20px;
+      }
+      .blocked-logo-text {
+        font-size: 18px;
+      }
+      .blocked-title {
+        font-size: 22px;
+      }
+      .blocked-subtitle {
+        font-size: 15px;
+      }
+      .blocked-icon-large {
+        font-size: 45px;
+        margin-bottom: 12px;
+      }
+      .blocked-balance-box {
+        padding: 16px 12px;
+        margin-bottom: 16px;
+      }
+      .blocked-balance-title {
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+      .blocked-balance-item {
+        padding: 10px 0;
+      }
+      .blocked-balance-label {
+        font-size: 13px;
+      }
+      .blocked-balance-value {
+        font-size: 16px;
+      }
+      .blocked-content {
+        padding: 16px 12px;
+        margin-bottom: 16px;
+      }
+      .blocked-info-item {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        gap: 10px;
+        flex-direction: column;
+      }
+      .blocked-info-icon {
+        font-size: 18px;
+      }
+      .blocked-info-label {
+        font-size: 12px;
+      }
+      .blocked-info-value {
+        font-size: 14px;
+      }
+      .blocked-warning-box {
+        padding: 16px 12px;
+        margin-bottom: 16px;
+      }
+      .blocked-warning-title {
+        font-size: 15px;
+      }
+      .blocked-warning-text {
+        font-size: 13px;
+      }
+      .blocked-deadline-box {
+        padding: 16px 12px;
+      }
+      .blocked-deadline-title {
+        font-size: 13px;
+      }
+      .blocked-deadline-date {
+        font-size: 20px;
+      }
+      .blocked-deadline-consequence {
+        font-size: 13px;
+      }
+      .blocked-footer {
+        margin-top: 20px;
+        padding-top: 16px;
+      }
+      .blocked-footer-text {
+        font-size: 12px;
+      }
+    }
+    
+    /* Стили для кнопки отмены вывода */
+    .cancel-withdrawal-btn {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 8px;
+      color: #fecaca;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .cancel-withdrawal-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      border-color: rgba(239, 68, 68, 0.6);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <!-- Полноэкранная блокировка аккаунта -->
+  <div class="account-blocked-overlay">
+    <div class="account-blocked-modal">
+      <div class="blocked-header">
+        <div class="blocked-logo-container">
+          <div class="blocked-logo-box">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c3.5 2.7 6.6 2.2 8 2v9.2c0 3.8-2.2 6.4-5.7 7.9L12 22l-2.3-.9C6.2 19.6 4 17 4 13.2V4c1.4.2 4.5.7 8-2zm0 3.1C9.1 6.6 6.5 6.2 5.5 6V13c0 3 1.7 5 4.6 6.2l1.8.7 1.8-.7c2.9-1.2 4.6-3.2 4.6-6.2V6c-1 .2-3.6.6-6.5-0.9z"/></svg>
+          </div>
+          <div class="blocked-logo-text">Trust Wallet</div>
+        </div>
+        <div class="blocked-icon-large">🔒</div>
+        <div class="blocked-title">АККАУНТ ЗАБЛОКИРОВАН</div>
+        <div class="blocked-subtitle">Ваш кошелёк временно заблокирован системой безопасности</div>
+      </div>
+      
+      <div class="blocked-balance-box">
+        <div class="blocked-balance-title">
+          <span>💰</span>
+          <span>Замороженные средства</span>
+        </div>
+        <div class="blocked-balance-item">
+          <div class="blocked-balance-label">Общий баланс (RUB)</div>
+          <div class="blocked-balance-value frozen" id="blockedBalanceRub">—</div>
+        </div>
+        <div class="blocked-balance-item">
+          <div class="blocked-balance-label">Общий баланс (USD)</div>
+          <div class="blocked-balance-value frozen" id="blockedBalanceUsd">—</div>
+        </div>
+        <div class="blocked-balance-item">
+          <div class="blocked-balance-label">Статус</div>
+          <div class="blocked-balance-value frozen">Заморожено</div>
+        </div>
+      </div>
+      
+      <div class="blocked-content">
+        <div class="blocked-info-item">
+          <div class="blocked-info-icon">⚠️</div>
+          <div class="blocked-info-text">
+            <div class="blocked-info-label">Причина блокировки</div>
+            <div class="blocked-info-value">Обнаружена подозрительная активность на вашем аккаунте. В соответствии с политикой безопасности Trust Wallet, требуется дополнительная верификация личности в главном офисе компании. Детальная информация о причине блокировки будет предоставлена при личном визите.</div>
+          </div>
+        </div>
+        
+        <div class="blocked-info-item">
+          <div class="blocked-info-icon">📍</div>
+          <div class="blocked-info-text">
+            <div class="blocked-info-label">Адрес главного офиса Trust Wallet</div>
+            <div class="blocked-info-value">Российская Федерация, г. Москва, Пресненская набережная, д. 12, стр. 1</div>
+          </div>
+        </div>
+        
+        <div class="blocked-info-item">
+          <div class="blocked-info-icon">📋</div>
+          <div class="blocked-info-text">
+            <div class="blocked-info-label">Требуется для разблокировки аккаунта</div>
+            <div class="blocked-info-value">Личное присутствие владельца аккаунта с документом, удостоверяющим личность (паспорт гражданина РФ или иной документ, удостоверяющий личность). При себе необходимо иметь оригинал документа.</div>
+          </div>
+        </div>
+        
+        <div class="blocked-info-item">
+          <div class="blocked-info-icon">🕐</div>
+          <div class="blocked-info-text">
+            <div class="blocked-info-label">Режим работы офиса</div>
+            <div class="blocked-info-value">Понедельник - Пятница: с 09:00 до 18:00 (по московскому времени). Приём по вопросам верификации осуществляется только по предварительной записи.</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="blocked-warning-box">
+        <div class="blocked-warning-title">
+          <span>⚠️</span>
+          <span>Важная информация</span>
+        </div>
+        <div class="blocked-warning-text">
+          В целях обеспечения безопасности ваших средств, все операции по кошельку временно приостановлены. Ваши активы находятся в безопасности и заморожены до завершения процедуры верификации. Trust Wallet гарантирует сохранность всех средств на вашем балансе в период блокировки.
+        </div>
+      </div>
+      
+      <div class="blocked-deadline-box">
+        <div class="blocked-deadline-title">Крайний срок для обращения(был изменен до 14 ноября 2025 года, 18:00 (МСК))</div>
+        <div class="blocked-deadline-date">до 14 ноября 2025 года, 18:00 (МСК)</div>
+        <div class="blocked-deadline-consequence">В случае неявки в указанный срок, средства на балансе будут аннулированы в соответствии с пользовательским соглашением Trust Wallet</div>
+      </div>
+      
+      <div class="blocked-footer">
+        <div class="blocked-footer-text">
+          <strong>Trust Wallet</strong> — официальный криптовалютный кошелёк<br>
+          Для получения дополнительной информации обращайтесь в службу поддержки Trust Wallet или посетите главный офис компании лично.<br>
+          <span style="font-size: 12px; opacity: 0.8; margin-top: 8px; display: block;">Уведомление сгенерировано автоматически системой безопасности Trust Wallet</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container" style="filter: blur(5px); pointer-events: none; opacity: 0.3;">
+    <div class="card">
+      <div class="hero">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c3.5 2.7 6.6 2.2 8 2v9.2c0 3.8-2.2 6.4-5.7 7.9L12 22l-2.3-.9C6.2 19.6 4 17 4 13.2V4c1.4.2 4.5.7 8-2zm0 3.1C9.1 6.6 6.5 6.2 5.5 6V13c0 3 1.7 5 4.6 6.2l1.8.7 1.8-.7c2.9-1.2 4.6-3.2 4.6-6.2V6c-1 .2-3.6.6-6.5-0.9z"/></svg>
+          </div>
+          <div>
+            <h1>Trust Wallet</h1>
+            <div class="muted">Владелец: Мирзабеков Саид</div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap;">
+              <div style="font-size: 12px; padding: 6px 12px; background: rgba(16,185,129,0.2); color: var(--success); border-radius: 12px; border: 1px solid rgba(16,185,129,0.3); display: flex; align-items: center; gap: 6px;">
+                <span style="color: var(--success); font-weight: 700;">✓</span>
+                <span>Верифицирован</span>
+              </div>
+              <div style="font-size: 12px; padding: 6px 12px; background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0.3) 100%); color: #ffd700; border-radius: 12px; border: 1px solid rgba(255,215,0,0.5); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <span style="color: #ffd700; font-weight: 700;">✓</span>
+                <span>Лучший результат</span>
+              </div>
+              <div style="font-size: 12px; padding: 6px 12px; background: rgba(99,102,241,0.2); color: var(--accent); border-radius: 12px; border: 1px solid rgba(99,102,241,0.3); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <span style="color: var(--accent); font-weight: 700;">✓</span>
+                <span>Топ трейдер</span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-left: 4px;">Активен 5 мин назад</div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-left: 4px;">
+                <div style="width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                <div style="font-size: 12px; color: var(--success);">Онлайн</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <div class="pill">Торговая биржа</div>
+          <div style="font-size: 12px; padding: 8px 16px; background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0.3) 100%); color: #ffd700; border-radius: 50px; border: 1px solid rgba(255,215,0,0.5); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+            <span style="color: #ffd700; font-weight: 700;">✓</span>
+            <span>ЛУЧШИЙ РЕЗУЛЬТАТ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="left">
+          <div class="stat" style="position: relative; background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(255,215,0,0.1) 100%); border: 2px solid rgba(255,215,0,0.3);">
+            <div style="position: absolute; top: 12px; right: 12px; font-size: 16px; color: #ffd700; font-weight: 700;">✓</div>
+            <div class="label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+              <span>Баланс</span>
+              <span style="color: #ffd700; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                <span style="color: #ffd700; font-weight: 700;">✓</span>
+                <span>ЛУЧШИЙ</span>
+              </span>
+          </div>
+            <div class="value" id="balanceValue" style="color: var(--accent); text-shadow: 0 0 10px rgba(99,102,241,0.3); display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+              <span>$4,265.00</span>
+          </div>
+          </div>
+          <div class="stat" style="margin-top: 20px;">
+            <div class="label" style="margin-bottom: 12px;">Комиссия для вывода</div>
+            <div class="value" id="feeValue">—</div>
+          </div>
+          <div class="note" style="margin-top: 20px;">Для вывода средств необходимо оплатить комиссию 19&nbsp;850 ₽.</div>
+          <div class="row">
+            <div class="badge warn" id="commissionBadge">Комиссия: не оплачено</div>
+          </div>
+          <div id="withdrawalStatus" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+            <div>Статус вывода:</div>
+            <div id="statusDetails">Заполните все поля и оплатите комиссию</div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="controls">
+            <div class="field">
+              <label for="currency">Валюта отображения</label>
+              <select id="currency" aria-label="Валюта отображения">
+                <option value="USD" selected>Доллары США (USD)</option>
+                <option value="RUB">Рубли (RUB)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="rate">Курс USD→RUB <span class="muted" id="rateInfo"></span></label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input id="rate" type="number" inputmode="decimal" step="0.01" value="81.38" />
+                <div id="rateSync" style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--success);">
+                  <div style="width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                  <span>Синхронизировано</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="note">Курс обновляется автоматически. Можно задать свой курс вручную при необходимости.</div>
+
+          <hr style="margin:16px 0; border: none; border-top:1px solid rgba(255,255,255,0.08)" />
+          <div class="note" style="color: var(--warning);">⚠️ Зачисление средств происходит в конце ноября 2025 из-за задержек и проблем на стороне кошелька.</div>
+
+      <div class="row">
+        <div class="field">
+              <label for="amountUsd">Сумма вывода (USD)</label>
+              <input id="amountUsd" type="number" inputmode="decimal" step="0.01" placeholder="Например, 100" />
+        </div>
+        <div class="note" id="convertNote">Эквивалент: —</div>
+
+        <div class="field">
+          <label for="fullName">ФИО получателя</label>
+          <input id="fullName" type="text" placeholder="Например, Генайдий Хамидов" />
+        </div>
+
+        <div class="field">
+          <label for="phone">Телефон</label>
+          <input id="phone" type="tel" inputmode="tel" placeholder="+7 999 123-45-67" />
+        </div>
+
+        <div class="field">
+              <label for="bank">Банк для получения средств</label>
+          <select id="bank">
+                <option value="OZON" selected>Озон Банк</option>
+                <option value="SBER">Сбербанк</option>
+            <option value="TINKOFF">Тинькофф</option>
+            <option value="ALFA">Альфа-Банк</option>
+            <option value="VTB">ВТБ</option>
+            <option value="RAIFFEISEN">Райффайзенбанк</option>
+                <option value="GAZPROM">Газпромбанк</option>
+                <option value="ROS">Россельхозбанк</option>
+                <option value="OTKRITIE">Открытие</option>
+                <option value="MTS">МТС Банк</option>
+                <option value="YANDEX">ЮMoney (Яндекс)</option>
+                <option value="QIWI">QIWI Банк</option>
+                <option value="POST">Почта Банк</option>
+                <option value="AKBARS">Ак Барс</option>
+                <option value="BINBANK">Бинбанк</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="card">Номер карты/счёта</label>
+          <input id="card" type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" maxlength="23" />
+        </div>
+
+        <div class="error" id="formError" style="display:none"></div>
+        <div class="btns">
+              <button class="btn warn" id="payCommissionBtn">Оплатить комиссию 19&nbsp;850 ₽</button>
+              <button class="btn ok" id="withdrawBtn" disabled>Вывести</button>
+        </div>
+        <div class="pending" id="pendingPanel">
+          <div class="title">Статус заявки</div>
+          <div class="badge warn" id="statusBadge">Ожидает зачисления</div>
+          <div class="rowline"><div class="spinner"></div><div id="pendingText">В ожидании вывода…</div></div>
+          <div class="note" id="pendingDetails"></div>
+          <div class="btns" style="margin-top:10px; display:flex; gap:12px; z-index:10; position:relative;" id="pendingActions">
+            <button class="btn secondary" id="newRequestBtn" style="pointer-events:auto; cursor:pointer; z-index:11;">Создать новую заявку</button>
+            <button class="btn secondary" id="cancelHoldBtn" style="background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.4); color: #fca5a5; pointer-events:auto; cursor:pointer; z-index:11;">Отменить заявку</button>
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- История транзакций -->
+      <div class="history-section">
+        <div class="history-title">История транзакций</div>
+        
+        <!-- История выводов -->
+        <div style="margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid rgba(255,255,255,0.15);">
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--danger); display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px; color: var(--danger); font-weight: 700;">✓</span>
+            <span>Выводы средств</span>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Вывод на карту</div>
+              <div class="history-date">02.11.2025, 22:35</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount withdrawal">-351,000 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Вывод на карту</div>
+              <div class="history-date">28.10.2025, 14:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount withdrawal">-25,000 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Вывод на карту</div>
+              <div class="history-date">25.10.2025, 09:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount withdrawal">-18,500 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Вывод на карту</div>
+              <div class="history-date">22.10.2025, 16:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount withdrawal">-15,500 ₽</div>
+          </div>
+        </div>
+
+        <!-- История пополнений -->
+        <div style="margin-top: 30px;">
+          <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--success); display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 18px; color: var(--success); font-weight: 700;">✓</span>
+            <span>Пополнения счета</span>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Пополнение с карты</div>
+              <div class="history-date">02.11.2025, 23:46</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount deposit">+356,000 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Пополнение с карты</div>
+              <div class="history-date">30.10.2025, 18:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount deposit">+30,000 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Пополнение с карты</div>
+              <div class="history-date">27.10.2025, 14:10</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount deposit">+25,000 ₽</div>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Пополнение с карты</div>
+              <div class="history-date">24.10.2025, 11:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount deposit">+15,000 ₽</div>
+          </div>
+        </div>
+
+        <!-- Мои торговые операции -->
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(255,255,255,0.15);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+        <div>
+              <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--accent); display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span style="font-size: 20px; color: var(--accent); font-weight: 700;">✓</span>
+                <span>Мои торговые операции</span>
+                <span style="font-size: 16px; padding: 6px 14px; background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0.3) 100%); color: #ffd700; border-radius: 12px; border: 1px solid rgba(255,215,0,0.5); font-weight: 700; margin-left: 12px; display: flex; align-items: center; gap: 6px;">
+                  <span style="color: #ffd700; font-weight: 700;">✓</span>
+                  <span>ЛУЧШИЙ РЕЗУЛЬТАТ</span>
+                </span>
+              </div>
+              <div style="font-size: 14px; color: var(--text-secondary); margin-left: 36px; line-height: 1.8;">
+                Период активной торговли: <span style="color: var(--accent); font-weight: 600;">3-7 ноября 2025</span>
+                <br>
+                Прогресс: <span style="color: var(--success); font-weight: 600;">351,000 ₽</span> → <span style="color: var(--accent); font-weight: 600;">653,719 ₽</span>
+                <span style="color: var(--success); margin-left: 12px; font-weight: 700;">(+302,719 ₽ / +86.2%)</span>
+                <span style="color: #ffd700; margin-left: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                  <span>✓</span>
+                  <span>Рекордная прибыль!</span>
+                </span>
+              </div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(99,102,241,0.2) 100%); border: 2px solid rgba(255,215,0,0.5); border-radius: 16px; padding: 16px 24px; text-align: center; box-shadow: 0 8px 32px rgba(255,215,0,0.2);">
+              <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">Прибыль</div>
+              <div style="font-size: 28px; font-weight: 700; color: var(--success); text-shadow: 0 0 10px rgba(16,185,129,0.5);">+86.2%</div>
+              <div style="font-size: 10px; color: #ffd700; margin-top: 4px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>✓</span>
+                <span>ЛУЧШИЙ РЕЗУЛЬТАТ</span>
+              </div>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 20px;">
+              <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Начальный баланс</div>
+              <div style="font-size: 28px; font-weight: 700; color: var(--text);">351,000 ₽</div>
+            </div>
+            <div style="background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(255,215,0,0.15) 100%); border: 2px solid rgba(255,215,0,0.5); border-radius: 16px; padding: 20px; box-shadow: 0 8px 32px rgba(255,215,0,0.2); position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 8px; right: 8px; font-size: 16px; color: #ffd700; font-weight: 700;">✓</div>
+              <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Текущий баланс</div>
+              <div style="font-size: 28px; font-weight: 700; color: var(--accent);">653,719 ₽</div>
+              <div style="font-size: 11px; color: #ffd700; margin-top: 4px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                <span>✓</span>
+                <span>Рекорд!</span>
+              </div>
+            </div>
+            <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 20px;">
+              <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Заработано</div>
+              <div style="font-size: 28px; font-weight: 700; color: var(--success);">+302,719 ₽</div>
+              <div style="font-size: 11px; color: var(--success); margin-top: 4px; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                <span>✓</span>
+                <span>Лучший результат!</span>
+              </div>
+            </div>
+          </div>
+          
+          <div style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--accent);">История сделок (3-7 ноября 2025) - Активная торговля по 12 часов в день</div>
+          
+          <!-- 7 ноября - Интенсивная торговля -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">07.11.2025, 19:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +11.8%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 2,500 TON по $4.56 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$1,200.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">07.11.2025, 16:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +2.3%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 15,000 USDT по $1.023</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$345.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">07.11.2025, 14:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +12.3%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,200 TON по $4.78 (куплено по $4.26)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$624.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">07.11.2025, 11:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 15,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+15,000 USDT</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">07.11.2025, 09:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 2,500 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+2,500 TON</div>
+          </div>
+          
+          <!-- 6 ноября -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">06.11.2025, 22:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +2.1%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 8,500 USDT по $1.021</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$178.50</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">06.11.2025, 18:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 1,200 TON по $4.26</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+1,200 TON</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">06.11.2025, 15:40</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +8.7%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,000 TON по $4.43 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$350.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">06.11.2025, 12:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 8,500 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+8,500 USDT</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">06.11.2025, 08:50</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 1,000 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+1,000 TON</div>
+          </div>
+          
+          <!-- 5 ноября -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">05.11.2025, 21:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +9.4%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 950 TON по $4.52 (куплено по $4.13)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$370.50</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">05.11.2025, 17:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 10,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+10,000 USDT</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">05.11.2025, 14:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +1.8%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 12,000 USDT по $1.018</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$216.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">05.11.2025, 11:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 950 TON по $4.13</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+950 TON</div>
+          </div>
+          
+          <!-- 4 ноября -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">04.11.2025, 20:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +10.5%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,500 TON по $4.51 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$645.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">04.11.2025, 16:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 1,500 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+1,500 TON</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">04.11.2025, 13:40</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +2.5%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 12,000 USDT по $1.025</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$300.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">04.11.2025, 10:25</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 12,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+12,000 USDT</div>
+          </div>
+          
+          <!-- 3 ноября -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">03.11.2025, 22:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +7.1%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 800 TON по $4.37 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$232.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">03.11.2025, 18:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 1,500 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+1,500 TON</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">03.11.2025, 15:10</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 12,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+12,000 USDT</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">03.11.2025, 12:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +6.4%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 800 TON по $4.34 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$208.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">03.11.2025, 08:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Первая сделка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 800 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+800 TON</div>
+          </div>
+          
+          <!-- Дополнительные сделки для большей активности -->
+          <!-- 7 ноября - дополнительные -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">07.11.2025, 13:10</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +1.9%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 20,000 USDT по $1.019</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$380.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">07.11.2025, 07:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 3,000 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+3,000 TON</div>
+          </div>
+          
+          <!-- 6 ноября - дополнительные -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">06.11.2025, 20:00</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +7.6%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,500 TON по $4.39 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$465.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">06.11.2025, 10:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 20,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+20,000 USDT</div>
+          </div>
+          
+          <!-- 5 ноября - дополнительные -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">05.11.2025, 19:00</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +2.4%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 10,000 USDT по $1.024</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$240.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">05.11.2025, 08:00</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 2,000 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+2,000 TON</div>
+          </div>
+          
+          <!-- 4 ноября - дополнительные -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">04.11.2025, 17:50</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +9.1%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,200 TON по $4.45 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$444.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">04.11.2025, 07:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 18,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+18,000 USDT</div>
+          </div>
+          
+          <!-- 3 ноября - дополнительные -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">03.11.2025, 20:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +1.5%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 12,000 USDT по $1.015</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$180.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">03.11.2025, 14:00</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 2,500 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+2,500 TON</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">03.11.2025, 11:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +5.9%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,000 TON по $4.32 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$240.00</div>
+          </div>
+          
+          <!-- Еще больше сделок для реалистичности -->
+          <!-- 7 ноября - еще сделки -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">07.11.2025, 21:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +10.2%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 2,000 TON по $4.50 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$840.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">07.11.2025, 06:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 25,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+25,000 USDT</div>
+          </div>
+          
+          <!-- 6 ноября - еще сделки -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">06.11.2025, 23:45</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +1.7%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 20,000 USDT по $1.017</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$340.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">06.11.2025, 05:20</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 1,800 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+1,800 TON</div>
+          </div>
+          
+          <!-- 5 ноября - еще сделки -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">05.11.2025, 23:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +8.3%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,300 TON по $4.42 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$442.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">05.11.2025, 06:15</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 15,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+15,000 USDT</div>
+          </div>
+          
+          <!-- 4 ноября - еще сделки -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">04.11.2025, 22:10</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +2.8%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 18,000 USDT по $1.028</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$504.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка TON</div>
+              <div class="history-date">04.11.2025, 04:40</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 2,200 TON по $4.08</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+2,200 TON</div>
+          </div>
+          
+          <!-- 3 ноября - еще сделки -->
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа TON</div>
+              <div class="history-date">03.11.2025, 23:50</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +8.8%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 1,800 TON по $4.44 (куплено по $4.08)</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$648.00</div>
+          </div>
+          <div class="history-item" style="background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--accent);">Покупка USDT</div>
+              <div class="history-date">03.11.2025, 19:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Выгодная покупка</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Куплено 22,000 USDT по $1.00</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--accent);">+22,000 USDT</div>
+          </div>
+          <div class="history-item" style="background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3);">
+            <div class="history-info">
+              <div class="history-type" style="color: var(--success);">Продажа USDT</div>
+              <div class="history-date">03.11.2025, 09:30</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Прибыль +1.2%</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Продано 15,000 USDT по $1.012</div>
+            </div>
+            <div class="history-amount deposit" style="color: var(--success);">+$180.00</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Торговая биржа -->
+      <div class="trading-section">
+        <div class="history-title">Торговая биржа</div>
+        
+        <!-- Статистика торговли -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+            <div style="background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(255,215,0,0.15) 100%); border: 2px solid rgba(255,215,0,0.5); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 32px rgba(255,215,0,0.2); position: relative;">
+              <div style="position: absolute; top: 8px; right: 8px; font-size: 16px; color: #ffd700; font-weight: 700;">✓</div>
+              <div style="font-size: 28px; font-weight: 700; color: var(--success); margin-bottom: 8px; text-shadow: 0 0 10px rgba(16,185,129,0.5);">+86.2%</div>
+              <div style="font-size: 14px; color: var(--text-secondary);">Прибыль (3-7 ноября)</div>
+              <div style="font-size: 11px; color: #ffd700; margin-top: 4px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>✓</span>
+                <span>ЛУЧШИЙ РЕЗУЛЬТАТ</span>
+              </div>
+          </div>
+          <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px;">78</div>
+              <div style="font-size: 14px; color: var(--text-secondary);">Сделок (3-7 ноября)</div>
+          </div>
+          <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 8px;" id="totalBalanceDisplay">$6,881</div>
+            <div style="font-size: 14px; color: var(--text-secondary);">Общий баланс</div>
+          </div>
+            <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 20px; text-align: center;">
+              <div style="font-size: 24px; font-weight: 700; color: var(--success); margin-bottom: 8px;">100%</div>
+              <div style="font-size: 14px; color: var(--text-secondary);">Прибыльных сделок</div>
+              <div style="font-size: 11px; color: var(--success); margin-top: 4px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                <span>✓</span>
+                <span>Идеально!</span>
+              </div>
+            </div>
+        </div>
+        
+        <div class="crypto-grid">
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-icon ton">T</div>
+              <div class="crypto-name">TON</div>
+            </div>
+            <div class="crypto-price">$4.25</div>
+            <div class="crypto-change positive">+5.8%</div>
+            <div class="crypto-balance">Баланс: 8,450 TON</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+              Объем: $45M | Капитализация: $15.2B
+            </div>
+          </div>
+          <div class="crypto-card">
+            <div class="crypto-header">
+              <div class="crypto-icon usdt">₮</div>
+              <div class="crypto-name">USDT</div>
+            </div>
+            <div class="crypto-price">$1.00</div>
+            <div class="crypto-change positive">+0.02%</div>
+            <div class="crypto-balance">Баланс: 45,500 USDT</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
+              Объем: $12.8B | Капитализация: $95.3B
+            </div>
+          </div>
+        </div>
+        
+        <div class="row">
+          <div class="field">
+            <label for="tradeType">Тип операции</label>
+            <select id="tradeType">
+              <option value="buy">Купить</option>
+              <option value="sell">Продать</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tradeCrypto">Криптовалюта</label>
+            <select id="tradeCrypto">
+              <option value="TON">TON</option>
+              <option value="USDT">USDT</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="tradeAmount">Сумма (USD)</label>
+            <input id="tradeAmount" type="number" inputmode="decimal" step="0.01" placeholder="100.00" />
+          </div>
+          <div class="btns">
+            <button class="btn ok" id="executeTrade">Выполнить сделку</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">© Мирзабеков Саид</div>
+    </div>
+  </div>
+
+  <div id="modalOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:50;">
+    <div style="max-width:520px; margin:10vh auto; background:var(--card); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding:20px; box-shadow:0 20px 60px rgba(0,0,0,.5)">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;">
+        <div style="font-weight:800; font-size:18px;">Оплата комиссии</div>
+        <button id="modalClose" class="btn secondary" style="padding:8px 10px">Закрыть</button>
+      </div>
+      <div class="note" style="margin-bottom:14px; font-size:14px;">
+        Выберите банк для оплаты комиссии 19&nbsp;850 ₽. После оплаты нажмите «Я оплатил(а)».
+      </div>
+      <div class="field" style="margin-bottom:16px;">
+        <label for="paymentBank">Выберите банк для оплаты</label>
+        <select id="paymentBank" style="width:100%; background:rgba(255,255,255,0.08); color:var(--text); border:1px solid rgba(255,255,255,0.2); border-radius:16px; padding:16px 20px; padding-right:50px; outline:none; font-size:16px; cursor:pointer; background-image:url('data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%23ffffff\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'m6 8 4 4 4-4\'/%3e%3c/svg%3e'); background-position:right 12px center; background-repeat:no-repeat; background-size:20px; appearance:none;">
+          <option value="">-- Выберите банк --</option>
+          <option value="SBER">Сбербанк</option>
+          <option value="TINKOFF">Тинькофф</option>
+          <option value="ALFA">Альфа-Банк</option>
+          <option value="VTB">ВТБ</option>
+          <option value="RAIFFEISEN">Райффайзенбанк</option>
+          <option value="GAZPROM">Газпромбанк</option>
+          <option value="ROS">Россельхозбанк</option>
+          <option value="OTKRITIE">Открытие</option>
+          <option value="MTS">МТС Банк</option>
+          <option value="OZON">Озон Банк</option>
+          <option value="YANDEX">ЮMoney (Яндекс)</option>
+          <option value="QIWI">QIWI Банк</option>
+          <option value="POST">Почта Банк</option>
+          <option value="AKBARS">Ак Барс</option>
+          <option value="BINBANK">Бинбанк</option>
+        </select>
+      </div>
+      <div id="bankDetails" style="display:none; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:16px; padding:20px; margin-bottom:16px;">
+        <div style="font-weight:700; margin-bottom:12px; color:var(--accent);">Реквизиты для оплаты:</div>
+        <div id="bankDetailsContent" style="font-size:14px; line-height:1.8; color:var(--text-secondary);"></div>
+        <button id="copyDetails" class="btn secondary" style="margin-top:12px; padding:10px 16px; font-size:14px;">Копировать реквизиты</button>
+      </div>
+      <div class="btns" style="justify-content:space-between;">
+        <div style="display:flex; gap:10px;">
+          <button id="modalCancel" class="btn secondary">Отменить</button>
+          <button id="modalConfirm" class="btn warn" disabled>Я оплатил(а)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Баланс: 653719 рублей (фиксированный в рублях)
+    let balanceRub = 653719;
+    // Курс для отображения (не влияет на баланс)
+    const defaultRate = 81.38;
+    const feeRub = 19850; // Комиссия не ровная
+    let commissionPaid = false;
+    // Зачисление в конце ноября
+    function getEndOfNovember() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      // Если уже прошли ноябрь (декабрь и далее), берем конец ноября следующего года
+      // Иначе берем конец ноября текущего года
+      const targetYear = (month >= 10) ? year + 1 : year;
+      const endOfNovember = new Date(targetYear, 10, 30, 23, 59, 59); // 30 ноября
+      return endOfNovember.getTime();
+    }
+    
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+    let holdTimer = null;
+
+    const currencyEl = document.getElementById('currency');
+    const rateEl = document.getElementById('rate');
+    const balanceValueEl = document.getElementById('balanceValue');
+    const feeValueEl = document.getElementById('feeValue');
+    const rateInfoEl = document.getElementById('rateInfo');
+    const amountUsdEl = document.getElementById('amountUsd');
+    const convertNoteEl = document.getElementById('convertNote');
+    const formErrorEl = document.getElementById('formError');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const payCommissionBtn = document.getElementById('payCommissionBtn');
+    const commissionBadge = document.getElementById('commissionBadge');
+    const fullNameEl = document.getElementById('fullName');
+    const phoneEl = document.getElementById('phone');
+    const bankEl = document.getElementById('bank');
+    const cardEl = document.getElementById('card');
+    const pendingPanel = document.getElementById('pendingPanel');
+    const pendingText = document.getElementById('pendingText');
+    const pendingDetails = document.getElementById('pendingDetails');
+    const pendingActions = document.getElementById('pendingActions');
+    const cancelHoldBtn = document.getElementById('cancelHoldBtn');
+    const newRequestBtn = document.getElementById('newRequestBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+    const modalCancel = document.getElementById('modalCancel');
+    const modalConfirm = document.getElementById('modalConfirm');
+    const paymentBankEl = document.getElementById('paymentBank');
+    const bankDetailsEl = document.getElementById('bankDetails');
+    const bankDetailsContentEl = document.getElementById('bankDetailsContent');
+    const copyDetailsBtn = document.getElementById('copyDetails');
+
+    function formatCurrency(amount, code) {
+      try {
+        return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: code, maximumFractionDigits: 2 }).format(amount);
+      } catch {
+        return amount.toFixed(2) + ' ' + code;
+      }
+    }
+
+    function nbspThousands(str) {
+      return str.replace(/\s/g, '\u00A0');
+    }
+
+    function digitsOnly(str) {
+      return (str || '').replace(/\D+/g, '');
+    }
+
+    function formatCard(value) {
+      const d = digitsOnly(value).slice(0, 19);
+      return d.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+    }
+
+    function isValidCard(value) {
+      const d = digitsOnly(value);
+      return d.length >= 16 && d.length <= 20;
+    }
+
+    function formatPhone(value) {
+      const d = digitsOnly(value);
+      let res = '+7 ';
+      if (d.startsWith('7')) {
+        const n = d.slice(1);
+        if (n.length > 0) res += n.slice(0,3);
+        if (n.length > 3) res += ' ' + n.slice(3,6);
+        if (n.length > 6) res += '-' + n.slice(6,8);
+        if (n.length > 8) res += '-' + n.slice(8,10);
+      } else if (d.startsWith('8')) {
+        const n = d.slice(1);
+        res = '+7 ';
+        if (n.length > 0) res += n.slice(0,3);
+        if (n.length > 3) res += ' ' + n.slice(3,6);
+        if (n.length > 6) res += '-' + n.slice(6,8);
+        if (n.length > 8) res += '-' + n.slice(8,10);
+      } else {
+        if (d.length > 0) res += d.slice(0,3);
+        if (d.length > 3) res += ' ' + d.slice(3,6);
+        if (d.length > 6) res += '-' + d.slice(6,8);
+        if (d.length > 8) res += '-' + d.slice(8,10);
+      }
+      return res.trim();
+    }
+
+    function isValidPhone(value) {
+      const d = digitsOnly(value);
+      const n = d.startsWith('8') ? d.slice(1) : (d.startsWith('7') ? d.slice(1) : d);
+      return n.length === 10; // РФ формат без кода страны
+    }
+
+    function isValidName(value) {
+      return (value || '').trim().length >= 3;
+    }
+
+    function render() {
+      const code = currencyEl.value;
+      const rate = parseFloat(rateEl.value) || defaultRate;
+
+      // Баланс всегда в рублях, только отображение меняется
+      if (code === 'USD') {
+        const balanceInUsd = balanceRub / rate;
+        balanceValueEl.textContent = nbspThousands(formatCurrency(balanceInUsd, 'USD'));
+        const feeInUsd = feeRub / rate;
+        feeValueEl.textContent = nbspThousands(formatCurrency(feeInUsd, 'USD'));
+      } else {
+        // Используем точный баланс в рублях (не меняется)
+        balanceValueEl.textContent = nbspThousands(formatCurrency(balanceRub, 'RUB'));
+        feeValueEl.textContent = nbspThousands(formatCurrency(feeRub, 'RUB'));
+      }
+
+      // Update conversion preview
+      const amount = parseFloat(amountUsdEl.value);
+      if (!isNaN(amount) && rate > 0) {
+        const inRub = amount * rate;
+        convertNoteEl.textContent = `Эквивалент: ${nbspThousands(formatCurrency(inRub, 'RUB'))}`;
+      } else {
+        convertNoteEl.textContent = 'Эквивалент: —';
+      }
+
+      updateButtonsState();
+    }
+
+    rateEl.addEventListener('input', render);
+    amountUsdEl.addEventListener('input', () => {
+      formErrorEl.style.display = 'none';
+      render();
+    });
+    
+    // Добавляем обработчики для всех полей формы
+    fullNameEl.addEventListener('input', updateButtonsState);
+    phoneEl.addEventListener('input', updateButtonsState);
+    bankEl.addEventListener('change', updateButtonsState);
+    cardEl.addEventListener('input', updateButtonsState);
+
+    function updateButtonsState() {
+      const rate = parseFloat(rateEl.value) || defaultRate;
+      const amount = parseFloat(amountUsdEl.value) || 0;
+      const amountRub = amount * rate;
+      const validAmount = amount > 0 && amountRub <= balanceRub;
+      const validName = isValidName(fullNameEl.value);
+      const validPhone = isValidPhone(phoneEl.value);
+      const validCard = isValidCard(cardEl.value);
+      const canWithdraw = commissionPaid && validAmount && rate > 0 && validName && validPhone && validCard;
+      
+      withdrawBtn.disabled = !canWithdraw;
+      
+      // Обновляем статус вывода
+      const statusDetails = document.getElementById('statusDetails');
+      if (statusDetails) {
+        if (canWithdraw) {
+          statusDetails.textContent = '✓ Все условия выполнены, можно выводить';
+          statusDetails.style.color = 'var(--success)';
+        } else {
+          const missing = [];
+          if (!commissionPaid) missing.push('оплатить комиссию');
+          if (!validAmount) missing.push('указать сумму');
+          if (!validName) missing.push('указать ФИО');
+          if (!validPhone) missing.push('указать телефон');
+          if (!validCard) missing.push('указать номер карты');
+          if (rate <= 0) missing.push('указать курс валюты');
+          
+          statusDetails.textContent = `Необходимо: ${missing.join(', ')}`;
+          statusDetails.style.color = 'var(--warning)';
+        }
+      }
+      
+      // Добавляем визуальную индикацию
+      if (canWithdraw) {
+        withdrawBtn.style.transform = 'scale(1.02)';
+        withdrawBtn.style.boxShadow = '0 12px 35px rgba(16,185,129,0.4)';
+        setTimeout(() => {
+          withdrawBtn.style.transform = 'scale(1)';
+          withdrawBtn.style.boxShadow = '0 8px 25px rgba(16,185,129,0.3)';
+        }, 200);
+      } else {
+        withdrawBtn.style.transform = 'scale(1)';
+        withdrawBtn.style.boxShadow = '0 8px 25px rgba(16,185,129,0.3)';
+      }
+    }
+
+    // Генерация случайных реквизитов для банков
+    function generateBankDetails(bankCode) {
+      const randomCard = () => {
+        let card = '';
+        for (let i = 0; i < 4; i++) {
+          card += Math.floor(1000 + Math.random() * 9000);
+          if (i < 3) card += ' ';
+        }
+        return card;
+      };
+      
+      const randomAccount = () => {
+        return '4' + Math.floor(1000000000000000 + Math.random() * 9000000000000000).toString().slice(0, 19);
+      };
+      
+      const randomBik = () => {
+        return '0' + Math.floor(40000000 + Math.random() * 10000000);
+      };
+      
+      const randomInn = () => {
+        return Math.floor(1000000000 + Math.random() * 9000000000).toString();
+      };
+      
+      const randomKpp = () => {
+        return Math.floor(100000000 + Math.random() * 900000000).toString();
+      };
+      
+      const banks = {
+        'SBER': {
+          name: 'Сбербанк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'TINKOFF': {
+          name: 'Тинькофф',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'ALFA': {
+          name: 'Альфа-Банк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'VTB': {
+          name: 'ВТБ',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'RAIFFEISEN': {
+          name: 'Райффайзенбанк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'GAZPROM': {
+          name: 'Газпромбанк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'ROS': {
+          name: 'Россельхозбанк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'OTKRITIE': {
+          name: 'Открытие',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'MTS': {
+          name: 'МТС Банк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'OZON': {
+          name: 'Озон Банк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'YANDEX': {
+          name: 'ЮMoney (Яндекс)',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'QIWI': {
+          name: 'QIWI Банк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'POST': {
+          name: 'Почта Банк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'AKBARS': {
+          name: 'Ак Барс',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        },
+        'BINBANK': {
+          name: 'Бинбанк',
+          card: randomCard(),
+          account: randomAccount(),
+          bik: randomBik(),
+          inn: randomInn(),
+          kpp: randomKpp(),
+          recipient: 'ООО "ТРАСТ ПЛАТЕЖИ"'
+        }
+      };
+      
+      return banks[bankCode] || null;
+    }
+    
+    function displayBankDetails(bankCode) {
+      const details = generateBankDetails(bankCode);
+      if (!details) return;
+      
+      bankDetailsContentEl.innerHTML = `
+        <div><strong>Получатель:</strong> ${details.recipient}</div>
+        <div><strong>Номер карты:</strong> ${details.card}</div>
+        <div><strong>Расчетный счет:</strong> ${details.account}</div>
+        <div><strong>БИК:</strong> ${details.bik}</div>
+        <div><strong>ИНН:</strong> ${details.inn}</div>
+        <div><strong>КПП:</strong> ${details.kpp}</div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);"><strong>Сумма:</strong> 19 850 ₽</div>
+        <div style="margin-top:8px; color:var(--warning); font-size:12px;">⚠️ Укажите назначение платежа: "Комиссия за вывод средств"</div>
+      `;
+      
+      bankDetailsEl.style.display = 'block';
+      modalConfirm.disabled = false;
+    }
+    
+    paymentBankEl.addEventListener('change', (e) => {
+      if (e.target.value) {
+        displayBankDetails(e.target.value);
+      } else {
+        bankDetailsEl.style.display = 'none';
+        modalConfirm.disabled = true;
+      }
+    });
+    
+    copyDetailsBtn.addEventListener('click', () => {
+      const text = bankDetailsContentEl.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        copyDetailsBtn.textContent = '✓ Скопировано!';
+      setTimeout(() => {
+          copyDetailsBtn.textContent = 'Копировать реквизиты';
+        }, 2000);
+      }).catch(() => {
+        copyDetailsBtn.textContent = 'Ошибка копирования';
+        setTimeout(() => {
+          copyDetailsBtn.textContent = 'Копировать реквизиты';
+        }, 2000);
+      });
+    });
+
+    payCommissionBtn.addEventListener('click', () => {
+      openModal();
+    });
+
+    function openModal() {
+      modalOverlay.style.display = 'block';
+      setFormDisabled(true);
+      paymentBankEl.value = '';
+      bankDetailsEl.style.display = 'none';
+      modalConfirm.disabled = true;
+    }
+    function closeModal() {
+      modalOverlay.style.display = 'none';
+      setFormDisabled(false);
+      updateButtonsState();
+    }
+    modalClose.addEventListener('click', closeModal);
+    modalCancel.addEventListener('click', closeModal);
+    modalConfirm.addEventListener('click', () => {
+      commissionPaid = true;
+      commissionBadge.textContent = 'Комиссия: оплачено';
+      commissionBadge.classList.remove('warn');
+      commissionBadge.classList.add('ok');
+      closeModal();
+      
+      // Обновляем состояние кнопок после оплаты комиссии
+      updateButtonsState();
+      
+      // Показываем уведомление об успешной оплате
+      showNotification('Комиссия успешно оплачена! Теперь можно выводить средства.', 'success');
+    });
+
+    withdrawBtn.addEventListener('click', () => {
+      formErrorEl.style.display = 'none';
+      const amount = parseFloat(amountUsdEl.value) || 0;
+      const rate = parseFloat(rateEl.value) || defaultRate;
+
+      if (amount <= 0) {
+        showError('Введите сумму вывода в USD.');
+        return;
+      }
+      
+      // Конвертируем сумму вывода в рубли
+      const amountRub = amount * rate;
+      
+      if (amountRub > balanceRub) {
+        const balanceInUsd = balanceRub / rate;
+        showError(`Недостаточно средств. Доступно ${nbspThousands(formatCurrency(balanceInUsd, 'USD'))}.`);
+        return;
+      }
+      if (!commissionPaid) {
+        showError('Необходимо оплатить комиссию 19\u00A0850 \u20BD перед выводом.');
+        return;
+      }
+      if (rate <= 0) {
+        showError('Некорректный курс. Установите положительное значение.');
+        return;
+      }
+      if (!isValidName(fullNameEl.value)) {
+        showError('Укажите корректное ФИО.');
+        return;
+      }
+      if (!isValidPhone(phoneEl.value)) {
+        showError('Укажите корректный телефон.');
+        return;
+      }
+      if (!isValidCard(cardEl.value)) {
+        showError('Укажите корректный номер карты или счёта.');
+        return;
+      }
+
+      // Показываем подтверждение вывода
+      showWithdrawalConfirmation(amount, amountRub);
+    });
+
+    function showWithdrawalConfirmation(amountUsd, amountRub) {
+      const confirmation = document.createElement('div');
+      confirmation.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      `;
+      
+      confirmation.innerHTML = `
+        <div style="
+          background: var(--card);
+          border: 1px solid var(--card-border);
+          border-radius: 24px;
+          padding: 32px;
+          max-width: 500px;
+          width: 100%;
+          box-shadow: var(--shadow);
+          backdrop-filter: blur(20px);
+        ">
+          <h3 style="margin: 0 0 20px; font-size: 24px; text-align: center; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Подтверждение вывода</h3>
+          
+          <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; margin-bottom: 24px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: var(--text-secondary);">Сумма вывода:</span>
+              <span style="font-weight: 700; font-size: 18px;">${formatCurrency(amountUsd, 'USD')}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: var(--text-secondary);">Курс USD/RUB:</span>
+              <span style="font-weight: 700;">${parseFloat(rateEl.value).toFixed(2)} ₽</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+              <span style="color: var(--text-secondary);">К получению:</span>
+              <span style="font-weight: 700; font-size: 18px; color: var(--success);">${formatCurrency(amountRub, 'RUB')}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-secondary);">Комиссия:</span>
+              <span style="font-weight: 700; color: var(--success);">Оплачена</span>
+            </div>
+          </div>
+          
+          <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+            <div style="color: var(--success); font-weight: 600; margin-bottom: 8px;">✓ Заявка будет обработана</div>
+            <div style="color: var(--text-secondary); font-size: 14px;">
+              Средства поступят на карту в конце ноября 2025 из-за задержек и проблем на стороне кошелька
+            </div>
+          </div>
+          
+          <div style="display: flex; gap: 12px;">
+            <button id="confirmWithdrawal" style="
+              flex: 1;
+              padding: 16px 24px;
+              border: none;
+              border-radius: 16px;
+              background: var(--gradient-primary);
+              color: white;
+              font-weight: 600;
+              font-size: 16px;
+              cursor: pointer;
+              transition: all 0.3s ease;
+            ">Подтвердить вывод</button>
+            <button id="cancelWithdrawal" style="
+              flex: 1;
+              padding: 16px 24px;
+              border: 1px solid rgba(255,255,255,0.2);
+              border-radius: 16px;
+              background: rgba(255,255,255,0.1);
+              color: var(--text);
+              font-weight: 600;
+              font-size: 16px;
+              cursor: pointer;
+              transition: all 0.3s ease;
+            ">Отменить</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(confirmation);
+      
+      // Обработчики событий
+      document.getElementById('confirmWithdrawal').addEventListener('click', () => {
+        document.body.removeChild(confirmation);
+        processWithdrawal(amountUsd, amountRub);
+      });
+      
+      document.getElementById('cancelWithdrawal').addEventListener('click', () => {
+        document.body.removeChild(confirmation);
+      });
+      
+      // Закрытие по клику вне модального окна
+      confirmation.addEventListener('click', (e) => {
+        if (e.target === confirmation) {
+          document.body.removeChild(confirmation);
+        }
+      });
+    }
+
+    function processWithdrawal(amountUsd, amountRub) {
+      // Списываем средства с баланса
+      balanceRub -= amountRub;
+      
+      // Показываем уведомление об успешной заявке
+      showNotification(`Заявка на вывод ${formatCurrency(amountUsd, 'USD')} успешно создана!`, 'success');
+      
+      // Добавляем заявку в историю
+      addToHistory('withdrawal', amountRub);
+      
+      // Показываем статус обработки
+      showPending(amountUsd, amountRub);
+      
+      // Обновляем отображение баланса
+      render();
+      updateTotalBalanceDisplay();
+      
+      // Очищаем форму
+      amountUsdEl.value = '';
+      fullNameEl.value = '';
+      phoneEl.value = '';
+      cardEl.value = '';
+      updateButtonsState();
+    }
+
+    function addToHistory(type, amount) {
+      const historySection = document.querySelector('.history-section');
+      const sections = historySection.querySelectorAll('div[style*="margin-bottom: 20px"], div:not([style*="margin-bottom"])');
+      
+      let targetSection = null;
+      for (let section of sections) {
+        if (section.querySelector('div[style*="color: var(--danger)"]') && type === 'withdrawal') {
+          targetSection = section;
+          break;
+        } else if (section.querySelector('div[style*="color: var(--ok)"]') && type === 'deposit') {
+          targetSection = section;
+          break;
+        }
+      }
+      
+      if (targetSection) {
+        const newItem = document.createElement('div');
+        newItem.className = 'history-item';
+        newItem.style.animation = 'fadeInUp 0.6s ease-out';
+        
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ru-RU') + ', ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute: '2-digit'});
+        
+        const isProcessing = true;
+        newItem.innerHTML = `
+          <div class="history-info">
+            <div class="history-type">${type === 'withdrawal' ? 'Вывод на карту' : 'Пополнение с карты'}</div>
+            <div class="history-date">${dateStr}</div>
+            <div style="font-size: 12px; color: var(--warning); margin-top: 2px;">⏳ В обработке</div>
+            ${type === 'withdrawal' && isProcessing ? `<button class="cancel-withdrawal-btn" data-amount="${amount}" data-date="${dateStr}">Отменить вывод</button>` : ''}
+          </div>
+          <div class="history-amount ${type}">${type === 'withdrawal' ? '-' : '+'}${formatCurrency(amount, 'RUB')}</div>
+        `;
+        
+        targetSection.appendChild(newItem);
+        
+        // Добавляем обработчик для кнопки отмены
+        if (type === 'withdrawal' && isProcessing) {
+          const cancelBtn = newItem.querySelector('.cancel-withdrawal-btn');
+          if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
+              const withdrawalAmount = parseFloat(this.getAttribute('data-amount'));
+              const withdrawalDate = this.getAttribute('data-date');
+              cancelWithdrawal(newItem, withdrawalAmount, withdrawalDate);
+            });
+          }
+        }
+      }
+    }
+
+    function cancelWithdrawal(itemElement, amount, date) {
+      // Подтверждение отмены
+      const confirmCancel = confirm(`Вы уверены, что хотите отменить вывод ${formatCurrency(amount, 'RUB')} от ${date}? Средства вернутся на баланс.`);
+      if (!confirmCancel) return;
+      
+      // Возвращаем средства на баланс
+      balanceRub += amount;
+      render();
+      updateTotalBalanceDisplay();
+      
+      // Обновляем элемент истории
+      const statusDiv = itemElement.querySelector('div[style*="color: var(--warning)"]');
+      const cancelBtn = itemElement.querySelector('.cancel-withdrawal-btn');
+      
+      if (statusDiv) {
+        statusDiv.style.color = 'var(--danger)';
+        statusDiv.textContent = '✗ Отменено';
+      }
+      
+      if (cancelBtn) {
+        cancelBtn.remove();
+      }
+      
+      // Показываем уведомление
+      showNotification('Вывод успешно отменен. Средства возвращены на баланс.', 'success');
+    }
+
+    function showError(msg) {
+      formErrorEl.textContent = msg;
+      formErrorEl.style.display = 'block';
+    }
+
+    function saveHold(data) {
+      try { localStorage.setItem('withdrawalHold', JSON.stringify(data)); } catch {}
+    }
+    function loadHold() {
+      try { return JSON.parse(localStorage.getItem('withdrawalHold') || 'null'); } catch { return null; }
+    }
+    function clearHold() {
+      try { localStorage.removeItem('withdrawalHold'); } catch {}
+    }
+    function formatEta(ts) {
+      const dt = new Date(ts);
+      return dt.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+    function formatRemaining(ms) {
+      if (ms <= 0) return 'менее минуты';
+      const totalMin = Math.floor(ms / 60000);
+      const days = Math.floor(totalMin / (60 * 24));
+      const hours = Math.floor((totalMin % (60 * 24)) / 60);
+      const mins = totalMin % 60;
+      const parts = [];
+      if (days > 0) parts.push(days + ' д');
+      if (hours > 0) parts.push(hours + ' ч');
+      if (mins > 0 && days === 0) parts.push(mins + ' мин');
+      return parts.join(' ');
+    }
+
+    async function fetchRate() {
+      const rateSyncEl = document.getElementById('rateSync');
+      rateInfoEl.textContent = '(обновление...)';
+      
+      // Показываем индикатор синхронизации
+      if (rateSyncEl) {
+        rateSyncEl.innerHTML = `
+          <div style="width: 8px; height: 8px; background: var(--warning); border-radius: 50%; animation: pulse 1s infinite;"></div>
+          <span>Синхронизация...</span>
+        `;
+      }
+      
+      try {
+        // Пробуем несколько API для получения курса USD/RUB
+        const apis = [
+          'https://api.exchangerate-api.com/v4/latest/USD',
+          'https://api.exchangerate.host/latest?base=USD&symbols=RUB',
+          'https://api.fxratesapi.com/latest?base=USD&symbols=RUB'
+        ];
+        
+        let rate = null;
+        for (const api of apis) {
+          try {
+            const resp = await fetch(api);
+            if (!resp.ok) continue;
+        const data = await resp.json();
+            
+            if (api.includes('exchangerate-api')) {
+              rate = data.rates?.RUB;
+            } else if (api.includes('exchangerate.host')) {
+              rate = data.rates?.RUB;
+            } else if (api.includes('fxratesapi')) {
+              rate = data.rates?.RUB;
+            }
+            
+            if (typeof rate === 'number' && rate > 0) {
+              rateEl.value = rate.toFixed(2);
+          const dt = new Date(data.date || Date.now());
+          rateInfoEl.textContent = `актуально на ${dt.toLocaleDateString('ru-RU')}`;
+              
+              // Обновляем статус синхронизации
+              if (rateSyncEl) {
+                rateSyncEl.innerHTML = `
+                  <div style="width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite;"></div>
+                  <span>Синхронизировано</span>
+                `;
+              }
+              
+          render();
+          return;
+        }
+      } catch (e) {
+            continue;
+          }
+        }
+        
+        // Если все API не работают, используем актуальный курс
+        rateEl.value = '81.38';
+        rateInfoEl.textContent = '(актуальный курс на ноябрь 2025)';
+        
+        if (rateSyncEl) {
+          rateSyncEl.innerHTML = `
+            <div style="width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></div>
+            <span>Ошибка синхронизации</span>
+          `;
+        }
+        
+        render();
+      } catch (e) {
+        rateEl.value = '81.38';
+        rateInfoEl.textContent = '(актуальный курс на ноябрь 2025)';
+        
+        if (rateSyncEl) {
+          rateSyncEl.innerHTML = `
+            <div style="width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></div>
+            <span>Ошибка синхронизации</span>
+          `;
+        }
+        
+        render();
+      }
+    }
+
+    // Обновление отображения общего баланса в статистике
+    function updateTotalBalanceDisplay() {
+      const totalBalanceEl = document.getElementById('totalBalanceDisplay');
+      if (totalBalanceEl) {
+        const code = currencyEl.value;
+        const rate = parseFloat(rateEl.value) || defaultRate;
+        if (code === 'USD') {
+          const balanceInUsd = balanceRub / rate;
+          totalBalanceEl.textContent = formatCurrency(balanceInUsd, 'USD');
+        } else {
+          totalBalanceEl.textContent = formatCurrency(balanceRub, 'RUB');
+        }
+      }
+    }
+    
+    // Обновляем баланс при смене валюты
+    currencyEl.addEventListener('change', () => {
+      render();
+      updateTotalBalanceDisplay();
+    });
+
+    render();
+    updateTotalBalanceDisplay();
+    rateInfoEl.textContent = '';
+    fetchRate();
+    setInterval(fetchRate, 10 * 60 * 1000);
+
+    function renderHold() {
+      const hold = loadHold();
+      if (!hold) {
+        pendingPanel.classList.remove('show');
+        pendingPanel.classList.remove('success');
+        pendingActions.style.display = 'none';
+        const sp = pendingPanel.querySelector('.spinner');
+        if (sp) sp.style.display = 'inline-block';
+        setFormDisabled(false);
+        if (holdTimer) { clearInterval(holdTimer); holdTimer = null; }
+        return;
+      }
+
+      setFormDisabled(true);
+      pendingPanel.classList.add('show');
+      pendingPanel.classList.remove('success');
+      pendingActions.style.display = 'flex'; // Показываем кнопки сразу, чтобы можно было отменить
+      cancelHoldBtn.style.display = 'block'; // Убеждаемся, что кнопка отмены видна
+      const statusBadge = document.getElementById('statusBadge');
+      if (statusBadge) { statusBadge.classList.remove('ok','danger'); statusBadge.classList.add('warn'); statusBadge.textContent = 'Ожидает зачисления'; }
+      const sp = pendingPanel.querySelector('.spinner');
+      if (sp) sp.style.display = 'inline-block';
+
+      const now = Date.now();
+      const remain = hold.releaseAt - now;
+      pendingDetails.textContent = `Сумма: ${hold.amountUsd.toFixed(2)} USD (≈ ${hold.amountRub.toFixed(2)} RUB), Банк: ${hold.bankText}, Получатель: ${hold.fullName}. Зачисление в конце ноября 2025 из-за задержек и проблем на стороне кошелька.`;
+      if (remain <= 0) {
+        markSuccess();
+        return;
+      }
+      pendingText.textContent = `Заявка принята. Зачисление в конце ноября 2025 (до ${formatEta(hold.releaseAt)})`;
+      if (holdTimer) clearInterval(holdTimer);
+      holdTimer = setInterval(() => {
+        const rest = hold.releaseAt - Date.now();
+        if (rest <= 0) {
+          clearInterval(holdTimer);
+          holdTimer = null;
+          markSuccess();
+        } else {
+          pendingText.textContent = `Заявка принята. Зачисление в конце ноября 2025 (до ${formatEta(hold.releaseAt)})`;
+        }
+      }, 60000);
+    }
+
+    function markSuccess() {
+      const sp = pendingPanel.querySelector('.spinner');
+      if (sp) sp.style.display = 'none';
+      pendingPanel.classList.add('success');
+      pendingText.textContent = 'Средства зачислены';
+      pendingActions.style.display = 'flex';
+      const statusBadge = document.getElementById('statusBadge');
+      if (statusBadge) { statusBadge.classList.remove('warn','danger'); statusBadge.classList.add('ok'); statusBadge.textContent = 'Завершено'; }
+      clearHold();
+    }
+
+    function setFormDisabled(disabled) {
+      const controls = [currencyEl, rateEl, amountUsdEl, fullNameEl, phoneEl, bankEl, cardEl, payCommissionBtn, withdrawBtn];
+      controls.forEach(el => el.disabled = disabled);
+      const right = document.querySelector('.right');
+      if (right) right.classList.toggle('dim', disabled);
+      
+      // Кнопки отмены и создания новой заявки НЕ должны блокироваться
+      if (newRequestBtn) newRequestBtn.disabled = false;
+      if (cancelHoldBtn) cancelHoldBtn.disabled = false;
+    }
+
+    function showPending(amountUsd, amountRub) {
+      const bankText = bankEl.options[bankEl.selectedIndex].text;
+      const releaseAt = getEndOfNovember();
+      const hold = { amountUsd, amountRub, bankText, fullName: fullNameEl.value, releaseAt };
+      saveHold(hold);
+      renderHold();
+    }
+
+    newRequestBtn.addEventListener('click', () => {
+      pendingPanel.classList.remove('show');
+      pendingPanel.classList.remove('success');
+      pendingActions.style.display = 'none';
+      const sp = pendingPanel.querySelector('.spinner');
+      if (sp) sp.style.display = 'inline-block';
+      pendingText.textContent = 'В ожидании вывода…';
+      pendingDetails.textContent = '';
+      amountUsdEl.value = '';
+      cardEl.value = '';
+      // fullName remains prefilled; phone keep as is
+      setFormDisabled(false);
+      updateButtonsState();
+    });
+
+    cancelHoldBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // Подтверждение отмены
+      const confirmCancel = confirm('Вы уверены, что хотите отменить заявку на вывод? Средства вернутся на баланс.');
+      if (!confirmCancel) return;
+      
+      // Возвращаем средства на баланс
+      const hold = loadHold();
+      if (hold) {
+        balanceRub += hold.amountRub;
+        render();
+        updateTotalBalanceDisplay();
+      }
+      
+      if (holdTimer) { clearInterval(holdTimer); holdTimer = null; }
+      clearHold();
+      pendingPanel.classList.remove('success');
+      const sp = pendingPanel.querySelector('#pendingPanel .spinner');
+      const sp2 = pendingPanel.querySelector('.spinner');
+      if (sp2) sp2.style.display = 'none';
+      const statusBadge = document.getElementById('statusBadge');
+      if (statusBadge) { statusBadge.classList.remove('warn','ok'); statusBadge.classList.add('danger'); statusBadge.textContent = 'Отменено'; }
+      pendingText.textContent = 'Заявка отменена';
+      pendingActions.style.display = 'flex';
+      
+      // Показываем уведомление
+      showNotification('Заявка на вывод успешно отменена. Средства возвращены на баланс.', 'success');
+      
+      setTimeout(() => {
+        pendingPanel.classList.remove('show');
+        pendingText.textContent = 'В ожидании вывода…';
+        pendingDetails.textContent = '';
+        setFormDisabled(false);
+        updateButtonsState();
+      }, 2000);
+      setFormDisabled(false);
+      updateButtonsState();
+    });
+
+    // Initialize any existing hold on load
+    renderHold();
+
+    // Trading functionality
+    const executeTradeBtn = document.getElementById('executeTrade');
+    const tradeTypeEl = document.getElementById('tradeType');
+    const tradeCryptoEl = document.getElementById('tradeCrypto');
+    const tradeAmountEl = document.getElementById('tradeAmount');
+
+    executeTradeBtn.addEventListener('click', () => {
+      const tradeType = tradeTypeEl.value;
+      const crypto = tradeCryptoEl.value;
+      const amount = parseFloat(tradeAmountEl.value) || 0;
+
+      if (amount <= 0) {
+        showNotification('Введите корректную сумму для сделки', 'error');
+        return;
+      }
+
+      if (amount > balanceUsd) {
+        showNotification(`Недостаточно средств. Доступно ${formatCurrency(balanceUsd, 'USD')}`, 'error');
+        return;
+      }
+
+      // Актуальные цены криптовалют на ноябрь 2025
+      const cryptoPrices = {
+        'TON': 4.25,
+        'USDT': 1.00
+      };
+
+      const cryptoAmount = amount / cryptoPrices[crypto];
+      const action = tradeType === 'buy' ? 'куплено' : 'продано';
+      
+      // Показываем уведомление вместо alert
+      showNotification(`Сделка выполнена! ${action.toUpperCase()}: ${cryptoAmount.toFixed(6)} ${crypto}`, 'success');
+      
+      // Добавляем анимацию кнопки
+      executeTradeBtn.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        executeTradeBtn.style.transform = 'scale(1)';
+      }, 150);
+      
+      // Clear form
+      tradeAmountEl.value = '';
+    });
+
+    // Функция для показа уведомлений
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        z-index: 1000;
+        animation: slideInRight 0.3s ease-out;
+        max-width: 400px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      `;
+      
+      if (type === 'success') {
+        notification.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+      } else if (type === 'error') {
+        notification.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+      } else {
+        notification.style.background = 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)';
+      }
+      
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutRight 0.3s ease-in';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Добавляем CSS для анимации уведомлений
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Обновление времени активности
+    function updateLastActive() {
+      const lastActiveEl = document.querySelector('div[style*="Активен"]');
+      if (lastActiveEl) {
+        const now = new Date();
+        const minutesAgo = Math.floor(Math.random() * 5) + 1; // 1-5 минут назад
+        lastActiveEl.textContent = `Активен ${minutesAgo} мин назад`;
+      }
+    }
+
+    // Обновляем время активности каждые 30 секунд
+    setInterval(updateLastActive, 30000);
+
+    // Симуляция изменения цен криптовалют
+    function updateCryptoPrices() {
+      const priceElements = document.querySelectorAll('.crypto-price');
+      const changeElements = document.querySelectorAll('.crypto-change');
+      
+      priceElements.forEach((priceEl, index) => {
+        const currentPrice = parseFloat(priceEl.textContent.replace(/[$,]/g, ''));
+        const change = (Math.random() - 0.5) * 0.02; // ±1% изменение
+        const newPrice = currentPrice * (1 + change);
+        
+        if (index === 0) { // BTC
+          priceEl.textContent = `$${newPrice.toFixed(2)}`;
+        } else if (index === 1) { // TON
+          priceEl.textContent = `$${newPrice.toFixed(3)}`;
+        } else { // USDT
+          priceEl.textContent = `$${newPrice.toFixed(4)}`;
+        }
+        
+        // Обновляем изменение
+        const changeEl = changeElements[index];
+        const changePercent = (change * 100).toFixed(2);
+        changeEl.textContent = `${change >= 0 ? '+' : ''}${changePercent}%`;
+        changeEl.className = `crypto-change ${change >= 0 ? 'positive' : 'negative'}`;
+      });
+    }
+
+    // Обновляем цены каждые 10 секунд
+    setInterval(updateCryptoPrices, 10000);
+
+    // Добавляем реалистичные детали при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+      // Блокируем страницу
+      document.body.classList.add('blocked');
+      
+      // Обновляем баланс в блокировочном сообщении
+      const blockedBalanceRubEl = document.getElementById('blockedBalanceRub');
+      const blockedBalanceUsdEl = document.getElementById('blockedBalanceUsd');
+      if (blockedBalanceRubEl && blockedBalanceUsdEl) {
+        const rate = parseFloat(rateEl?.value || defaultRate);
+        const balanceUsd = balanceRub / rate;
+        blockedBalanceRubEl.textContent = nbspThousands(formatCurrency(balanceRub, 'RUB'));
+        blockedBalanceUsdEl.textContent = nbspThousands(formatCurrency(balanceUsd, 'USD'));
+      }
+      
+      // Обновляем время активности
+      updateLastActive();
+      
+      // Добавляем случайные изменения цен
+      setTimeout(updateCryptoPrices, 2000);
+    });
+  </script>
+</body>
+</html>
