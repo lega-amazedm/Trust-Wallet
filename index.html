@@ -962,8 +962,8 @@
       </div>
       
       <div class="blocked-deadline-box">
-        <div class="blocked-deadline-title">Крайний срок для обращения(был изменен до 14 ноября 2025 года, 18:00 (МСК))</div>
-        <div class="blocked-deadline-date">до 14 ноября 2025 года, 18:00 (МСК)</div>
+        <div class="blocked-deadline-title">Крайний срок для обращения(был изменен до 20 ноября 2025 года, 18:00 (МСК))</div>
+        <div class="blocked-deadline-date">до 20 ноября 2025 года, 18:00 (МСК)</div>
         <div class="blocked-deadline-consequence">В случае неявки в указанный срок, средства на балансе будут аннулированы в соответствии с пользовательским соглашением Trust Wallet</div>
       </div>
       
@@ -980,6 +980,9 @@
   <div class="container" style="filter: blur(5px); pointer-events: none; opacity: 0.3;">
     <div class="card">
       <div class="hero">
+        <div class="date-banner" style="background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(236,72,153,0.2) 100%); border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 12px 20px; margin-bottom: 20px; text-align: center; font-size: 16px; color: #ffffff; font-weight: 500;">
+          <span style="font-weight: 700; color: #6366f1;">14 ноября 2020</span>
+        </div>
         <div class="brand">
           <div class="logo" aria-hidden="true">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c3.5 2.7 6.6 2.2 8 2v9.2c0 3.8-2.2 6.4-5.7 7.9L12 22l-2.3-.9C6.2 19.6 4 17 4 13.2V4c1.4.2 4.5.7 8-2zm0 3.1C9.1 6.6 6.5 6.2 5.5 6V13c0 3 1.7 5 4.6 6.2l1.8.7 1.8-.7c2.9-1.2 4.6-3.2 4.6-6.2V6c-1 .2-3.6.6-6.5-0.9z"/></svg>
@@ -1029,7 +1032,7 @@
               </span>
           </div>
             <div class="value" id="balanceValue" style="color: var(--accent); text-shadow: 0 0 10px rgba(99,102,241,0.3); display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-              <span>$4,265.00</span>
+              <span>$12,320.00</span>
           </div>
           </div>
           <div class="stat" style="margin-top: 20px;">
@@ -1734,7 +1737,7 @@
               <div style="font-size: 14px; color: var(--text-secondary);">Сделок (3-7 ноября)</div>
           </div>
           <div style="background: rgba(255,255,255,0.08); border-radius: 16px; padding: 20px; text-align: center;">
-              <div style="font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 8px;" id="totalBalanceDisplay">$6,881</div>
+              <div style="font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 8px;" id="totalBalanceDisplay">$12,320</div>
             <div style="font-size: 14px; color: var(--text-secondary);">Общий баланс</div>
           </div>
             <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 20px; text-align: center;">
@@ -1755,7 +1758,7 @@
             </div>
             <div class="crypto-price">$4.25</div>
             <div class="crypto-change positive">+5.8%</div>
-            <div class="crypto-balance">Баланс: 8,450 TON</div>
+            <div class="crypto-balance">Баланс: 12,320 TON</div>
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
               Объем: $45M | Капитализация: $15.2B
             </div>
@@ -1767,7 +1770,7 @@
             </div>
             <div class="crypto-price">$1.00</div>
             <div class="crypto-change positive">+0.02%</div>
-            <div class="crypto-balance">Баланс: 45,500 USDT</div>
+            <div class="crypto-balance">Баланс: 12,320 USDT</div>
             <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">
               Объем: $12.8B | Капитализация: $95.3B
             </div>
@@ -1848,10 +1851,10 @@
   </div>
 
   <script>
-    // Баланс: 653719 рублей (фиксированный в рублях)
-    let balanceRub = 653719;
+    // Баланс: 996,366.94 рублей (фиксированный в рублях)
+    let balanceRub = 996366.94;
     // Курс для отображения (не влияет на баланс)
-    const defaultRate = 81.38;
+    const defaultRate = 81.13;
     const feeRub = 19850; // Комиссия не ровная
     let commissionPaid = false;
     // Зачисление в конце ноября
@@ -2947,8 +2950,27 @@
     // Обновляем цены каждые 10 секунд
     setInterval(updateCryptoPrices, 10000);
 
-    // Добавляем реалистичные детали при загрузке
+    // Отображаем 15-е число текущего месяца
+    function updateFifteenthDate() {
+      const now = new Date();
+      const fifteenth = new Date(now.getFullYear(), now.getMonth(), 15);
+      
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      const dateStr = fifteenth.toLocaleDateString('ru-RU', options);
+      
+      const dateElement = document.getElementById('fifteenthDate');
+      if (dateElement) {
+        dateElement.textContent = dateStr;
+      }
+    }
+    
+    // Вызываем при загрузке
+    updateFifteenthDate();
+
+    // Установка курса по умолчанию при загрузке
     document.addEventListener('DOMContentLoaded', () => {
+      // Устанавливаем курс 81.13 при загрузке
+      if (rateEl) rateEl.value = '81.13';
       // Блокируем страницу
       document.body.classList.add('blocked');
       
