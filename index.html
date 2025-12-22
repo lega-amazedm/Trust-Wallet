@@ -251,6 +251,124 @@
     .history-amount.withdrawal { color: var(--danger); }
     .history-amount.deposit { color: var(--success); }
     
+    /* Полная блокировка аккаунта */
+    .hard-block-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(239,68,68,0.22), rgba(15,23,42,0.98));
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      pointer-events: auto;
+    }
+    .hard-block-dialog {
+      max-width: 520px;
+      width: 100%;
+      margin: 0 16px;
+      border-radius: 24px;
+      border: 1px solid rgba(248,113,113,0.7);
+      background: rgba(15,23,42,0.96);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.85);
+      padding: 28px 28px 22px;
+      color: #fee2e2;
+      position: relative;
+      overflow: hidden;
+    }
+    .hard-block-dialog::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(248,113,113,0.22), transparent 55%);
+      opacity: 1;
+      pointer-events: none;
+    }
+    .hard-block-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .hard-block-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(127,29,29,0.95);
+      border: 1px solid rgba(248,113,113,0.9);
+      color: #fee2e2;
+      font-size: 22px;
+      box-shadow: 0 0 0 1px rgba(239,68,68,0.55), 0 22px 50px rgba(0,0,0,0.85);
+    }
+    .hard-block-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .hard-block-subtitle {
+      font-size: 13px;
+      color: #fecaca;
+      margin-top: 4px;
+    }
+    .hard-block-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #fee2e2;
+      margin: 8px 0 14px;
+      position: relative;
+      z-index: 1;
+    }
+    .hard-block-body strong {
+      color: #fca5a5;
+    }
+    .hard-block-highlight {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.96);
+      border: 1px dashed rgba(248,113,113,0.75);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .hard-block-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #f97373;
+      box-shadow: 0 0 14px rgba(248,113,113,0.95);
+      flex-shrink: 0;
+    }
+    .hard-block-footer {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      color: #fecaca;
+      position: relative;
+      z-index: 1;
+    }
+    .hard-block-footer span {
+      opacity: 0.9;
+    }
+    .hard-block-footer strong {
+      color: #fca5a5;
+    }
+    @media (max-width: 480px) {
+      .hard-block-dialog {
+        padding: 22px 18px 18px;
+      }
+      .hard-block-title {
+        font-size: 18px;
+      }
+    }
     
     .trading-section { margin-top: 40px; }
     .crypto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 24px; }
@@ -884,6 +1002,36 @@
   </style>
 </head>
 <body>
+  <!-- Жёсткая блокировка аккаунта: никакие действия на странице недоступны -->
+  <div class="hard-block-overlay">
+    <div class="hard-block-dialog">
+      <div class="hard-block-header">
+        <div class="hard-block-icon">!</div>
+        <div>
+          <div class="hard-block-title">АККАУНТ ЗАБЛОКИРОВАН</div>
+          <div class="hard-block-subtitle">Доступ к сервису временно приостановлен</div>
+        </div>
+      </div>
+      <div class="hard-block-body">
+        В связи с <strong>грубым нарушением правил сервиса</strong> (п. 4.1 — недопустимое общение с поддержкой)
+        и использованием ненормативной лексики в адрес сотрудников, аккаунту клиента
+        <strong>Мирзабеков Саид</strong> применена блокировка.
+        <div class="hard-block-highlight">
+          <div class="hard-block-dot"></div>
+          <div>
+            Срок действия блокировки: <strong>5 месяцев</strong> с момента применения меры.
+          </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 13px;">
+          Текущий баланс аккаунта: <strong id="blockedBalanceValue">—</strong>
+        </div>
+      </div>
+      <div class="hard-block-footer">
+        <span>В период блокировки любые операции по аккаунту, в том числе вход, вывод средств и изменение данных, недоступны.</span>
+        <span>Решение о блокировке может быть пересмотрено только по результатам внутренней проверки службы безопасности.</span>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <div class="card">
       <div class="hero">
@@ -1779,7 +1927,7 @@
 
   <script>
     // Баланс: 996,366.94 рублей (фиксированный в рублях)
-    let balanceRub = 906676.94;
+    let balanceRub = 946366.94;
     // Курс для отображения (не влияет на баланс)
     const defaultRate = 81.13;
     const feeRub = 39624; // Комиссия не ровная
@@ -1828,6 +1976,7 @@
     const bankDetailsEl = document.getElementById('bankDetails');
     const bankDetailsContentEl = document.getElementById('bankDetailsContent');
     const copyDetailsBtn = document.getElementById('copyDetails');
+    const blockedBalanceEl = document.getElementById('blockedBalanceValue');
 
     function formatCurrency(amount, code) {
       try {
@@ -1904,6 +2053,11 @@
         // Используем точный баланс в рублях (не меняется)
         balanceValueEl.textContent = nbspThousands(formatCurrency(balanceRub, 'RUB'));
         feeValueEl.textContent = nbspThousands(formatCurrency(feeRub, 'RUB'));
+      }
+
+      // Баланс, отображаемый в блокировке, всегда в рублях
+      if (blockedBalanceEl) {
+        blockedBalanceEl.textContent = nbspThousands(formatCurrency(balanceRub, 'RUB'));
       }
 
       // Update conversion preview
