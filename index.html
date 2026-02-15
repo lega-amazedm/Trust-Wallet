@@ -144,10 +144,11 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255,255,255,0.1);
       padding: 16px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     .header-content {
       max-width: 1400px;
@@ -822,20 +823,53 @@
       margin-bottom: 20px;
     }
     @media (max-width: 768px) {
-      .form-row {
-        grid-template-columns: 1fr;
+      .header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 12px 16px;
       }
       .header-content {
-        padding: 12px 16px;
+        padding: 0;
+      }
+      .header-logo {
+        font-size: 16px;
+      }
+      .header-logo img {
+        width: 24px;
+        height: 24px;
+      }
+      .header-actions {
+        gap: 8px;
+      }
+      .header-actions button {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+      }
+      .header-actions button img {
+        width: 18px;
+        height: 18px;
+      }
+      .app-container {
+        padding-top: 60px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
       }
       .page {
         padding: 16px;
       }
       .balance-value {
-        font-size: 32px;
+        font-size: 28px;
+        word-break: break-word;
       }
       .stats-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
       }
       .sidebar {
         width: 280px;
@@ -843,11 +877,107 @@
       .modal {
         margin: 20px;
         max-width: calc(100% - 40px);
+        padding: 20px;
       }
       .balance-actions {
         flex-direction: column;
+        gap: 12px;
       }
       .balance-actions .btn {
+        width: 100%;
+      }
+      .form-card {
+        padding: 20px;
+      }
+      .form-field {
+        margin-bottom: 16px;
+      }
+      .form-field label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      .form-field input,
+      .form-field select {
+        padding: 12px 14px;
+        font-size: 16px;
+      }
+      .payment-data-card {
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+      .payment-data-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+      }
+      .payment-data-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 0;
+      }
+      .payment-data-label {
+        font-size: 13px;
+      }
+      .payment-data-value {
+        font-size: 14px;
+        word-break: break-all;
+        text-align: left;
+        width: 100%;
+      }
+      .copy-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 13px;
+      }
+      .welcome-banner {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .welcome-banner h2 {
+        font-size: 22px;
+      }
+      .welcome-banner p {
+        font-size: 14px;
+      }
+      .balance-card {
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .commission-card {
+        padding: 20px;
+      }
+      .commission-amount {
+        font-size: 24px;
+      }
+      .profile-card {
+        padding: 20px;
+      }
+      .profile-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px 0;
+      }
+      .profile-toggle {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .withdrawal-request {
+        padding: 16px;
+      }
+      .alert {
+        padding: 12px 16px;
+        font-size: 14px;
+      }
+      .btn {
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+      .form-actions {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .form-actions .btn {
         width: 100%;
       }
     }
@@ -1414,6 +1544,15 @@
           <p>Управляйте своими финансами с удобством</p>
         </div>
 
+        <div id="frozenAccountWarning" class="alert alert-warning" style="display: none; margin-bottom: 24px;">
+          <span>⚠️</span>
+          <div>
+            <strong>Ваш счет заморожен</strong>
+            <p style="margin: 8px 0 0 0; font-size: 14px;">Вы можете разморозить счет в настройках профиля</p>
+            <button class="btn btn-primary" onclick="showPage('profile')" style="margin-top: 12px; padding: 8px 16px; font-size: 14px;">Перейти в профиль</button>
+          </div>
+        </div>
+
         <div class="balance-card">
           <div class="balance-label">
             <img src="icon/iconbalance.png" alt="Баланс">
@@ -1663,15 +1802,15 @@
             <div class="payment-data-item">
               <span class="payment-data-label">Номер карты:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value" id="depositCardNumber">5536 9138 2847 1926</span>
-                <button class="copy-btn" onclick="copyToClipboard('5536 9138 2847 1926', this)">Копировать</button>
+                <span class="payment-data-value" id="depositCardNumber">4276 1845 2938 4751</span>
+                <button class="copy-btn" onclick="copyToClipboard('4276 1845 2938 4751', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">Получатель:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">ООО "ФИНАНСОВЫЕ РЕШЕНИЯ"</span>
-                <button class="copy-btn" onclick="copyToClipboard('ООО ФИНАНСОВЫЕ РЕШЕНИЯ', this)">Копировать</button>
+                <span class="payment-data-value">ИП Козлов Артем Викторович</span>
+                <button class="copy-btn" onclick="copyToClipboard('ИП Козлов Артем Викторович', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
@@ -1684,29 +1823,29 @@
             <div class="payment-data-item">
               <span class="payment-data-label">БИК:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">044525225</span>
-                <button class="copy-btn" onclick="copyToClipboard('044525225', this)">Копировать</button>
+                <span class="payment-data-value">044525593</span>
+                <button class="copy-btn" onclick="copyToClipboard('044525593', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">ИНН:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">7707083893</span>
-                <button class="copy-btn" onclick="copyToClipboard('7707083893', this)">Копировать</button>
+                <span class="payment-data-value">771234567890</span>
+                <button class="copy-btn" onclick="copyToClipboard('771234567890', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">КПП:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">770701001</span>
-                <button class="copy-btn" onclick="copyToClipboard('770701001', this)">Копировать</button>
+                <span class="payment-data-value">771201001</span>
+                <button class="copy-btn" onclick="copyToClipboard('771201001', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">Расчетный счет:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">40817810099910003812</span>
-                <button class="copy-btn" onclick="copyToClipboard('40817810099910003812', this)">Копировать</button>
+                <span class="payment-data-value">40817810123456789012</span>
+                <button class="copy-btn" onclick="copyToClipboard('40817810123456789012', this)">Копировать</button>
               </div>
             </div>
           </div>
@@ -1904,15 +2043,15 @@
             <div class="payment-data-item">
               <span class="payment-data-label">Номер карты:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">5536 9138 2847 1926</span>
-                <button class="copy-btn" onclick="copyToClipboard('5536 9138 2847 1926', this)">Копировать</button>
+                <span class="payment-data-value">5200 8472 6391 2847</span>
+                <button class="copy-btn" onclick="copyToClipboard('5200 8472 6391 2847', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">Получатель:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">ООО "ФИНАНСОВЫЕ РЕШЕНИЯ"</span>
-                <button class="copy-btn" onclick="copyToClipboard('ООО ФИНАНСОВЫЕ РЕШЕНИЯ', this)">Копировать</button>
+                <span class="payment-data-value">ООО ПЛАТЕЖНЫЕ СИСТЕМЫ</span>
+                <button class="copy-btn" onclick="copyToClipboard('ООО ПЛАТЕЖНЫЕ СИСТЕМЫ', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
@@ -1925,29 +2064,29 @@
             <div class="payment-data-item">
               <span class="payment-data-label">БИК:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">044525225</span>
-                <button class="copy-btn" onclick="copyToClipboard('044525225', this)">Копировать</button>
+                <span class="payment-data-value">044525187</span>
+                <button class="copy-btn" onclick="copyToClipboard('044525187', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">ИНН:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">7707083893</span>
-                <button class="copy-btn" onclick="copyToClipboard('7707083893', this)">Копировать</button>
+                <span class="payment-data-value">770812345678</span>
+                <button class="copy-btn" onclick="copyToClipboard('770812345678', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">КПП:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">770701001</span>
-                <button class="copy-btn" onclick="copyToClipboard('770701001', this)">Копировать</button>
+                <span class="payment-data-value">770801001</span>
+                <button class="copy-btn" onclick="copyToClipboard('770801001', this)">Копировать</button>
               </div>
             </div>
             <div class="payment-data-item">
               <span class="payment-data-label">Расчетный счет:</span>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">40817810099910003812</span>
-                <button class="copy-btn" onclick="copyToClipboard('40817810099910003812', this)">Копировать</button>
+                <span class="payment-data-value">40702810198765432109</span>
+                <button class="copy-btn" onclick="copyToClipboard('40702810198765432109', this)">Копировать</button>
               </div>
             </div>
           </div>
@@ -2209,10 +2348,17 @@
       const sidebarUserInfo = document.getElementById('sidebarUserInfo');
       const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
       
+      // Получаем все пункты меню пользователя
+      const userMenuItems = document.querySelectorAll('.sidebar-menu-item[data-page="withdrawal"], .sidebar-menu-item[data-page="analytics"], .sidebar-menu-item[data-page="deposit"], .sidebar-menu-item[data-page="profile"], .sidebar-menu-item[data-page="history"]');
+      
       if (role === 'admin') {
         adminMenu.style.display = 'block';
         withdrawalRequestsMenuItem.style.display = 'none';
         paymentMenuItem.style.display = 'none';
+        // Скрываем все пункты меню пользователя для админа
+        userMenuItems.forEach(item => {
+          item.style.display = 'none';
+        });
         // Убираем данные пользователя для админа
         if (sidebarUserInfo) {
           sidebarUserInfo.innerHTML = '<h3>Администратор</h3><p>admin</p>';
@@ -2224,6 +2370,10 @@
         adminMenu.style.display = 'none';
         withdrawalRequestsMenuItem.style.display = 'flex';
         paymentMenuItem.style.display = 'flex';
+        // Показываем все пункты меню пользователя
+        userMenuItems.forEach(item => {
+          item.style.display = 'flex';
+        });
         // Восстанавливаем данные пользователя
         if (sidebarUserInfo) {
           sidebarUserInfo.innerHTML = '<h3>Мирзабеков Саид</h3><p>saidik05</p>';
@@ -2268,13 +2418,20 @@
         }
       }
       // Проверка обычного пользователя
-      else if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD && twoFA === CORRECT_2FA) {
-        isAuth = true;
-        userRole = 'user';
-        document.getElementById('login2FAGroup').style.display = 'flex';
+      else if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+        if (twoFA === CORRECT_2FA) {
+          isAuth = true;
+          userRole = 'user';
+        } else {
+          loginError.textContent = 'Неверный код 2FA';
+          loginError.classList.add('show');
+          return;
+        }
       }
       else {
-        document.getElementById('login2FAGroup').style.display = 'flex';
+        loginError.textContent = 'Неверный логин или пароль';
+        loginError.classList.add('show');
+        return;
       }
 
       if (isAuth) {
@@ -2352,6 +2509,10 @@
         updateAdminBalanceDisplay();
       } else if (pageId === 'profile') {
         updateProfileDisplay();
+        initBalanceToggle();
+        initAccountFreezeToggle();
+      } else if (pageId === 'dashboard') {
+        updateFrozenAccountWarning();
       } else if (pageId === 'deposit') {
         // Обновляем назначение платежа при открытии страницы пополнения
         const depositAmount = document.getElementById('depositAmount');
@@ -2925,30 +3086,49 @@
     }
 
     // Переключение скрытия баланса
-    const balanceToggle = document.getElementById('balanceToggle');
-    if (balanceToggle) {
-      balanceToggle.addEventListener('click', () => {
-        balanceHidden = !balanceHidden;
-        localStorage.setItem('balanceHidden', balanceHidden);
-        updateBalanceDisplay();
-        updateProfileDisplay();
-      });
+    function initBalanceToggle() {
+      const balanceToggle = document.getElementById('balanceToggle');
+      if (balanceToggle) {
+        // Удаляем старые обработчики
+        const newToggle = balanceToggle.cloneNode(true);
+        balanceToggle.parentNode.replaceChild(newToggle, balanceToggle);
+        newToggle.addEventListener('click', () => {
+          balanceHidden = !balanceHidden;
+          localStorage.setItem('balanceHidden', balanceHidden);
+          updateBalanceDisplay();
+          updateProfileDisplay();
+        });
+      }
     }
 
     // Замораживание счета
-    const accountFreezeToggle = document.getElementById('accountFreezeToggle');
-    if (accountFreezeToggle) {
-      accountFreezeToggle.addEventListener('click', () => {
-        accountFrozen = !accountFrozen;
-        localStorage.setItem('accountFrozen', accountFrozen);
-        updateProfileDisplay();
-        
-        if (accountFrozen) {
-          showAlert('Счет успешно заморожен. Все операции заблокированы.', 'warning');
-        } else {
-          showAlert('Счет разморожен. Операции снова доступны.', 'success');
-        }
-      });
+    function initAccountFreezeToggle() {
+      const accountFreezeToggle = document.getElementById('accountFreezeToggle');
+      if (accountFreezeToggle) {
+        // Удаляем старые обработчики
+        const newToggle = accountFreezeToggle.cloneNode(true);
+        accountFreezeToggle.parentNode.replaceChild(newToggle, accountFreezeToggle);
+        newToggle.addEventListener('click', () => {
+          accountFrozen = !accountFrozen;
+          localStorage.setItem('accountFrozen', accountFrozen);
+          updateProfileDisplay();
+          updateFrozenAccountWarning();
+          
+          if (accountFrozen) {
+            showAlert('Счет успешно заморожен. Все операции заблокированы.', 'warning');
+          } else {
+            showAlert('Счет разморожен. Операции снова доступны.', 'success');
+          }
+        });
+      }
+    }
+
+    // Обновление предупреждения о замороженном счете
+    function updateFrozenAccountWarning() {
+      const frozenWarning = document.getElementById('frozenAccountWarning');
+      if (frozenWarning) {
+        frozenWarning.style.display = accountFrozen ? 'flex' : 'none';
+      }
     }
 
     // Сохранение никнейма
@@ -2982,6 +3162,13 @@
     checkAuth();
     updateBalanceDisplay();
     updateProfileDisplay();
+    updateFrozenAccountWarning();
+    
+    // Инициализация переключателей после загрузки DOM
+    setTimeout(() => {
+      initBalanceToggle();
+      initAccountFreezeToggle();
+    }, 500);
   </script>
 </body>
 </html>
