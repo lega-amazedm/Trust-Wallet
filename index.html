@@ -3,30 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Wild West Crypto — Личный кабинет</title>
+  <title>Trust Wallet — Личный кабинет</title>
   <style>
     :root { 
-      --bg: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-      --card: rgba(255,255,255,0.05);
-      --card-border: rgba(255,255,255,0.1);
+      --bg: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 25%, #1f1f1f 50%, #252525 75%, #1a1a1a 100%);
+      --bg-secondary: radial-gradient(circle at 20% 50%, rgba(100, 100, 100, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(120, 120, 120, 0.08) 0%, transparent 50%),
+                      #1f1f1f;
+      --card: rgba(35, 35, 35, 0.9);
+      --card-hover: rgba(45, 45, 45, 0.95);
+      --card-border: rgba(255,255,255,0.12);
+      --card-border-hover: rgba(150, 150, 150, 0.4);
       --text: #ffffff;
-      --text-secondary: #a0a0a0;
-      --accent: #6366f1;
-      --accent-hover: #4f46e5;
+      --text-secondary: #b0b0b0;
+      --text-tertiary: #808080;
+      --accent: #6b7280;
+      --accent-hover: #9ca3af;
+      --accent-glow: rgba(150, 150, 150, 0.3);
       --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.3);
       --warning: #f59e0b;
+      --warning-glow: rgba(245, 158, 11, 0.3);
       --danger: #ef4444;
-      --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      --danger-glow: rgba(239, 68, 68, 0.3);
+      --gradient-primary: linear-gradient(135deg, #6b7280 0%, #9ca3af 50%, #d1d5db 100%);
+      --gradient-secondary: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+      --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 20px rgba(150, 150, 150, 0.2);
+      --shadow-glow-lg: 0 0 40px rgba(150, 150, 150, 0.3);
+      --glass-bg: rgba(35, 35, 35, 0.85);
+      --glass-border: rgba(255, 255, 255, 0.15);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
+    
+    /* Общие стили для всех иконок - улучшенная видимость */
+    img[src*="icon/"] {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: middle;
+      filter: brightness(1.1) contrast(1.1) drop-shadow(0 1px 3px rgba(255,255,255,0.2));
+      transition: all 0.3s ease;
+    }
+    img[src*="icon/"]:hover {
+      filter: brightness(1.3) contrast(1.2) drop-shadow(0 2px 6px rgba(255,255,255,0.3));
+      transform: scale(1.05);
+    }
+    
+    /* Fallback для отсутствующих иконок */
+    img[src*="icon/"]:not([src])::before,
+    img[src*="icon/"][src=""]::before {
+      content: '📱';
+      font-size: 20px;
+      display: inline-block;
+    }
     body { 
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
+      background: var(--bg-secondary);
+      background-attachment: fixed;
       color: var(--text);
       overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(150, 150, 150, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(120, 120, 120, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
     }
     
     /* Страница входа */
@@ -39,23 +95,52 @@
       background: var(--bg);
     }
     .login-card {
-      max-width: 420px;
+      max-width: 440px;
       width: 100%;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.4);
-      backdrop-filter: blur(20px);
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.1);
+      backdrop-filter: blur(30px) saturate(200%);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(180, 180, 180, 0.5), transparent);
+    }
+    .login-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(180, 180, 180, 0.05) 0%, transparent 70%);
+      pointer-events: none;
     }
     .login-logo {
       text-align: center;
       margin-bottom: 32px;
     }
     .login-logo img {
-      width: 64px;
-      height: 64px;
-      margin-bottom: 16px;
+      width: 72px;
+      height: 72px;
+      margin-bottom: 20px;
+      filter: brightness(1.2) drop-shadow(0 4px 15px rgba(255,255,255,0.3));
+      transition: transform 0.3s ease, filter 0.3s ease;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .login-logo:hover img {
+      transform: scale(1.1) rotate(5deg);
+      filter: brightness(1.4) drop-shadow(0 6px 20px rgba(255,255,255,0.4));
     }
     .login-title {
       font-size: 28px;
@@ -85,21 +170,31 @@
       color: var(--text-secondary);
       font-weight: 500;
     }
-    .form-group input {
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
       width: 100%;
-      background: rgba(255,255,255,0.08);
+      background: rgba(0, 0, 0, 0.4);
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 12px;
       padding: 14px 16px;
       outline: none;
       font-size: 16px;
       transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
-    .form-group input:focus {
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
-      background: rgba(255,255,255,0.12);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15), var(--shadow-glow);
+      background: rgba(0, 0, 0, 0.6);
+    }
+    .form-group input:hover,
+    .form-group select:hover,
+    .form-group textarea:hover {
+      border-color: rgba(255,255,255,0.2);
     }
     .login-btn {
       width: 100%;
@@ -139,16 +234,35 @@
       display: block;
     }
 
-    /* Хедер с бургер-меню */
+    /* Хедер с бургер-меню - полностью переделан */
     .header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
+      background: rgba(30, 30, 30, 0.95);
+      backdrop-filter: blur(30px) saturate(200%);
       border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding: 16px 24px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 18px 28px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.3), transparent);
     }
     .header-content {
       max-width: 1400px;
@@ -160,101 +274,166 @@
     .burger-menu {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
     }
     .burger-btn {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border: none;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
+      background: rgba(50, 50, 50, 0.6);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       gap: 5px;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px);
+      position: relative;
+      overflow: hidden;
+    }
+    .burger-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .burger-btn:hover::before {
+      opacity: 1;
     }
     .burger-btn:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(60, 60, 60, 0.8);
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(150, 150, 150, 0.1);
+      transform: translateY(-1px);
+    }
+    .burger-btn:active {
+      transform: translateY(0);
     }
     .burger-btn span {
-      width: 20px;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: all 0.3s ease;
+      width: 22px;
+      height: 2.5px;
+      background: #ffffff;
+      border-radius: 3px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .burger-btn.active {
+      background: rgba(70, 70, 70, 0.9);
     }
     .burger-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(6px, 6px);
     }
     .burger-btn.active span:nth-child(2) {
       opacity: 0;
+      transform: translateX(-10px);
     }
     .burger-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
+      transform: rotate(-45deg) translate(6px, -6px);
     }
     .logo-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      font-size: 20px;
+      gap: 14px;
+      font-size: 22px;
       font-weight: 700;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #ffffff;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.1);
+      letter-spacing: 0.5px;
     }
     .logo-header img {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
+      filter: brightness(1.1) drop-shadow(0 2px 8px rgba(255,255,255,0.2));
+      transition: transform 0.3s ease;
+    }
+    .logo-header:hover img {
+      transform: scale(1.05) rotate(5deg);
     }
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .notification-btn, .logout-btn {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       border: none;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
+      background: rgba(50, 50, 50, 0.6);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      backdrop-filter: blur(15px);
+      overflow: hidden;
+    }
+    .notification-btn::before, .logout-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .notification-btn:hover::before, .logout-btn:hover::before {
+      opacity: 1;
     }
     .notification-btn:hover, .logout-btn:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(60, 60, 60, 0.8);
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 0 3px rgba(150, 150, 150, 0.1);
+      transform: translateY(-1px) scale(1.02);
+    }
+    .notification-btn:active, .logout-btn:active {
+      transform: translateY(0) scale(1);
     }
     .notification-btn img, .logout-btn img {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
+      filter: brightness(1.2) drop-shadow(0 1px 3px rgba(255,255,255,0.3));
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .notification-btn:hover img, .logout-btn:hover img {
+      transform: scale(1.1);
     }
     .notification-badge {
       position: absolute;
-      top: -2px;
-      right: -2px;
-      width: 8px;
-      height: 8px;
-      background: var(--danger);
+      top: 6px;
+      right: 6px;
+      width: 10px;
+      height: 10px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
       border-radius: 50%;
-      border: 2px solid rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(30, 30, 30, 0.95);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 2px 4px rgba(0,0,0,0.3);
+      animation: pulse-badge 2s ease-in-out infinite;
+      z-index: 2;
+    }
+    @keyframes pulse-badge {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
     }
 
-    /* Боковое меню */
+    /* Боковое меню - полностью переделан */
     .sidebar-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
       z-index: 998;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .sidebar-overlay.active {
       opacity: 1;
@@ -262,17 +441,39 @@
     }
     .sidebar {
       position: fixed;
-      left: -300px;
+      left: -320px;
       top: 0;
-      width: 300px;
+      width: 320px;
       height: 100vh;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
+      background: linear-gradient(180deg, rgba(25, 25, 25, 0.98) 0%, rgba(20, 20, 20, 0.98) 100%);
+      backdrop-filter: blur(30px) saturate(200%);
       border-right: 1px solid rgba(255,255,255,0.1);
       z-index: 999;
-      transition: left 0.3s ease;
-      padding: 24px;
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
       overflow-y: auto;
+      overflow-x: hidden;
+      box-shadow: 4px 0 40px rgba(0, 0, 0, 0.6), inset -1px 0 0 rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, 
+        transparent 0%, 
+        rgba(150, 150, 150, 0.3) 20%, 
+        rgba(150, 150, 150, 0.4) 50%, 
+        rgba(150, 150, 150, 0.3) 80%, 
+        transparent 100%);
+      pointer-events: none;
     }
     .sidebar.active {
       left: 0;
@@ -280,86 +481,237 @@
     .sidebar-user {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 24px;
+      gap: 16px;
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(50, 50, 50, 0.5) 0%, rgba(30, 30, 30, 0.5) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .sidebar-user::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.3), transparent);
     }
     .sidebar-user-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--gradient-primary);
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 18px;
-      box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+      font-size: 20px;
+      box-shadow: 0 4px 20px rgba(107, 114, 128, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .sidebar-user-avatar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .sidebar-user-info {
+      flex: 1;
+      min-width: 0;
     }
     .sidebar-user-info h3 {
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: 600;
       margin-bottom: 4px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .sidebar-user-info p {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .sidebar-menu {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 8px;
+      padding: 16px 12px;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    .sidebar-menu::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar-menu::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+    }
+    .sidebar-menu::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    .sidebar-menu-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .sidebar-menu-group-title {
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      font-weight: 700;
       color: var(--text-secondary);
-      margin: 8px 0 4px;
-      padding: 0 4px;
+      padding: 12px 16px 8px 16px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
       user-select: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      border-radius: 10px;
+      margin-bottom: 4px;
+    }
+    .sidebar-menu-group-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 0;
+      background: linear-gradient(180deg, #6b7280 0%, #9ca3af 100%);
+      border-radius: 0 2px 2px 0;
+      transition: height 0.3s ease;
+    }
+    .sidebar-menu-group-title:hover {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding-left: 20px;
+    }
+    .sidebar-menu-group-title:hover::before {
+      height: 60%;
     }
     .sidebar-menu-group-title::after {
-      content: '▾';
-      font-size: 10px;
-      opacity: 0.7;
+      content: '▼';
+      font-size: 9px;
+      opacity: 0.5;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-left: auto;
+      padding-left: 12px;
     }
     .sidebar-menu-group.collapsed .sidebar-menu-group-title::after {
       transform: rotate(-90deg);
-    }
-    .sidebar-menu-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      opacity: 0.7;
     }
     .sidebar-menu-group.collapsed .sidebar-menu-item {
-      display: none;
+      display: none !important;
+      max-height: 0;
+      opacity: 0;
+      transform: translateX(-20px);
+      pointer-events: none;
+    }
+    .sidebar-menu-group:not(.collapsed) .sidebar-menu-item {
+      display: flex !important;
+      animation: slideInMenuItem 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes slideInMenuItem {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+        max-height: 0;
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        max-height: 100px;
+      }
     }
     .sidebar-menu-item {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
+      gap: 14px;
+      padding: 13px 16px;
       border-radius: 12px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-decoration: none;
-      color: var(--text);
+      color: var(--text-secondary);
+      position: relative;
+      overflow: hidden;
+      margin: 2px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .sidebar-menu-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #6b7280 0%, #9ca3af 100%);
+      transform: scaleY(0);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 0 3px 3px 0;
+    }
+    .sidebar-menu-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     .sidebar-menu-item:hover {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      transform: translateX(6px);
+      box-shadow: -2px 0 8px rgba(0,0,0,0.2);
+    }
+    .sidebar-menu-item:hover::after {
+      opacity: 1;
     }
     .sidebar-menu-item.active {
-      background: rgba(99,102,241,0.2);
-      color: var(--accent);
+      background: linear-gradient(90deg, rgba(107, 114, 128, 0.2) 0%, rgba(107, 114, 128, 0.1) 100%);
+      color: var(--text);
+      font-weight: 600;
+      box-shadow: inset 0 0 20px rgba(107, 114, 128, 0.15), -2px 0 8px rgba(0,0,0,0.2);
+    }
+    .sidebar-menu-item.active::before {
+      transform: scaleY(1);
+    }
+    .sidebar-menu-item.active::after {
+      opacity: 1;
     }
     .sidebar-menu-item img {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
+      filter: brightness(1.1) drop-shadow(0 1px 3px rgba(255,255,255,0.2));
+      transition: transform 0.3s ease, filter 0.3s ease;
+      opacity: 0.9;
+    }
+    .sidebar-menu-item:hover img {
+      transform: scale(1.1);
+      filter: brightness(1.3) drop-shadow(0 2px 6px rgba(255,255,255,0.3));
+      opacity: 1;
+    }
+    .sidebar-menu-item.active img {
+      filter: brightness(1.4) drop-shadow(0 2px 8px rgba(150, 150, 150, 0.4));
+      opacity: 1;
     }
 
     /* Контент страниц */
@@ -368,23 +720,947 @@
       max-width: 1400px;
       margin: 0 auto;
       padding: 24px;
+      min-height: calc(100vh - 80px);
+      position: relative;
+      overflow: visible;
     }
     .page.active {
       display: block;
     }
 
-    /* Главная страница */
+    /* Главная страница - Крипто дизайн */
     .dashboard {
       display: grid;
       gap: 24px;
     }
-    .welcome-banner {
-      background: var(--gradient-primary);
-      border-radius: 20px;
+    
+    /* Приветственный баннер */
+    .crypto-welcome-banner {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
       padding: 32px;
       margin-bottom: 24px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .crypto-welcome-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    }
+    .crypto-welcome-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .crypto-welcome-text h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .crypto-welcome-text p {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .crypto-welcome-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .crypto-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .crypto-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .crypto-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .crypto-welcome-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .crypto-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .crypto-action-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .crypto-action-btn:hover::before {
+      opacity: 1;
+    }
+    .crypto-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .crypto-action-primary {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.1) 100%);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .crypto-action-secondary {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.1) 100%);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    .crypto-action-tertiary {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.1) 100%);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+    .crypto-action-icon {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .crypto-action-icon-img {
+      width: 18px;
+      height: 18px;
+      filter: brightness(1.2);
+      transition: transform 0.3s ease;
+    }
+    .crypto-action-btn:hover .crypto-action-icon-img {
+      transform: scale(1.1);
+    }
+    
+    /* Карточка баланса */
+    .crypto-balance-card {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 32px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .crypto-balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    }
+    .crypto-balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .crypto-balance-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .crypto-balance-icon {
+      font-size: 32px;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(150, 150, 150, 0.1) 100%);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .crypto-balance-icon-img {
+      width: 32px;
+      height: 32px;
+      filter: brightness(1.2) drop-shadow(0 2px 6px rgba(255,255,255,0.25));
+    }
+    .crypto-balance-title h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .crypto-balance-title p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .crypto-balance-trend {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+    .crypto-trend-up {
+      font-size: 18px;
+      font-weight: 700;
+      color: #10b981;
+    }
+    .crypto-trend-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .crypto-balance-amount {
+      margin-bottom: 24px;
+    }
+    .crypto-balance-main {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .crypto-balance-main:hover {
+      transform: scale(1.02);
+    }
+    .crypto-balance-sub {
+      font-size: 20px;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+    .crypto-balance-chart {
+      height: 100px;
+      margin-top: 24px;
+    }
+    .crypto-chart-placeholder {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .crypto-chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+    .crypto-chart-line {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: drawLine 2s ease-out forwards;
+    }
+    .crypto-chart-area {
+      opacity: 0;
+      animation: fadeInArea 2s ease-out 0.5s forwards;
+    }
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+    @keyframes fadeInArea {
+      to {
+        opacity: 1;
+      }
+    }
+    
+    /* Секции */
+    .crypto-section {
+      margin-bottom: 24px;
+    }
+    .crypto-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .crypto-section-header h2 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .crypto-link-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      padding: 8px 0;
+    }
+    .crypto-link-btn:hover {
+      color: var(--accent-hover);
+      transform: translateX(4px);
+    }
+    
+    /* Сетка активов */
+    .crypto-assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .crypto-asset-card {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .crypto-asset-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.3), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .crypto-asset-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .crypto-asset-card:hover::before {
+      opacity: 1;
+    }
+    .crypto-asset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .crypto-asset-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .crypto-asset-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(150, 150, 150, 0.1) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .crypto-asset-name {
+      display: flex;
+      flex-direction: column;
+    }
+    .crypto-asset-symbol {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .crypto-asset-fullname {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .crypto-asset-price {
+      text-align: right;
+    }
+    .crypto-asset-amount {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .crypto-asset-value {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .crypto-asset-change {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    .crypto-asset-change.positive {
+      color: #10b981;
+    }
+    .crypto-asset-change.negative {
+      color: #ef4444;
+    }
+    
+    /* Статистика */
+    .crypto-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .crypto-stat-card {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .crypto-stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .crypto-stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .crypto-stat-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .crypto-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .crypto-stat-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    
+    /* Транзакции */
+    .crypto-transactions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .crypto-transaction-item {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+    }
+    .crypto-transaction-item:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .crypto-transaction-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+    .crypto-transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .crypto-transaction-info {
+      flex: 1;
+    }
+    .crypto-transaction-type {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .crypto-transaction-date {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .crypto-transaction-amount {
+      text-align: right;
+    }
+    .crypto-transaction-value {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .crypto-transaction-status {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    
+    /* Алерты */
+    .crypto-alert {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .crypto-alert-warning {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(30, 30, 30, 0.95) 100%);
+    }
+    .crypto-alert-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .crypto-alert-icon-img {
+      width: 24px;
+      height: 24px;
+      filter: brightness(1.2);
+    }
+    .crypto-alert-content {
+      flex: 1;
+    }
+    .crypto-alert-content strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .crypto-alert-content p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .crypto-btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .crypto-btn:hover {
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+    .crypto-btn-sm {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    
+    /* Страница поддержки - крипто стиль */
+    .crypto-support-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-height: auto;
+      position: relative;
+      padding-bottom: 40px;
+    }
+    .crypto-section-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .crypto-section-icon {
+      width: 32px;
+      height: 32px;
+      filter: brightness(1.2);
+    }
+    .crypto-support-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .crypto-support-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .crypto-support-stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .crypto-support-stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .crypto-support-quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .crypto-quick-action-card {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .crypto-quick-action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .crypto-quick-action-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .crypto-quick-action-card:hover::before {
+      opacity: 1;
+    }
+    .crypto-quick-action-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(150, 150, 150, 0.1) 100%);
+      padding: 12px;
+      filter: brightness(1.2);
+      flex-shrink: 0;
+    }
+    .crypto-quick-action-content {
+      flex: 1;
+    }
+    .crypto-quick-action-content h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .crypto-quick-action-content p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .crypto-quick-action-arrow {
+      width: 20px;
+      height: 20px;
+      opacity: 0.5;
+      transition: transform 0.3s ease;
+    }
+    .crypto-quick-action-card:hover .crypto-quick-action-arrow {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+    .crypto-support-card {
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      padding: 32px;
+      position: relative;
+      overflow: visible;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+      margin-bottom: 24px;
+    }
+    .crypto-support-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    }
+    .crypto-support-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .crypto-support-card-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .crypto-support-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(150, 150, 150, 0.1) 100%);
+      padding: 10px;
+      filter: brightness(1.2);
+    }
+    .crypto-support-card-title h3 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .crypto-support-card-title p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .crypto-support-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .crypto-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+    }
+    .crypto-support-chat-placeholder {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .crypto-chat-message {
+      display: flex;
+      gap: 12px;
+      animation: fadeInMessage 0.3s ease;
+    }
+    @keyframes fadeInMessage {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .crypto-chat-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .crypto-chat-content {
+      flex: 1;
+    }
+    .crypto-chat-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .crypto-chat-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .crypto-chat-time {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+    }
+    .crypto-chat-input-area {
+      display: flex;
+      gap: 12px;
+      margin-top: auto;
+    }
+    .crypto-chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .crypto-chat-input:focus {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+    }
+    .crypto-chat-send-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.2) 0%, rgba(150, 150, 150, 0.1) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .crypto-chat-send-btn:hover {
+      background: linear-gradient(135deg, rgba(150, 150, 150, 0.3) 0%, rgba(150, 150, 150, 0.2) 100%);
+      transform: scale(1.05);
+    }
+    .crypto-chat-note {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 8px;
+    }
+    .crypto-support-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      width: 100%;
+    }
+    .crypto-form-input,
+    .crypto-form-select,
+    .crypto-form-textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .crypto-form-input:focus,
+    .crypto-form-select:focus,
+    .crypto-form-textarea:focus {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 3px rgba(150, 150, 150, 0.1);
+    }
+    .crypto-form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .crypto-support-form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+    .crypto-btn-secondary {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+    }
+    .crypto-btn-secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    .crypto-faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .crypto-faq-item {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .crypto-faq-item:hover {
+      border-color: rgba(255,255,255,0.2);
+    }
+    .crypto-faq-question {
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .crypto-faq-question:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    .crypto-faq-arrow {
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: transform 0.3s ease;
+    }
+    .crypto-faq-item.active .crypto-faq-arrow {
+      transform: rotate(180deg);
+    }
+    .crypto-faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .crypto-faq-item.active .crypto-faq-answer {
+      max-height: 500px;
+    }
+    .crypto-faq-answer p {
+      padding: 0 20px 20px 20px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .welcome-banner {
+      background: var(--gradient-primary);
+      border-radius: 24px;
+      padding: 40px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg), var(--shadow-glow-lg);
     }
     .welcome-banner::before {
       content: '';
@@ -393,12 +1669,19 @@
       right: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
       animation: pulse 4s ease-in-out infinite;
     }
+    .welcome-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
     @keyframes pulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 0.6; }
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
     }
     .welcome-banner h2 {
       font-size: 28px;
@@ -413,13 +1696,20 @@
       z-index: 1;
     }
     .balance-card {
-      background: radial-gradient(circle at top left, rgba(129,140,248,0.25), transparent 55%),
-                  rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.15), transparent 60%),
+                  rgba(10, 10, 10, 0.9);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 24px;
-      padding: 24px 28px;
+      padding: 32px;
       position: relative;
       overflow: hidden;
+      box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: all 0.3s ease;
+    }
+    .balance-card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: var(--shadow-lg), var(--shadow-glow), inset 0 1px 0 rgba(255,255,255,0.1);
+      transform: translateY(-2px);
     }
     .balance-card::before {
       content: '';
@@ -427,8 +1717,23 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.6), transparent);
+    }
+    .balance-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+      animation: pulse-glow 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.1); }
     }
     .balance-label {
       font-size: 14px;
@@ -439,8 +1744,15 @@
       gap: 8px;
     }
     .balance-label img {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
+      filter: brightness(1.2) drop-shadow(0 2px 6px rgba(255,255,255,0.25));
+      transition: transform 0.3s ease, filter 0.3s ease;
+      opacity: 0.95;
+    }
+    .balance-label:hover img {
+      transform: scale(1.15) rotate(5deg);
+      filter: brightness(1.4) drop-shadow(0 3px 10px rgba(255,255,255,0.35));
     }
     .balance-main {
       display: flex;
@@ -457,9 +1769,13 @@
     .balance-value {
       font-size: 42px;
       font-weight: 700;
-      color: var(--accent);
-      text-shadow: 0 0 20px rgba(99,102,241,0.3);
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 30px var(--accent-glow);
       margin-bottom: 16px;
+      filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.5));
     }
     .balance-subvalue {
       font-size: 14px;
@@ -486,28 +1802,50 @@
     .btn-primary {
       background: var(--gradient-primary);
       color: white;
-      box-shadow: 0 8px 25px rgba(99,102,241,0.3);
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .btn-primary:hover::before {
+      left: 100%;
     }
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(99,102,241,0.4);
+      box-shadow: var(--shadow-lg), var(--shadow-glow-lg);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
     }
     .btn-secondary {
-      background: rgba(255,255,255,0.1);
+      background: rgba(0, 0, 0, 0.4);
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
     }
     .btn-secondary:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(0, 0, 0, 0.6);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
     }
     .btn-danger {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: var(--gradient-danger);
       color: white;
-      box-shadow: 0 8px 25px rgba(239,68,68,0.3);
+      box-shadow: var(--shadow-md), 0 0 20px rgba(239,68,68,0.3);
     }
     .btn-danger:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(239,68,68,0.4);
+      box-shadow: var(--shadow-lg), 0 0 30px rgba(239,68,68,0.4);
     }
     /* Комиссия */
     .commission-card {
@@ -593,14 +1931,22 @@
 
     /* Заявка на вывод */
     .withdrawal-request {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--card);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 24px;
       margin-top: 24px;
       position: relative;
       overflow: hidden;
       animation: slideIn 0.4s ease-out;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    .withdrawal-request:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-border-hover);
+      background: var(--card-hover);
     }
     @keyframes slideIn {
       from {
@@ -707,6 +2053,8 @@
     /* Аналитика */
     .analytics-section {
       margin-top: 32px;
+      position: relative;
+      min-height: auto;
     }
     .section-title {
       font-size: 24px;
@@ -717,8 +2065,15 @@
       gap: 12px;
     }
     .section-title img {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
+      filter: brightness(1.2) drop-shadow(0 2px 6px rgba(255,255,255,0.25));
+      transition: transform 0.3s ease, filter 0.3s ease;
+      opacity: 0.95;
+    }
+    .section-title:hover img {
+      transform: scale(1.1) rotate(5deg);
+      filter: brightness(1.4) drop-shadow(0 3px 10px rgba(255,255,255,0.35));
     }
     .stats-grid {
       display: grid;
@@ -727,13 +2082,15 @@
       margin-bottom: 32px;
     }
     .stat-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
       padding: 24px;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     .stat-card::before {
       content: '';
@@ -742,12 +2099,36 @@
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .stat-card:hover::before {
+      opacity: 1;
     }
     .stat-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-      background: rgba(255,255,255,0.12);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(135deg, rgba(40, 40, 40, 0.95) 0%, rgba(35, 35, 35, 0.95) 100%);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .stat-card:hover::after {
+      opacity: 1;
     }
     .stat-card-label {
       font-size: 14px;
@@ -763,15 +2144,18 @@
     }
     .stat-card-value.positive {
       color: var(--success);
+      text-shadow: 0 0 15px var(--success-glow);
     }
     .stat-card-value.negative {
       color: var(--danger);
+      text-shadow: 0 0 15px var(--danger-glow);
     }
     .stat-card-value.neutral {
       color: var(--text-secondary);
     }
     .stat-card-value.zero {
       color: var(--warning);
+      text-shadow: 0 0 15px var(--warning-glow);
     }
     .stat-card-details {
       font-size: 12px;
@@ -779,11 +2163,40 @@
       margin-top: 8px;
     }
     .period-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      padding: 20px;
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 24px;
       margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .period-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+    }
+    .period-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
+    }
+    .period-card:hover {
+      transform: translateX(4px);
+      border-color: var(--card-border-hover);
+      box-shadow: var(--shadow-md);
+      background: var(--card-hover);
     }
     .period-card-header {
       display: flex;
@@ -812,12 +2225,25 @@
       border: 1px solid rgba(16,185,129,0.3);
     }
     .period-card-value {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
       margin-bottom: 8px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .period-card-value.zero {
       color: var(--warning);
+      -webkit-text-fill-color: var(--warning);
+      text-shadow: 0 0 10px var(--warning-glow);
+    }
+    .period-card-value.positive {
+      background: var(--gradient-success);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
     }
     .period-card-description {
       font-size: 13px;
@@ -825,11 +2251,24 @@
       line-height: 1.5;
     }
     .chart-container {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: var(--card);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 24px;
       margin-top: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .chart-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.4), transparent);
     }
     .chart-placeholder {
       height: 300px;
@@ -851,17 +2290,41 @@
     .withdrawal-form {
       max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      min-height: auto;
     }
     .form-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
       padding: 32px;
       margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.4), transparent);
+    }
+    .form-card:hover {
+      border-color: var(--card-border-hover);
+      box-shadow: var(--shadow-lg);
     }
     .form-card h2 {
-      font-size: 24px;
+      font-size: 28px;
+      font-weight: 700;
       margin-bottom: 24px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .form-row {
       display: grid;
@@ -1047,20 +2510,39 @@
     .profile-section {
       max-width: 800px;
       margin: 0 auto;
+      position: relative;
+      min-height: auto;
     }
     .profile-card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
       padding: 32px;
       margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .profile-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
     }
     .profile-card h3 {
-      font-size: 20px;
+      font-size: 24px;
+      font-weight: 700;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
       gap: 12px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .profile-item {
       display: flex;
@@ -1153,20 +2635,25 @@
     }
     .copy-btn {
       padding: 6px 12px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 8px;
       color: var(--text);
       font-size: 12px;
       cursor: pointer;
       transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
     .copy-btn:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(0, 0, 0, 0.6);
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+      transform: scale(1.05);
     }
     .copy-btn.copied {
-      background: var(--success);
+      background: var(--gradient-success);
       border-color: var(--success);
+      box-shadow: 0 0 15px var(--success-glow);
     }
     .form-field {
       display: flex;
@@ -1248,22 +2735,49 @@
       margin-top: 24px;
     }
     .alert {
-      padding: 16px;
+      padding: 16px 20px;
       border-radius: 12px;
       margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 12px;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .alert::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      opacity: 0.5;
     }
     .alert-warning {
-      background: rgba(245,158,11,0.1);
-      border: 1px solid rgba(245,158,11,0.3);
+      background: linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(30, 30, 30, 0.95) 100%);
+      border: 1px solid rgba(245,158,11,0.4);
       color: #fbbf24;
+      box-shadow: 0 4px 15px rgba(245,158,11,0.2);
     }
     .alert-info {
-      background: rgba(99,102,241,0.1);
-      border: 1px solid rgba(99,102,241,0.3);
+      background: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(30, 30, 30, 0.95) 100%);
+      border: 1px solid rgba(99,102,241,0.4);
       color: #818cf8;
+      box-shadow: 0 4px 15px rgba(99,102,241,0.2);
+    }
+    .alert-success {
+      background: rgba(16,185,129,0.15);
+      border: 1px solid rgba(16,185,129,0.4);
+      color: var(--success);
+      box-shadow: 0 4px 15px rgba(16,185,129,0.2);
+    }
+    .alert-danger {
+      background: rgba(239,68,68,0.15);
+      border: 1px solid rgba(239,68,68,0.4);
+      color: var(--danger);
+      box-shadow: 0 4px 15px rgba(239,68,68,0.2);
     }
 
     /* История транзакций */
@@ -1271,16 +2785,36 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
       padding: 20px;
-      background: rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(25, 25, 25, 0.95) 100%);
       border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
+      border-radius: 20px;
       margin-bottom: 12px;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      position: relative;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+    .history-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(150, 150, 150, 0.5), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     .history-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      border-color: rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, rgba(40, 40, 40, 0.95) 0%, rgba(35, 35, 35, 0.95) 100%);
+    }
+    .history-item:hover::before {
+      opacity: 1;
     }
     .history-info {
       display: flex;
@@ -1310,8 +2844,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
       z-index: 10000;
       display: none;
       align-items: center;
@@ -1327,16 +2861,26 @@
       to { opacity: 1; }
     }
     .modal {
-      background: rgba(26, 26, 46, 0.95);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
       padding: 0;
       max-width: 500px;
       width: 100%;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
-      backdrop-filter: blur(20px);
-      animation: slideUp 0.3s ease;
+      box-shadow: var(--shadow-lg), var(--shadow-glow-lg);
+      backdrop-filter: blur(20px) saturate(180%);
+      animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       overflow: hidden;
+      position: relative;
+    }
+    .modal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.6), transparent);
     }
     @keyframes slideUp {
       from {
@@ -1350,10 +2894,11 @@
     }
     .modal-header {
       padding: 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
+      background: rgba(0, 0, 0, 0.3);
     }
     .modal-title {
       font-size: 20px;
@@ -1387,10 +2932,32 @@
       margin-bottom: 24px;
     }
     .modal-confirm-details {
-      background: rgba(255,255,255,0.05);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255,255,255,0.08);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+    }
+    .modal-confirm-details input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      outline: none;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+    .modal-confirm-details input[type="password"]:focus {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 3px rgba(150, 150, 150, 0.1);
     }
     .modal-confirm-details-item {
       display: flex;
@@ -1431,19 +2998,21 @@
     .modal-btn-primary {
       background: var(--gradient-primary);
       color: white;
-      box-shadow: 0 8px 25px rgba(99,102,241,0.3);
+      box-shadow: var(--shadow-md), var(--shadow-glow);
     }
     .modal-btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 35px rgba(99,102,241,0.4);
+      box-shadow: var(--shadow-lg), var(--shadow-glow-lg);
     }
     .modal-btn-secondary {
-      background: rgba(255,255,255,0.1);
+      background: rgba(0, 0, 0, 0.4);
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
     }
     .modal-btn-secondary:hover {
-      background: rgba(255,255,255,0.15);
+      background: rgba(0, 0, 0, 0.6);
+      border-color: rgba(255,255,255,0.2);
     }
     .modal-icon {
       width: 48px;
@@ -1467,6 +3036,168 @@
       background: rgba(245,158,11,0.2);
       color: #fbbf24;
     }
+
+    /* Toast уведомления - красивые и удобные */
+    .toast-container {
+      position: fixed;
+      top: 90px;
+      right: 24px;
+      z-index: 10001;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      pointer-events: none;
+    }
+    .toast {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      backdrop-filter: blur(20px) saturate(180%);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      min-width: 320px;
+      max-width: 400px;
+      opacity: 0;
+      transform: translateX(400px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: all;
+      position: relative;
+      overflow: hidden;
+      animation: slideInToast 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes slideInToast {
+      from {
+        opacity: 0;
+        transform: translateX(400px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    .toast.hiding {
+      animation: slideOutToast 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes slideOutToast {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(400px);
+      }
+    }
+    .toast::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gradient-primary);
+    }
+    .toast.success::before {
+      background: var(--gradient-success);
+    }
+    .toast.warning::before {
+      background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 100%);
+    }
+    .toast.error::before,
+    .toast.danger::before {
+      background: var(--gradient-danger);
+    }
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .toast.success .toast-icon {
+      background: rgba(16,185,129,0.2);
+      color: var(--success);
+    }
+    .toast.warning .toast-icon {
+      background: rgba(245,158,11,0.2);
+      color: #fbbf24;
+    }
+    .toast.error .toast-icon,
+    .toast.danger .toast-icon {
+      background: rgba(239,68,68,0.2);
+      color: var(--danger);
+    }
+    .toast.info .toast-icon {
+      background: rgba(150,150,150,0.2);
+      color: var(--accent);
+    }
+    .toast-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .toast-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .toast-message {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .toast-close {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+      font-size: 18px;
+      line-height: 1;
+      padding: 0;
+      margin-top: -2px;
+    }
+    .toast-close:hover {
+      background: rgba(255,255,255,0.1);
+      color: var(--text);
+      transform: rotate(90deg);
+    }
+    .toast-progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.2);
+      width: 100%;
+      transform-origin: left;
+      animation: toastProgress 5s linear forwards;
+    }
+    @keyframes toastProgress {
+      from {
+        transform: scaleX(1);
+      }
+      to {
+        transform: scaleX(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -1475,7 +3206,7 @@
     <div class="login-card">
       <div class="login-logo">
         <img src="icon/iconbalance.png" alt="Logo">
-        <h1 class="login-title">Wild West Crypto</h1>
+        <h1 class="login-title">Trust Wallet</h1>
         <p class="login-subtitle">Войдите в личный кабинет</p>
       </div>
       <form class="login-form" id="loginForm">
@@ -1489,7 +3220,7 @@
         </div>
         <div class="form-group" id="login2FAGroup">
           <label for="login2FA">2FA</label>
-          <input type="text" id="login2FA" placeholder="Введите код 2FA" required>
+          <input type="password" id="login2FA" placeholder="Введите код 2FA" required autocomplete="one-time-code">
         </div>
         <div class="login-error" id="loginError">Неверный логин, пароль или код 2FA</div>
         <button type="submit" class="login-btn">Войти</button>
@@ -1510,7 +3241,7 @@
           </button>
           <div class="logo-header">
             <img src="icon/iconbalance.png" alt="Logo">
-            <span>Wild West Crypto</span>
+            <span>Trust Wallet</span>
           </div>
         </div>
         <div class="header-actions">
@@ -1537,7 +3268,7 @@
       </div>
       <nav class="sidebar-menu">
         <div class="sidebar-menu-group">
-          <div class="sidebar-menu-group-title">Обзор</div>
+          <div class="sidebar-menu-group-title" onclick="toggleMenuGroup(this, event)">ОБЗОР</div>
           <a href="#" class="sidebar-menu-item active" data-page="dashboard">
             <img src="icon/iconbalance.png" alt="Главная">
             <span>Главная</span>
@@ -1548,8 +3279,8 @@
           </a>
         </div>
 
-        <div class="sidebar-menu-group collapsed">
-          <div class="sidebar-menu-group-title">Финансы</div>
+        <div class="sidebar-menu-group">
+          <div class="sidebar-menu-group-title" onclick="toggleMenuGroup(this, event)">ФИНАНСЫ</div>
           <a href="#" class="sidebar-menu-item" data-page="deposit">
             <img src="icon/iconbalance.png" alt="Пополнение">
             <span>Пополнить</span>
@@ -1568,8 +3299,8 @@
           </a>
         </div>
 
-        <div class="sidebar-menu-group collapsed">
-          <div class="sidebar-menu-group-title">Сервис</div>
+        <div class="sidebar-menu-group">
+          <div class="sidebar-menu-group-title" onclick="toggleMenuGroup(this, event)">СЕРВИС</div>
           <a href="#" class="sidebar-menu-item" data-page="referrals">
             <img src="icon/icon-stats.png" alt="Рефералы">
             <span>Рефералы</span>
@@ -1595,17 +3326,19 @@
           <img src="icon/iconlink.png" alt="Заявки на вывод">
           <span>Заявки на вывод</span>
         </a>
-        <!-- Админское меню -->
-        <div id="adminMenu" style="display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <div style="font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; padding: 0 16px;">Администрирование</div>
-          <a href="#" class="sidebar-menu-item" data-page="adminRequests">
-            <img src="icon/iconlink.png" alt="Управление заявками">
-            <span>Управление заявками</span>
-          </a>
-          <a href="#" class="sidebar-menu-item" data-page="adminBalance">
-            <img src="icon/iconbalance.png" alt="Управление балансом">
-            <span>Управление балансом</span>
-          </a>
+        <!-- Меню Администрирование для пользователя -->
+        <div id="adminMenu" style="margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <div class="sidebar-menu-group">
+            <div class="sidebar-menu-group-title" onclick="toggleMenuGroup(this, event)">АДМИНИСТРИРОВАНИЕ</div>
+            <a href="#" class="sidebar-menu-item" data-page="adminRequests">
+              <img src="icon/iconlink.png" alt="Управление заявками">
+              <span>Управление заявками</span>
+            </a>
+            <a href="#" class="sidebar-menu-item" data-page="adminBalance">
+              <img src="icon/iconbalance.png" alt="Управление балансом">
+              <span>Управление балансом</span>
+            </a>
+          </div>
         </div>
       </nav>
     </aside>
@@ -1613,44 +3346,156 @@
     <!-- Главная страница -->
     <div class="page active" id="dashboardPage">
       <div class="dashboard">
-        <div class="welcome-banner">
-          <h2>Добро пожаловать, Саид!</h2>
-          <p>Управляйте своими финансами с удобством</p>
+        <!-- Приветственный баннер -->
+        <div class="crypto-welcome-banner">
+          <div class="crypto-welcome-content">
+            <div class="crypto-welcome-text">
+              <h1>Добро пожаловать, Саид!</h1>
+              <p>Управляйте своими криптовалютными активами</p>
+            </div>
+            <div class="crypto-welcome-stats">
+              <div class="crypto-stat-item">
+                <span class="crypto-stat-label">Общий баланс</span>
+                <span class="crypto-stat-value" id="balanceValue" onclick="toggleBalanceVisibility()">1 706 040,00 ₽</span>
+              </div>
+              <div class="crypto-stat-item">
+                <span class="crypto-stat-label">В USD</span>
+                <span class="crypto-stat-value" id="balanceValueUsd">≈ 21 280,28 $</span>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-welcome-actions">
+            <button class="crypto-action-btn crypto-action-primary" onclick="showPage('deposit')">
+              <img src="icon/iconbalance.png" alt="Пополнить" class="crypto-action-icon-img">
+              <span>Пополнить</span>
+            </button>
+            <button class="crypto-action-btn crypto-action-secondary" onclick="showPage('withdrawal')">
+              <img src="icon/iconlink.png" alt="Вывести" class="crypto-action-icon-img">
+              <span>Вывести</span>
+            </button>
+            <button class="crypto-action-btn crypto-action-tertiary" onclick="showPage('swap')">
+              <img src="icon/icon-stats.png" alt="Обменять" class="crypto-action-icon-img">
+              <span>Обменять</span>
+            </button>
+          </div>
         </div>
 
-        <div id="frozenAccountWarning" class="alert alert-warning" style="display: none; margin-bottom: 24px;">
-          <span>⚠️</span>
-          <div>
+        <!-- Предупреждение о замороженном счете -->
+        <div id="frozenAccountWarning" class="crypto-alert crypto-alert-warning" style="display: none; margin-bottom: 24px;">
+          <img src="icon/iconnotification-8509088.png" alt="Предупреждение" class="crypto-alert-icon-img">
+          <div class="crypto-alert-content">
             <strong>Ваш счет заморожен</strong>
-            <p style="margin: 8px 0 0 0; font-size: 14px;">Вы можете разморозить счет в настройках профиля</p>
-            <button class="btn btn-primary" onclick="showPage('profile')" style="margin-top: 12px; padding: 8px 16px; font-size: 14px;">Перейти в профиль</button>
+            <p>Вы можете разморозить счет в настройках профиля</p>
+            <button class="crypto-btn crypto-btn-sm" onclick="showPage('profile')">Перейти в профиль</button>
           </div>
         </div>
 
-        <div class="balance-card">
-          <div class="balance-label">
-            <img src="icon/iconbalance.png" alt="Баланс">
-            <span>Текущий баланс</span>
-          </div>
-          <div class="balance-main">
-            <div class="balance-amount-group">
-              <div class="balance-value" id="balanceValue" style="cursor: pointer; position: relative;" onclick="toggleBalanceVisibility()">1 538 347,00 ₽</div>
-              <div class="balance-subvalue" id="balanceValueUsd">
-                ≈ 19 250,19 $
-              </div>    
+        <!-- Основной баланс карточка -->
+        <div class="crypto-balance-card">
+          <div class="crypto-balance-header">
+            <div class="crypto-balance-title">
+              <img src="icon/iconbalance.png" alt="Баланс" class="crypto-balance-icon-img">
+              <div>
+                <h3>Общий баланс</h3>
+                <p>Все ваши активы</p>
+              </div>
             </div>
-            <div class="balance-actions">
-              <button class="btn btn-primary" onclick="showPage('withdrawal')">
-                Вывести средства
-              </button>
-              <button class="btn btn-primary" onclick="showPage('analytics')">
-                Аналитика
-              </button>
+            <div class="crypto-balance-trend">
+              <span class="crypto-trend-up">+12.5%</span>
+              <span class="crypto-trend-label">за 24ч</span>
+            </div>
+          </div>
+          <div class="crypto-balance-amount">
+            <div class="crypto-balance-main" id="balanceValueMain" onclick="toggleBalanceVisibility()">
+              1 706 040,00 ₽
+            </div>
+            <div class="crypto-balance-sub" id="balanceValueUsdMain">
+              ≈ 21 280,87 USD
+            </div>
+          </div>
+          <div class="crypto-balance-chart">
+            <div class="crypto-chart-placeholder">
+              <svg viewBox="0 0 400 80" class="crypto-chart-svg">
+                <defs>
+                  <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(150,150,150,0.3);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgba(150,150,150,0);stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+                <path d="M 0,60 Q 50,50 100,45 T 200,40 T 300,35 T 400,30" 
+                      stroke="rgba(150,150,150,0.6)" 
+                      stroke-width="2" 
+                      fill="none" 
+                      class="crypto-chart-line"/>
+                <path d="M 0,60 Q 50,50 100,45 T 200,40 T 300,35 T 400,30 L 400,80 L 0,80 Z" 
+                      fill="url(#chartGradient)" 
+                      class="crypto-chart-area"/>
+              </svg>
             </div>
           </div>
         </div>
 
-        <!-- Блок комиссии скрыт, так как комиссия отключена -->
+        <!-- Топ криптовалюты -->
+        <div class="crypto-section">
+          <div class="crypto-section-header">
+            <h2>Ваши активы</h2>
+            <button class="crypto-link-btn" onclick="showPage('wallet')">Смотреть все <img src="icon/iconlink.png" alt="" style="width: 14px; height: 14px; margin-left: 4px; vertical-align: middle;"></button>
+          </div>
+          <div class="crypto-assets-grid" id="cryptoAssetsGrid">
+            <!-- Будет заполнено через JavaScript -->
+          </div>
+        </div>
+
+        <!-- Статистика -->
+        <div class="crypto-stats-grid">
+          <div class="crypto-stat-card">
+            <div class="crypto-stat-icon" style="background: rgba(16, 185, 129, 0.2);">
+              <img src="icon/icon-stats.png" alt="Доход" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(58%) sepia(95%) saturate(1234%) hue-rotate(120deg) brightness(95%) contrast(85%);">
+            </div>
+            <div class="crypto-stat-content">
+              <span class="crypto-stat-label">Доход за месяц</span>
+              <span class="crypto-stat-value" style="color: #10b981;">+245 320 ₽</span>
+            </div>
+          </div>
+          <div class="crypto-stat-card">
+            <div class="crypto-stat-icon" style="background: rgba(99, 102, 241, 0.2);">
+              <img src="icon/iconbalance.png" alt="Активы" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(48%) sepia(93%) saturate(1352%) hue-rotate(228deg) brightness(98%) contrast(96%);">
+            </div>
+            <div class="crypto-stat-content">
+              <span class="crypto-stat-label">Активных активов</span>
+              <span class="crypto-stat-value">6</span>
+            </div>
+          </div>
+          <div class="crypto-stat-card">
+            <div class="crypto-stat-icon" style="background: rgba(245, 158, 11, 0.2);">
+              <img src="icon/iconl.png" alt="Транзакции" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(70%) sepia(95%) saturate(1234%) hue-rotate(5deg) brightness(98%) contrast(96%);">
+            </div>
+            <div class="crypto-stat-content">
+              <span class="crypto-stat-label">Транзакций за 24ч</span>
+              <span class="crypto-stat-value">12</span>
+            </div>
+          </div>
+          <div class="crypto-stat-card">
+            <div class="crypto-stat-icon" style="background: rgba(239, 68, 68, 0.2);">
+              <img src="icon/icon-stats.png" alt="Прибыль" style="width: 24px; height: 24px; filter: brightness(0) saturate(100%) invert(40%) sepia(95%) saturate(1234%) hue-rotate(340deg) brightness(98%) contrast(96%);">
+            </div>
+            <div class="crypto-stat-content">
+              <span class="crypto-stat-label">Общая прибыль</span>
+              <span class="crypto-stat-value" style="color: #10b981;">+18.5%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Последние транзакции -->
+        <div class="crypto-section">
+          <div class="crypto-section-header">
+            <h2>Последние транзакции</h2>
+            <button class="crypto-link-btn" onclick="showPage('history')">Вся история <img src="icon/iconlink.png" alt="" style="width: 14px; height: 14px; margin-left: 4px; vertical-align: middle;"></button>
+          </div>
+          <div class="crypto-transactions-list" id="cryptoTransactionsList">
+            <!-- Будет заполнено через JavaScript -->
+          </div>
+        </div>
 
       </div>
     </div>
@@ -1661,36 +3506,31 @@
         <div class="form-card">
           <h2>Вывод средств</h2>
           <div class="alert alert-info">
-            <span>💡</span>
+            <img src="icon/iconnotification-8509088.png" alt="Информация" style="width: 20px; height: 20px; flex-shrink: 0;">
             <span>Минимальная сумма вывода: 1 000 ₽. Комиссия не взимается.</span>
           </div>
-          <div class="form-row">
             <div class="form-field">
               <label for="withdrawalAmount">Сумма вывода (₽)</label>
-              <input type="number" id="withdrawalAmount" placeholder="Введите сумму" min="1000" step="0.01">
+              <input type="number" id="withdrawalAmount" placeholder="Введите сумму" min="1000" step="0.01" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="withdrawalCurrency">Валюта отображения</label>
-              <select id="withdrawalCurrency">
+              <select id="withdrawalCurrency" class="crypto-form-select">
                 <option value="RUB" selected>Рубли (RUB)</option>
                 <option value="USD">Доллары США (USD)</option>
               </select>
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label for="withdrawalFullName">ФИО получателя</label>
-              <input type="text" id="withdrawalFullName" placeholder="Например, Иванов Иван Иванович">
+              <input type="text" id="withdrawalFullName" placeholder="Например, Иванов Иван Иванович" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="withdrawalPhone">Телефон</label>
-              <input type="tel" id="withdrawalPhone" placeholder="+7 999 123-45-67">
+              <input type="tel" id="withdrawalPhone" placeholder="+7 999 123-45-67" class="crypto-form-input">
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label for="withdrawalBank">Банк для получения средств</label>
-              <select id="withdrawalBank">
+              <select id="withdrawalBank" class="crypto-form-select">
                 <option value="OZON" selected>Озон Банк</option>
                 <option value="SBER">Сбербанк</option>
                 <option value="TINKOFF">Тинькофф</option>
@@ -1710,12 +3550,15 @@
             </div>
             <div class="form-field">
               <label for="withdrawalCard">Номер карты/счёта</label>
-              <input type="text" id="withdrawalCard" placeholder="0000 0000 0000 0000" maxlength="23">
+              <input type="text" id="withdrawalCard" placeholder="0000 0000 0000 0000" maxlength="23" class="crypto-form-input">
             </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-primary" id="submitWithdrawalBtn">Вывести средства</button>
-            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+            <div class="crypto-support-form-actions">
+              <button class="crypto-btn crypto-btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+              <button class="crypto-btn crypto-btn-primary" id="submitWithdrawalBtn">
+                <img src="icon/iconlink.png" alt="Вывести" style="width: 18px; height: 18px; margin-right: 8px;">
+                Вывести средства
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1723,81 +3566,104 @@
 
     <!-- Страница аналитики -->
     <div class="page" id="analyticsPage">
-      <div class="analytics-section">
-        <h2 class="section-title">
-          <img src="icon/icon-stats.png" alt="Аналитика">
-          <span>Аналитика заработка</span>
-        </h2>
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/icon-stats.png" alt="Аналитика" class="crypto-section-icon">
+            <h2>Аналитика заработка</h2>
+          </div>
+        </div>
 
-        <!-- Периоды без работы -->
-        <div style="margin-bottom: 32px;">
-          <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--warning);">Периоды активности</h3>
+        <!-- Периоды активности -->
+        <div class="crypto-support-card" style="margin-bottom: 24px;">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/icon-stats.png" alt="Периоды" class="crypto-support-card-icon">
+              <div>
+                <h3>Периоды активности</h3>
+                <p>Статистика по торговым периодам</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 20px;">
           
           <div class="period-card">
             <div class="period-card-header">
               <div class="period-card-title">Сегодня</div>
-              <div class="period-card-status inactive">Активен</div>
+              <div class="period-card-status active">Активен</div>
             </div>
-            <div class="stat-card-value positive">75 322,00 ₽</div>
+            <div class="period-card-value positive">+12 450,00 ₽</div>
             <div class="period-card-description">
-              За сегодня не было совершено ни одной торговой операции. Аккаунт неактивен.
+              Успешная торговая сессия. Совершено 12 сделок, из них 11 прибыльных. Средняя прибыль на сделку: 3 850 ₽. Лучшая сделка: +49 500 ₽.
             </div>
           </div>
 
           <div class="period-card">
             <div class="period-card-header">
               <div class="period-card-title">Этот месяц ({{currentMonth}})</div>
-              <div class="period-card-status inactive">Активен</div>
+              <div class="period-card-status active">Активен</div>
             </div>
-            <div class="stat-card-value positive">591 981,00 ₽</div>
+            <div class="period-card-value positive">+506 040,00 ₽</div>
             <div class="period-card-description">
-              по отчетному периоду прошли торги (сделки) на сумму 591 981. Период неактивности закрыт.
+              Отличный месяц! Совершено 245 торговые операции с процентом успешных сделок 85%. Начальный баланс: 1 200 000 ₽ → Текущий баланс: 1 706 040 ₽. Процент роста: +42.2%. Лучший день: 15 марта (+49 500 ₽).
             </div>
           </div>
 
           <div class="period-card">
             <div class="period-card-header">
               <div class="period-card-title">2 месяца назад ({{twoMonthsAgo}})</div>
-              <div class="period-card-status inactive">Активен</div>
+              <div class="period-card-status active">Активен</div>
             </div>
-            <div class="period-card-value zero">351 000,00 ₽</div>
+            <div class="period-card-value positive">+250 000,00 ₽</div>
             <div class="period-card-description">
-              по отчетному периоду прошли торги (сделки) на сумму 351 000. Период неактивности закрыт.
+              Стабильный период активной торговли. Совершено 156 операций с процентом успешных сделок 78%. Начальный баланс: 950 000 ₽ → Конечный баланс: 1 200 000 ₽. Процент роста: +26.3%. Лучший день: 8 февраля (+38 500 ₽).
             </div>
           </div>
         </div>
 
+          </div>
+        </div>
         <!-- Общая статистика -->
-        <div class="stats-grid">
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/icon-stats.png" alt="Статистика" class="crypto-support-card-icon">
+              <div>
+                <h3>Общая статистика</h3>
+                <p>Сводка по всем операциям</p>
+              </div>
+            </div>
+          </div>
+          <div class="stats-grid" style="margin-top: 20px;">
           <div class="stat-card">
             <div class="stat-card-label">Общий доход (все время)</div>
-            <div class="stat-card-value positive">+1 538 347,94 ₽</div>
+            <div class="stat-card-value positive">+1 476 432,00 ₽</div>
             <div class="stat-card-details">Накопленный доход за весь период работы</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">Предыдущий баланс</div>
-            <div class="stat-card-value">1 463 025,94 ₽</div>
+            <div class="stat-card-value">1 200 000,00 ₽</div>
             <div class="stat-card-details">Баланс до последнего увеличения депозита</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">Текущий баланс</div>
-            <div class="stat-card-value">1 538 347,00 ₽</div>
+            <div class="stat-card-value">1 706 040,00 ₽</div>
             <div class="stat-card-details">Фактический баланс на счете сейчас</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">За сегодня</div>
-            <div class="stat-card-value positive">75 322,00 ₽</div>
-            <div class="stat-card-details">Операций за сегодня</div>
+            <div class="stat-card-value positive">+46 200,00 ₽</div>
+            <div class="stat-card-details">12 сделок, 11 прибыльных</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">За этот месяц</div>
-            <div class="stat-card-value positive">591 981,00 ₽</div>
-            <div class="stat-card-details">Период активности</div>
+            <div class="stat-card-value positive">+506 040,00 ₽</div>
+            <div class="stat-card-details">245 операций, успешность 85%</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">За 2 месяца назад</div>
-            <div class="stat-card-value positive">351 000,00 ₽</div>
-            <div class="stat-card-details">Период активности</div>
+            <div class="stat-card-value positive">+250 000,00 ₽</div>
+            <div class="stat-card-details">156 операций, успешность 78%</div>
           </div>
         </div>
 
@@ -1806,14 +3672,14 @@
           <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--success);">Последний активный период</h3>
           <div class="period-card">
             <div class="period-card-header">
-              <div class="period-card-title">Период: 1-14 марта 2026</div>
+              <div class="period-card-title">Период: 1-31 марта 2025</div>
               <div class="period-card-status active">Активен</div>
             </div>
-            <div class="period-card-value positive">+591 981 ₽</div>
+            <div class="period-card-value positive">+506 040,00 ₽</div>
             <div class="stat-card-details" style="margin-top: 12px;">
-              <strong>Детали:</strong> Рекордная прибыль за период активной торговли. 
-              Начальный баланс: 351 000 ₽ → Конечный баланс: 653 719 ₽. 
-              Процент роста: +86.2%. Лучший день: 5 ноября 2025 (+86 200 ₽).
+              <strong>Детали:</strong> Отличный месяц активной торговли. 
+              Начальный баланс: 1 200 000 ₽ → Конечный баланс: 1 706 040 ₽. 
+              Процент роста: +42.2%. Лучший день: 15 марта (+49 500 ₽). Совершено 245 операций с процентом успешных сделок 85%.
             </div>
           </div>
         </div>
@@ -1824,9 +3690,9 @@
             График доходов за последние 3 месяца
             <br>
             <small>
-              Последний активный период: 1-14 марта 2026 (+591 981 ₽)
+              Январь: +250 000 ₽ | Февраль: +506 040 ₽ | Март: +506 040 ₽ (текущий)
               <br>
-              Текущий период: неактивен (0 ₽)
+              Общий рост за 3 месяца: +1 262 080 ₽
             </small>
           </div>
         </div>
@@ -1834,23 +3700,23 @@
         <div class="stats-grid" style="margin-top: 24px;">
           <div class="stat-card">
             <div class="stat-card-label">Лучший день</div>
-            <div class="stat-card-value positive">+86 200 ₽</div>
-            <div class="stat-card-details">12 марта 2025</div>
+            <div class="stat-card-value positive">+49 500 ₽</div>
+            <div class="stat-card-details">15 марта 2025</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Рекордная прибыль</div>
-            <div class="stat-card-value positive">+591 981 ₽</div>
-            <div class="stat-card-details">Период: 3-7 ноября 2025</div>
+            <div class="stat-card-label">Рекордная прибыль за месяц</div>
+            <div class="stat-card-value positive">+476 432 ₽</div>
+            <div class="stat-card-details">Март 2025</div>
           </div>
           <div class="stat-card">
             <div class="stat-card-label">Процент роста</div>
-            <div class="stat-card-value positive">+86.2%</div>
-            <div class="stat-card-details">За период активности</div>
+            <div class="stat-card-value positive">+39.7%</div>
+            <div class="stat-card-details">За текущий месяц</div>
           </div>
           <div class="stat-card">
-            <div class="stat-card-label">Дней активности</div>
-            <div class="stat-card-value positive">1+</div>
-            <div class="stat-card-details">С момента последней операции</div>
+            <div class="stat-card-label">Успешность сделок</div>
+            <div class="stat-card-value positive">85%</div>
+            <div class="stat-card-details">За текущий месяц</div>
           </div>
         </div>
       </div>
@@ -1862,7 +3728,7 @@
         <div class="form-card">
           <h2>Пополнение счета</h2>
           <div class="alert alert-info">
-            <span>💡</span>
+            <img src="icon/iconnotification-8509088.png" alt="Информация" style="width: 20px; height: 20px; flex-shrink: 0;">
             <span>Минимальная сумма пополнения: 1 000 ₽. Комиссия не взимается.</span>
           </div>
           
@@ -1927,24 +3793,21 @@
           </div>
 
           <div class="alert alert-warning" style="margin-top: 24px;">
-            <span>⚠️</span>
+            <img src="icon/iconnotification-8509088.png" alt="Предупреждение" style="width: 20px; height: 20px; flex-shrink: 0;">
             <span>После перевода средств нажмите кнопку "Подтвердить пополнение" и укажите данные вашего перевода для проверки.</span>
           </div>
 
-          <div class="form-row" style="margin-top: 24px;">
             <div class="form-field">
               <label for="depositFullName">ФИО отправителя</label>
-              <input type="text" id="depositFullName" placeholder="Например, Иванов Иван Иванович">
+              <input type="text" id="depositFullName" placeholder="Например, Иванов Иван Иванович" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="depositPhone">Телефон</label>
-              <input type="tel" id="depositPhone" placeholder="+7 999 123-45-67">
+              <input type="tel" id="depositPhone" placeholder="+7 999 123-45-67" class="crypto-form-input">
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label for="depositBank">Банк отправителя</label>
-              <select id="depositBank">
+              <select id="depositBank" class="crypto-form-select">
                 <option value="OZON" selected>Озон Банк</option>
                 <option value="SBER">Сбербанк</option>
                 <option value="TINKOFF">Тинькофф</option>
@@ -1964,9 +3827,8 @@
             </div>
             <div class="form-field">
               <label for="depositCard">Номер карты отправителя</label>
-              <input type="text" id="depositCard" placeholder="0000 0000 0000 0000" maxlength="23">
+              <input type="text" id="depositCard" placeholder="0000 0000 0000 0000" maxlength="23" class="crypto-form-input">
             </div>
-          </div>
           <div class="form-actions">
             <button class="btn btn-primary" id="submitDepositBtn">Подтвердить пополнение</button>
             <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
@@ -2050,119 +3912,412 @@
 
     <!-- Страница истории -->
     <div class="page" id="historyPage">
-      <h2 class="section-title">
-        <img src="icon/iconl.png" alt="История">
-        <span>История транзакций</span>
-      </h2>
-      <div style="margin-bottom: 32px;">
-        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--danger);">Выводы средств</h3>
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/iconl.png" alt="История" class="crypto-section-icon">
+            <h2>История транзакций</h2>
+          </div>
+        </div>
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconl.png" alt="Операции" class="crypto-support-card-icon">
+              <div>
+                <h3>Торговые операции</h3>
+                <p>Все ваши криптовалютные сделки</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 20px;">
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Отмена вывода</div>
-            <div class="history-date">01.03.2026, 10:36</div>
+            <div class="history-type">Прибыльная сделка BTC/USDT</div>
+            <div class="history-date">Сегодня, 14:32</div>
           </div>
-          <div class="history-amount positive">+400 000 ₽</div>
+          <div class="history-amount positive">+45 230 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Выдача наличными</div>
-            <div class="history-date">21.11.2025, 16:45</div>
+            <div class="history-type">
+              <img src="icon/eth.png" alt="ETH" style="width: 20px; height: 20px; border-radius: 50%;">
+              <span>Продажа ETH/BTC • 0.85 ETH • $3,500</span>
+            </div>
+            <div class="history-date">Сегодня, 13:15</div>
           </div>
-          <div class="history-amount negative">-117 432 ₽</div>
+          <div class="history-amount positive">+38 900 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Вывод на карту</div>
-            <div class="history-date">02.11.2025, 22:35</div>
+            <div class="history-type">
+              <img src="icon/sol.png" alt="SOL" style="width: 20px; height: 20px; border-radius: 50%;">
+              <span>Покупка SOL/USDT • 8.5 SOL • $180</span>
+            </div>
+            <div class="history-date">Сегодня, 12:48</div>
           </div>
-          <div class="history-amount negative">-351 000 ₽</div>
+          <div class="history-amount positive">+32 150 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Вывод на карту</div>
-            <div class="history-date">28.10.2025, 14:30</div>
+            <div class="history-type">Прибыльная сделка ADA/BTC</div>
+            <div class="history-date">Сегодня, 11:22</div>
           </div>
-          <div class="history-amount negative">-25 000 ₽</div>
-        </div>
-      </div>
-      <div>
-        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--success);">Пополнения счета</h3>
-        <div class="history-item">
-          <div class="history-info">
-            <div class="history-type">Пополнение с карты</div>
-            <div class="history-date">13.03.2026, 15:36</div>
-          </div>
-          <div class="history-amount positive">+516 658 ₽</div>
+          <div class="history-amount positive">+28 750 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Пополнение с карты</div>
-            <div class="history-date">02.11.2025, 23:46</div>
+            <div class="history-type">Прибыльная сделка BNB/ETH</div>
+            <div class="history-date">Сегодня, 10:05</div>
           </div>
-          <div class="history-amount positive">+356 000 ₽</div>
+          <div class="history-amount positive">+35 600 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Пополнение с карты</div>
-            <div class="history-date">30.10.2025, 18:20</div>
+            <div class="history-type">Прибыльная сделка BTC/USDT</div>
+            <div class="history-date">Вчера, 22:18</div>
           </div>
-          <div class="history-amount positive">+30 000 ₽</div>
+          <div class="history-amount positive">+42 300 ₽</div>
         </div>
         <div class="history-item">
           <div class="history-info">
-            <div class="history-type">Пополнение с карты</div>
-            <div class="history-date">27.10.2025, 14:10</div>
+            <div class="history-type">Прибыльная сделка ETH/USDT</div>
+            <div class="history-date">Вчера, 20:45</div>
           </div>
-          <div class="history-amount positive">+25 000 ₽</div>
+          <div class="history-amount positive">+39 800 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/BTC</div>
+            <div class="history-date">Вчера, 19:12</div>
+          </div>
+          <div class="history-amount positive">+31 450 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/ETH</div>
+            <div class="history-date">Вчера, 17:30</div>
+          </div>
+          <div class="history-amount positive">+27 900 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/USDT</div>
+            <div class="history-date">Вчера, 15:55</div>
+          </div>
+          <div class="history-amount positive">+33 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/ETH</div>
+            <div class="history-date">Вчера, 14:20</div>
+          </div>
+          <div class="history-amount positive">+41 500 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/BTC</div>
+            <div class="history-date">Вчера, 12:08</div>
+          </div>
+          <div class="history-amount positive">+36 700 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/USDT</div>
+            <div class="history-date">Вчера, 10:40</div>
+          </div>
+          <div class="history-amount positive">+29 850 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/BTC</div>
+            <div class="history-date">15.03.2025, 18:25</div>
+          </div>
+          <div class="history-amount positive">+26 400 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/ETH</div>
+            <div class="history-date">15.03.2025, 16:50</div>
+          </div>
+          <div class="history-amount positive">+34 100 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/USDT</div>
+            <div class="history-date">15.03.2025, 15:15</div>
+          </div>
+          <div class="history-amount positive">+43 600 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/USDT</div>
+            <div class="history-date">15.03.2025, 13:42</div>
+          </div>
+          <div class="history-amount positive">+40 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/BTC</div>
+            <div class="history-date">15.03.2025, 11:20</div>
+          </div>
+          <div class="history-amount positive">+30 750 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/ETH</div>
+            <div class="history-date">15.03.2025, 09:55</div>
+          </div>
+          <div class="history-amount positive">+28 300 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/USDT</div>
+            <div class="history-date">14.03.2025, 22:10</div>
+          </div>
+          <div class="history-amount positive">+32 800 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/ETH</div>
+            <div class="history-date">14.03.2025, 20:35</div>
+          </div>
+          <div class="history-amount positive">+44 500 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/BTC</div>
+            <div class="history-date">14.03.2025, 18:50</div>
+          </div>
+          <div class="history-amount positive">+37 900 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/USDT</div>
+            <div class="history-date">14.03.2025, 17:15</div>
+          </div>
+          <div class="history-amount positive">+31 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/BTC</div>
+            <div class="history-date">14.03.2025, 15:40</div>
+          </div>
+          <div class="history-amount positive">+27 600 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/ETH</div>
+            <div class="history-date">14.03.2025, 14:05</div>
+          </div>
+          <div class="history-amount positive">+33 500 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/USDT</div>
+            <div class="history-date">14.03.2025, 12:30</div>
+          </div>
+          <div class="history-amount positive">+46 800 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/USDT</div>
+            <div class="history-date">14.03.2025, 10:55</div>
+          </div>
+          <div class="history-amount positive">+41 100 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/BTC</div>
+            <div class="history-date">13.03.2025, 21:20</div>
+          </div>
+          <div class="history-amount positive">+30 400 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/ETH</div>
+            <div class="history-date">13.03.2025, 19:45</div>
+          </div>
+          <div class="history-amount positive">+28 900 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/USDT</div>
+            <div class="history-date">13.03.2025, 18:10</div>
+          </div>
+          <div class="history-amount positive">+34 300 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/ETH</div>
+            <div class="history-date">13.03.2025, 16:35</div>
+          </div>
+          <div class="history-amount positive">+47 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/BTC</div>
+            <div class="history-date">13.03.2025, 15:00</div>
+          </div>
+          <div class="history-amount positive">+38 500 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/USDT</div>
+            <div class="history-date">13.03.2025, 13:25</div>
+          </div>
+          <div class="history-amount positive">+32 600 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/BTC</div>
+            <div class="history-date">13.03.2025, 11:50</div>
+          </div>
+          <div class="history-amount positive">+29 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/ETH</div>
+            <div class="history-date">13.03.2025, 10:15</div>
+          </div>
+          <div class="history-amount positive">+35 700 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/USDT</div>
+            <div class="history-date">12.03.2025, 22:40</div>
+          </div>
+          <div class="history-amount positive">+48 100 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/USDT</div>
+            <div class="history-date">12.03.2025, 21:05</div>
+          </div>
+          <div class="history-amount positive">+42 400 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/BTC</div>
+            <div class="history-date">12.03.2025, 19:30</div>
+          </div>
+          <div class="history-amount positive">+33 800 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/ETH</div>
+            <div class="history-date">12.03.2025, 17:55</div>
+          </div>
+          <div class="history-amount positive">+30 100 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BNB/USDT</div>
+            <div class="history-date">12.03.2025, 16:20</div>
+          </div>
+          <div class="history-amount positive">+36 900 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка BTC/ETH</div>
+            <div class="history-date">12.03.2025, 14:45</div>
+          </div>
+          <div class="history-amount positive">+49 500 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ETH/BTC</div>
+            <div class="history-date">12.03.2025, 13:10</div>
+          </div>
+          <div class="history-amount positive">+39 300 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка SOL/USDT</div>
+            <div class="history-date">12.03.2025, 11:35</div>
+          </div>
+          <div class="history-amount positive">+34 200 ₽</div>
+        </div>
+        <div class="history-item">
+          <div class="history-info">
+            <div class="history-type">Прибыльная сделка ADA/BTC</div>
+            <div class="history-date">12.03.2025, 10:00</div>
+          </div>
+          <div class="history-amount positive">+31 500 ₽</div>
         </div>
       </div>
     </div>
 
     <!-- Страница кошелька -->
     <div class="page" id="walletPage">
-      <h2 class="section-title">
-        <img src="icon/iconbalance.png" alt="Кошелек">
-        <span>Кошелек</span>
-      </h2>
-      <p style="color: var(--text-secondary); margin-bottom: 16px;">Здесь отображаются балансы по всем валютам и краткая сводка.</p>
-      <div id="walletAssetsList" class="stats-grid"></div>
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/iconbalance.png" alt="Кошелек" class="crypto-section-icon">
+            <h2>Кошелек</h2>
+          </div>
+        </div>
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconbalance.png" alt="Активы" class="crypto-support-card-icon">
+              <div>
+                <h3>Ваши криптовалютные активы</h3>
+                <p>Управляйте всеми вашими криптовалютами в одном месте</p>
+              </div>
+            </div>
+          </div>
+          <div id="walletAssetsList" class="crypto-assets-grid"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Внутренние переводы -->
     <div class="page" id="transfersPage">
-      <div class="withdrawal-form">
-        <div class="form-card">
-          <h2>Внутренние переводы</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 16px;">Перевод между пользователями по секретному ID внутри системы.</p>
-          <div class="form-row">
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/iconlink.png" alt="Переводы" class="crypto-section-icon">
+            <h2>Внутренние переводы</h2>
+          </div>
+        </div>
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconlink.png" alt="Перевод" class="crypto-support-card-icon">
+              <div>
+                <h3>Перевод по секретному ID</h3>
+                <p>Быстрый перевод между пользователями внутри системы</p>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-support-form">
             <div class="form-field">
               <label for="transferSecretId">Секретный ID получателя</label>
-              <input type="text" id="transferSecretId" placeholder="Например, DV-7X9K">
+              <input type="text" id="transferSecretId" placeholder="Например, DV-7X9K" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="transferAmount">Сумма перевода (₽)</label>
-              <input type="number" id="transferAmount" placeholder="Введите сумму" min="1" step="0.01">
+              <input type="number" id="transferAmount" placeholder="Введите сумму" min="1" step="0.01" class="crypto-form-input">
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label>Комиссия (0,5%)</label>
-              <input type="text" id="transferFee" readonly placeholder="0,00 ₽">
+              <input type="text" id="transferFee" readonly placeholder="0,00 ₽" class="crypto-form-input" style="background: rgba(255,255,255,0.03);">
             </div>
             <div class="form-field">
               <label>Итого к списанию</label>
-              <input type="text" id="transferTotal" readonly placeholder="0,00 ₽">
+              <input type="text" id="transferTotal" readonly placeholder="0,00 ₽" class="crypto-form-input" style="background: rgba(255,255,255,0.03);">
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label>Получатель</label>
-              <input type="text" id="transferReceiverPreview" readonly placeholder="Имя получателя будет показано здесь">
+              <input type="text" id="transferReceiverPreview" readonly placeholder="Имя получателя будет показано здесь" class="crypto-form-input" style="background: rgba(255,255,255,0.03);">
             </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-primary" id="submitTransferBtn">Перевести</button>
-            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+            <div class="crypto-support-form-actions">
+              <button class="crypto-btn crypto-btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+              <button class="crypto-btn crypto-btn-primary" id="submitTransferBtn">
+                <img src="icon/iconlink.png" alt="Перевести" style="width: 18px; height: 18px; margin-right: 8px;">
+                Перевести
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -2170,23 +4325,49 @@
 
     <!-- Мой секретный ID -->
     <div class="page" id="secretIdPage">
-      <div class="profile-section">
-        <h2 class="section-title">
-          <img src="icon/iconlink.png" alt="Секретный ID">
-          <span>Мой секретный ID</span>
-        </h2>
-        <div class="profile-card">
-          <h3>Ваш уникальный ID</h3>
-          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px;">
-            <input type="text" id="secretIdValue" readonly style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; padding: 8px 12px; color: var(--text); outline: none; flex: 1; min-width: 150px; max-width: 200px;">
-            <button class="copy-btn" id="copySecretIdBtn">Копировать</button>
-            <button class="btn btn-secondary" id="regenerateSecretIdBtn">Сменить ID</button>
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/iconlink.png" alt="Секретный ID" class="crypto-section-icon">
+            <h2>Мой секретный ID</h2>
           </div>
-          <p style="color: var(--text-secondary); font-size: 14px;">Передавайте этот ID только доверенным людям для получения переводов.</p>
         </div>
-        <div class="profile-card">
-          <h3>История переводов по ID</h3>
-          <div id="secretIdHistory" style="font-size: 14px; color: var(--text-secondary);">
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconlink.png" alt="ID" class="crypto-support-card-icon">
+              <div>
+                <h3>Ваш уникальный ID</h3>
+                <p>Используйте этот ID для получения переводов</p>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-support-form">
+            <div class="form-field">
+              <label>Секретный ID</label>
+              <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <input type="text" id="secretIdValue" readonly class="crypto-form-input" style="flex: 1; min-width: 200px; font-family: 'Courier New', monospace; font-weight: 600; letter-spacing: 2px;">
+                <button class="crypto-btn crypto-btn-secondary" id="copySecretIdBtn">Копировать</button>
+                <button class="crypto-btn crypto-btn-secondary" id="regenerateSecretIdBtn">Сменить ID</button>
+              </div>
+            </div>
+            <div class="alert alert-info">
+              <img src="icon/iconnotification-8509088.png" alt="Информация" style="width: 16px; height: 16px; flex-shrink: 0;">
+              <span style="font-size: 13px;">Передавайте этот ID только доверенным людям для получения переводов.</span>
+            </div>
+          </div>
+        </div>
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconl.png" alt="История" class="crypto-support-card-icon">
+              <div>
+                <h3>История переводов по ID</h3>
+                <p>Все переводы, полученные на этот ID</p>
+              </div>
+            </div>
+          </div>
+          <div id="secretIdHistory" style="padding: 20px; color: var(--text-secondary); text-align: center;">
             Пока нет переводов.
           </div>
         </div>
@@ -2195,14 +4376,27 @@
 
     <!-- Обменник -->
     <div class="page" id="swapPage">
-      <div class="withdrawal-form">
-        <div class="form-card">
-          <h2>Обменник</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 16px;">Обменивайте одну валюту на другую по внутреннему курсу.</p>
-          <div class="form-row">
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/icon-stats.png" alt="Обменник" class="crypto-section-icon">
+            <h2>Обменник криптовалют</h2>
+          </div>
+        </div>
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/icon-stats.png" alt="Обмен" class="crypto-support-card-icon">
+              <div>
+                <h3>Обмен валют</h3>
+                <p>Быстрый обмен одной криптовалюты на другую</p>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-support-form">
             <div class="form-field">
               <label for="swapFromCurrency">Отдаю</label>
-              <select id="swapFromCurrency">
+              <select id="swapFromCurrency" class="crypto-form-select">
                 <option value="USDT">USDT</option>
                 <option value="BTC">BTC</option>
                 <option value="ETH">ETH</option>
@@ -2210,27 +4404,31 @@
             </div>
             <div class="form-field">
               <label for="swapToCurrency">Получаю</label>
-              <select id="swapToCurrency">
+              <select id="swapToCurrency" class="crypto-form-select">
                 <option value="BTC">BTC</option>
                 <option value="ETH">ETH</option>
                 <option value="USDT">USDT</option>
               </select>
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-field">
               <label for="swapAmount">Сумма обмена</label>
-              <input type="number" id="swapAmount" placeholder="Введите сумму" min="0" step="0.0001">
+              <input type="number" id="swapAmount" placeholder="Введите сумму" min="0" step="0.0001" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="swapResult">Вы получите (примерно)</label>
-              <input type="text" id="swapResult" readonly placeholder="0">
+              <input type="text" id="swapResult" readonly placeholder="0" class="crypto-form-input" style="background: rgba(255,255,255,0.03); font-weight: 600;">
             </div>
-          </div>
-          <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 12px;">Курс и итоговая сумма носят демонстрационный характер.</p>
-          <div class="form-actions">
-            <button class="btn btn-primary" id="submitSwapBtn">Обменять</button>
-            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+            <div class="alert alert-info" style="margin-top: 8px;">
+              <img src="icon/iconnotification-8509088.png" alt="Информация" style="width: 16px; height: 16px; flex-shrink: 0;">
+              <span style="font-size: 13px;">Курс и итоговая сумма носят демонстрационный характер.</span>
+            </div>
+            <div class="crypto-support-form-actions">
+              <button class="crypto-btn crypto-btn-secondary" onclick="showPage('dashboard')">Отмена</button>
+              <button class="crypto-btn crypto-btn-primary" id="submitSwapBtn">
+                <img src="icon/icon-stats.png" alt="Обменять" style="width: 18px; height: 18px; margin-right: 8px;">
+                Обменять
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -2324,7 +4522,7 @@
         <div class="form-card">
           <h2>Верификация личности (KYC)</h2>
           <div class="alert alert-info">
-            <span>💡</span>
+            <img src="icon/iconnotification-8509088.png" alt="Информация" style="width: 20px; height: 20px; flex-shrink: 0;">
             <span>Заполните данные и загрузите документы, чтобы увеличить лимиты.</span>
           </div>
           <div class="form-row">
@@ -2358,23 +4556,44 @@
           <img src="icon/iconlink.png" alt="Адресная книга">
           <span>Адресная книга</span>
         </h2>
-        <div class="profile-card">
-          <h3>Добавить адрес</h3>
-          <div class="form-row">
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconlink.png" alt="Добавить" class="crypto-support-card-icon">
+              <div>
+                <h3>Добавить адрес</h3>
+                <p>Сохраните часто используемые адреса</p>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-support-form">
             <div class="form-field">
               <label for="addressLabel">Название (например, Binance)</label>
-              <input type="text" id="addressLabel" placeholder="Название">
+              <input type="text" id="addressLabel" placeholder="Название" class="crypto-form-input">
             </div>
             <div class="form-field">
               <label for="addressValue">Адрес кошелька / ID</label>
-              <input type="text" id="addressValue" placeholder="Адрес или ID">
+              <input type="text" id="addressValue" placeholder="Адрес или ID" class="crypto-form-input">
+            </div>
+            <div class="crypto-support-form-actions">
+              <button class="crypto-btn crypto-btn-primary" id="addAddressBtn">
+                <img src="icon/iconlink.png" alt="Добавить" style="width: 18px; height: 18px; margin-right: 8px;">
+                Добавить в адресную книгу
+              </button>
             </div>
           </div>
-          <button class="btn btn-primary" id="addAddressBtn">Добавить в адресную книгу</button>
         </div>
-        <div class="profile-card">
-          <h3>Сохраненные адреса</h3>
-          <div id="addressBookList" style="font-size: 14px; color: var(--text-secondary);">
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconlink.png" alt="Адреса" class="crypto-support-card-icon">
+              <div>
+                <h3>Сохраненные адреса</h3>
+                <p>Ваши сохраненные адреса кошельков</p>
+              </div>
+            </div>
+          </div>
+          <div id="addressBookList" style="padding: 20px; font-size: 14px; color: var(--text-secondary); text-align: center;">
             Адресов пока нет.
           </div>
         </div>
@@ -2459,11 +4678,11 @@
           <div class="stats-grid">
             <div class="stat-card">
               <div class="stat-card-label">Приведено друзей</div>
-              <div class="stat-card-value">18</div>
+              <div class="stat-card-value">0</div>
             </div>
             <div class="stat-card">
               <div class="stat-card-label">Доход с рефералов</div>
-              <div class="stat-card-value">35 658,00 ₽</div>
+              <div class="stat-card-value">0,00 ₽</div>
             </div>
           </div>
         </div>
@@ -2472,30 +4691,181 @@
 
     <!-- Поддержка -->
     <div class="page" id="supportPage">
-      <div class="profile-section">
-        <h2 class="section-title">
-          <img src="icon/iconlink.png" alt="Поддержка">
-          <span>Поддержка</span>
-        </h2>
-        <div class="profile-card">
-          <h3>Чат с поддержкой</h3>
-          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 12px;">Онлайн-чат доступен в интерфейсе приложения (демо-режим).</p>
+      <div class="crypto-support-container">
+        <div class="crypto-section-header">
+          <div class="crypto-section-title">
+            <img src="icon/iconlink.png" alt="Поддержка" class="crypto-section-icon">
+            <h2>Поддержка</h2>
+          </div>
+          <div class="crypto-support-stats">
+            <div class="crypto-support-stat">
+              <span class="crypto-support-stat-label">Среднее время ответа</span>
+              <span class="crypto-support-stat-value">2-4 часа</span>
+            </div>
+          </div>
         </div>
-        <div class="profile-card">
-          <h3>Обращение в поддержку</h3>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="supportTopic">Тема</label>
-              <input type="text" id="supportTopic" placeholder="Кратко опишите проблему">
+
+        <!-- Быстрые действия -->
+        <div class="crypto-support-quick-actions">
+          <div class="crypto-quick-action-card" onclick="showSupportCategory('deposit')">
+            <img src="icon/iconbalance.png" alt="Пополнение" class="crypto-quick-action-icon">
+            <div class="crypto-quick-action-content">
+              <h4>Проблемы с пополнением</h4>
+              <p>Не пришли средства или задержка</p>
+            </div>
+            <img src="icon/iconlink.png" alt="→" class="crypto-quick-action-arrow">
+          </div>
+          <div class="crypto-quick-action-card" onclick="showSupportCategory('withdrawal')">
+            <img src="icon/iconlink.png" alt="Вывод" class="crypto-quick-action-icon">
+            <div class="crypto-quick-action-content">
+              <h4>Проблемы с выводом</h4>
+              <p>Задержка вывода или отклонение заявки</p>
+            </div>
+            <img src="icon/iconlink.png" alt="→" class="crypto-quick-action-arrow">
+          </div>
+          <div class="crypto-quick-action-card" onclick="showSupportCategory('security')">
+            <img src="icon/iconnotification-8509088.png" alt="Безопасность" class="crypto-quick-action-icon">
+            <div class="crypto-quick-action-content">
+              <h4>Безопасность</h4>
+              <p>Подозрительная активность или взлом</p>
+            </div>
+            <img src="icon/iconlink.png" alt="→" class="crypto-quick-action-arrow">
+          </div>
+          <div class="crypto-quick-action-card" onclick="showSupportCategory('other')">
+            <img src="icon/icon-stats.png" alt="Другое" class="crypto-quick-action-icon">
+            <div class="crypto-quick-action-content">
+              <h4>Другие вопросы</h4>
+              <p>Общие вопросы и предложения</p>
+            </div>
+            <img src="icon/iconlink.png" alt="→" class="crypto-quick-action-arrow">
+          </div>
+        </div>
+
+        <!-- Чат с поддержкой -->
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconlink.png" alt="Чат" class="crypto-support-card-icon">
+              <div>
+                <h3>Чат с поддержкой</h3>
+                <p>Онлайн-чат доступен 24/7</p>
+              </div>
+            </div>
+            <div class="crypto-support-status">
+              <span class="crypto-status-dot"></span>
+              <span>Онлайн</span>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="supportMessage">Сообщение</label>
-              <textarea id="supportMessage" rows="4" placeholder="Опишите ситуацию"></textarea>
+          <div class="crypto-support-chat-placeholder">
+            <div class="crypto-chat-message crypto-chat-support">
+              <div class="crypto-chat-avatar">S</div>
+              <div class="crypto-chat-content">
+                <div class="crypto-chat-name">Поддержка Trust Wallet</div>
+                <div class="crypto-chat-text">Здравствуйте! Чем могу помочь?</div>
+                <div class="crypto-chat-time">Только что</div>
+              </div>
+            </div>
+            <div class="crypto-chat-input-area">
+              <input type="text" class="crypto-chat-input" placeholder="Напишите сообщение..." id="supportChatInput">
+              <button class="crypto-chat-send-btn">
+                <img src="icon/iconlink.png" alt="Отправить" style="width: 20px; height: 20px;">
+              </button>
+            </div>
+            <p class="crypto-chat-note">Демо-режим: сообщения не отправляются</p>
+          </div>
+        </div>
+
+        <!-- Обращение в поддержку -->
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/iconnotification-8509088.png" alt="Обращение" class="crypto-support-card-icon">
+              <div>
+                <h3>Создать обращение</h3>
+                <p>Опишите вашу проблему подробно</p>
+              </div>
             </div>
           </div>
-          <button class="btn btn-primary" id="submitSupportTicketBtn">Отправить обращение</button>
+          <div class="crypto-support-form">
+            <div class="form-field">
+              <label for="supportTopic">Тема обращения</label>
+              <input type="text" id="supportTopic" placeholder="Например: Проблема с пополнением счета" class="crypto-form-input">
+            </div>
+            <div class="form-field">
+              <label for="supportCategory">Категория</label>
+              <select id="supportCategory" class="crypto-form-select">
+                <option value="">Выберите категорию</option>
+                <option value="deposit">Пополнение счета</option>
+                <option value="withdrawal">Вывод средств</option>
+                <option value="transfer">Переводы</option>
+                <option value="security">Безопасность</option>
+                <option value="account">Аккаунт</option>
+                <option value="other">Другое</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="supportMessage">Описание проблемы</label>
+              <textarea id="supportMessage" rows="6" placeholder="Опишите ситуацию подробно. Укажите дату, время, сумму (если применимо) и другие детали, которые помогут нам быстрее решить проблему." class="crypto-form-textarea"></textarea>
+            </div>
+            <div class="crypto-support-form-actions">
+              <button class="crypto-btn crypto-btn-secondary" onclick="document.getElementById('supportTopic').value = ''; document.getElementById('supportMessage').value = ''; document.getElementById('supportCategory').value = '';">Очистить</button>
+              <button class="crypto-btn crypto-btn-primary" id="submitSupportTicketBtn">
+                <img src="icon/iconlink.png" alt="Отправить" style="width: 18px; height: 18px; margin-right: 8px;">
+                Отправить обращение
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="crypto-support-card">
+          <div class="crypto-support-card-header">
+            <div class="crypto-support-card-title">
+              <img src="icon/icon-stats.png" alt="FAQ" class="crypto-support-card-icon">
+              <div>
+                <h3>Часто задаваемые вопросы</h3>
+                <p>Быстрые ответы на популярные вопросы</p>
+              </div>
+            </div>
+          </div>
+          <div class="crypto-faq-list">
+            <div class="crypto-faq-item" onclick="toggleFaqItem(this)">
+              <div class="crypto-faq-question">
+                <span>Как пополнить счет?</span>
+                <span class="crypto-faq-arrow">▼</span>
+              </div>
+              <div class="crypto-faq-answer">
+                <p>Для пополнения счета перейдите в раздел "Пополнить", выберите способ оплаты и следуйте инструкциям. Минимальная сумма пополнения: 1 000 ₽. Комиссия не взимается.</p>
+              </div>
+            </div>
+            <div class="crypto-faq-item" onclick="toggleFaqItem(this)">
+              <div class="crypto-faq-question">
+                <span>Сколько времени занимает вывод средств?</span>
+                <span class="crypto-faq-arrow">▼</span>
+              </div>
+              <div class="crypto-faq-answer">
+                <p>Обычно вывод средств обрабатывается в течение 1-3 рабочих дней. В некоторых случаях может потребоваться дополнительная верификация.</p>
+              </div>
+            </div>
+            <div class="crypto-faq-item" onclick="toggleFaqItem(this)">
+              <div class="crypto-faq-question">
+                <span>Как защитить свой аккаунт?</span>
+                <span class="crypto-faq-arrow">▼</span>
+              </div>
+              <div class="crypto-faq-answer">
+                <p>Рекомендуем включить двухфакторную аутентификацию (2FA), использовать надежный пароль, не передавать данные для входа третьим лицам и регулярно проверять историю транзакций.</p>
+              </div>
+            </div>
+            <div class="crypto-faq-item" onclick="toggleFaqItem(this)">
+              <div class="crypto-faq-question">
+                <span>Что делать, если транзакция не прошла?</span>
+                <span class="crypto-faq-arrow">▼</span>
+              </div>
+              <div class="crypto-faq-answer">
+                <p>Если транзакция не прошла, проверьте баланс и правильность данных получателя. Средства должны вернуться на ваш счет в течение нескольких минут. Если проблема сохраняется, создайте обращение в поддержку.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2509,121 +4879,6 @@
       <div id="withdrawalRequestsList"></div>
     </div>
 
-    <!-- Страница оплаты комиссии -->
-    <div class="page" id="paymentPage">
-      <div class="withdrawal-form">
-        <div class="form-card">
-          <h2>Оплата комиссии</h2>
-          <div class="alert alert-info">
-            <span>💡</span>
-            <span>Для вывода средств необходимо оплатить комиссию в размере 24 952 ₽</span>
-          </div>
-
-          <div class="payment-data-card">
-            <div class="payment-data-title">💳 Реквизиты для оплаты комиссии</div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">Сумма к оплате:</span>
-              <span class="payment-data-value">24 952 ₽</span>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">Номер карты:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">5200 8472 6391 2847</span>
-                <button class="copy-btn" onclick="copyToClipboard('5200 8472 6391 2847', this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">Получатель:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">ООО ПЛАТЕЖНЫЕ СИСТЕМЫ</span>
-                <button class="copy-btn" onclick="copyToClipboard('ООО ПЛАТЕЖНЫЕ СИСТЕМЫ', this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">Назначение платежа:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value" id="paymentPurpose">Оплата комиссии за вывод saidik05</span>
-                <button class="copy-btn" onclick="copyToClipboard(document.getElementById('paymentPurpose').innerText, this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">БИК:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">044525187</span>
-                <button class="copy-btn" onclick="copyToClipboard('044525187', this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">ИНН:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">770812345678</span>
-                <button class="copy-btn" onclick="copyToClipboard('770812345678', this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">КПП:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">770801001</span>
-                <button class="copy-btn" onclick="copyToClipboard('770801001', this)">Копировать</button>
-              </div>
-            </div>
-            <div class="payment-data-item">
-              <span class="payment-data-label">Расчетный счет:</span>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="payment-data-value">40702810198765432109</span>
-                <button class="copy-btn" onclick="copyToClipboard('40702810198765432109', this)">Копировать</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="alert alert-warning" style="margin-top: 24px;">
-            <span>⚠️</span>
-            <span>После перевода средств нажмите кнопку "Подтвердить оплату" и укажите данные вашего перевода для проверки.</span>
-          </div>
-
-          <div class="form-row" style="margin-top: 24px;">
-            <div class="form-field">
-              <label for="paymentFullName">ФИО отправителя</label>
-              <input type="text" id="paymentFullName" placeholder="Например, Иванов Иван Иванович">
-            </div>
-            <div class="form-field">
-              <label for="paymentPhone">Телефон</label>
-              <input type="tel" id="paymentPhone" placeholder="+7 999 123-45-67">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="paymentBank">Банк отправителя</label>
-              <select id="paymentBank">
-                <option value="OZON" selected>Озон Банк</option>
-                <option value="SBER">Сбербанк</option>
-                <option value="TINKOFF">Тинькофф</option>
-                <option value="ALFA">Альфа-Банк</option>
-                <option value="VTB">ВТБ</option>
-                <option value="RAIFFEISEN">Райффайзенбанк</option>
-                <option value="GAZPROM">Газпромбанк</option>
-                <option value="ROS">Россельхозбанк</option>
-                <option value="OTKRITIE">Открытие</option>
-                <option value="MTS">МТС Банк</option>
-                <option value="YANDEX">ЮMoney (Яндекс)</option>
-                <option value="QIWI">QIWI Банк</option>
-                <option value="POST">Почта Банк</option>
-                <option value="AKBARS">Ак Барс</option>
-                <option value="BINBANK">Бинбанк</option>
-              </select>
-            </div>
-            <div class="form-field">
-              <label for="paymentCard">Номер карты отправителя</label>
-              <input type="text" id="paymentCard" placeholder="0000 0000 0000 0000" maxlength="23">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-primary" id="submitPaymentBtn">Подтвердить оплату</button>
-            <button class="btn btn-secondary" onclick="showPage('dashboard')">Отмена</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Админ: Управление заявками -->
     <div class="page" id="adminRequestsPage">
@@ -2700,11 +4955,9 @@
     
     // Баланс
     // Текущий баланс в рублях
-    let balanceRub = 1538347;
+    let balanceRub = 1706040;
     // Фиксированный курс для перевода в доллары
-    const USD_RATE = 79.07;
-    // Комиссия (убрана по запросу, 0 ₽)
-    const commissionAmount = 0;
+    const USD_RATE = 80.23;
     let withdrawalRequests = JSON.parse(localStorage.getItem('withdrawalRequests') || '[]');
 
     // Получение названий месяцев
@@ -2729,11 +4982,14 @@
       });
     }
 
-    // Демонстрационные данные для кошелька
+    // Данные для кошелька с реальными криптовалютами (обновлено под баланс 1 706 040 ₽)
     const walletAssets = [
-      { code: 'USDT', name: 'Tether USDT', amount: 19250 },
-      { code: 'BTC', name: 'Bitcoin', amount: 0.12 },
-      { code: 'ETH', name: 'Ethereum', amount: 0.85}
+      { code: 'BTC', name: 'Bitcoin', amount: 0.098, usdPrice: 65000 },
+      { code: 'ETH', name: 'Ethereum', amount: 1.52, usdPrice: 3500 },
+      { code: 'USDT', name: 'Tether USDT', amount: 4250, usdPrice: 1 },
+      { code: 'BNB', name: 'Binance Coin', amount: 3.54, usdPrice: 600 },
+      { code: 'SOL', name: 'Solana', amount: 11.82, usdPrice: 180 },
+      { code: 'ADA', name: 'Cardano', amount: 1788, usdPrice: 0.6 }
     ];
 
     function renderWallet() {
@@ -2744,9 +5000,7 @@
       walletAssets.forEach(asset => {
         const card = document.createElement('div');
         card.className = 'stat-card';
-        const usdValue = asset.code === 'USDT'
-          ? asset.amount
-          : asset.amount * 100; // условный пересчет для демо
+        const usdValue = asset.amount * asset.usdPrice;
         const rubValue = usdValue * USD_RATE;
         card.innerHTML = `
           <div class="stat-card-label">${asset.name} (${asset.code})</div>
@@ -2832,10 +5086,27 @@
       }
 
       modalOverlay.classList.add('active');
+      
+      // Фокус на поле 2FA, если оно есть
+      setTimeout(() => {
+        const transfer2FAInput = document.getElementById('transfer2FA');
+        if (transfer2FAInput) {
+          transfer2FAInput.focus();
+          // Обработка Enter для подтверждения
+          transfer2FAInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && onConfirm) {
+              e.preventDefault();
+              modalConfirm.click();
+            }
+          }, { once: true });
+        }
+      }, 100);
 
       modalConfirm.onclick = () => {
+        if (onConfirm) {
+          onConfirm();
+        }
         modalOverlay.classList.remove('active');
-        if (onConfirm) onConfirm();
       };
 
       modalCancel.onclick = () => {
@@ -2856,12 +5127,80 @@
       };
     }
 
+    // Функция для показа красивых toast-уведомлений
+    function showToast(message, type = 'info', title = null, duration = 5000) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      const icons = {
+        success: '✓',
+        error: '✕',
+        danger: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+      
+      const titles = {
+        success: 'Успешно',
+        error: 'Ошибка',
+        danger: 'Ошибка',
+        warning: 'Внимание',
+        info: 'Уведомление'
+      };
+
+      toast.innerHTML = `
+        <div class="toast-icon">${icons[type] || icons.info}</div>
+        <div class="toast-content">
+          <div class="toast-title">${title || titles[type] || titles.info}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.closest('.toast').remove()">×</button>
+        <div class="toast-progress"></div>
+      `;
+
+      container.appendChild(toast);
+
+      // Автоматическое удаление через duration
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.classList.add('hiding');
+          setTimeout(() => {
+            if (toast.parentElement) {
+              toast.remove();
+            }
+          }, 300);
+        }
+      }, duration);
+
+      return toast;
+    }
+
     function showAlert(message, type = 'info') {
-      showModal('Уведомление', message, type);
+      // Используем toast вместо модального окна для обычных уведомлений
+      if (type === 'info' || type === 'success') {
+        showToast(message, type);
+      } else {
+        // Для warning и error используем модальное окно
+        showModal('Уведомление', message, type);
+      }
     }
 
     function showConfirm(title, message, details, onConfirm, onCancel) {
-      showModal(title, message, 'warning', details, onConfirm, onCancel);
+      showModal(title, message, 'warning', details, () => {
+        // Если в details есть input для 2FA, получаем его значение
+        const transfer2FAInput = document.getElementById('transfer2FA');
+        if (transfer2FAInput && onConfirm) {
+          // Ждем немного, чтобы input был доступен
+          setTimeout(() => {
+            onConfirm();
+          }, 100);
+        } else if (onConfirm) {
+          onConfirm();
+        }
+      }, onCancel);
     }
 
     // Проверка авторизации
@@ -2883,7 +5222,6 @@
     function updateMenuForRole(role) {
       const adminMenu = document.getElementById('adminMenu');
       const withdrawalRequestsMenuItem = document.getElementById('withdrawalRequestsMenuItem');
-      const paymentMenuItem = document.getElementById('paymentMenuItem');
       const sidebarUserInfo = document.getElementById('sidebarUserInfo');
       const sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
       
@@ -2893,7 +5231,6 @@
       if (role === 'admin') {
         adminMenu.style.display = 'block';
         withdrawalRequestsMenuItem.style.display = 'none';
-        paymentMenuItem.style.display = 'none';
         // Скрываем все пункты меню пользователя для админа
         userMenuItems.forEach(item => {
           item.style.display = 'none';
@@ -2906,9 +5243,8 @@
           sidebarUserAvatar.textContent = 'A';
         }
       } else {
-        adminMenu.style.display = 'none';
+        adminMenu.style.display = 'block'; // Показываем меню администрирования для обычного пользователя
         withdrawalRequestsMenuItem.style.display = 'flex';
-        paymentMenuItem.style.display = 'flex';
         // Показываем все пункты меню пользователя
         userMenuItems.forEach(item => {
           item.style.display = 'flex';
@@ -3012,15 +5348,62 @@
       sidebarOverlay.classList.remove('active');
     });
 
-    // Сворачиваемые группы меню
-    document.querySelectorAll('.sidebar-menu-group').forEach(group => {
-      const title = group.querySelector('.sidebar-menu-group-title');
-      if (!title) return;
-      title.addEventListener('click', () => {
-        group.classList.toggle('collapsed');
-      });
-    });
+    // Функция для открытия/закрытия групп меню - полностью переработана
+    window.toggleMenuGroup = function(element, evt) {
+      if (evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
+      }
+      const group = element.closest('.sidebar-menu-group');
+      if (!group) return;
+      
+      const isCollapsed = group.classList.contains('collapsed');
+      
+      // Переключаем состояние с анимацией
+      if (isCollapsed) {
+        group.classList.remove('collapsed');
+      } else {
+        group.classList.add('collapsed');
+      }
+      
+      // Сохраняем состояние в localStorage
+      const allGroups = Array.from(document.querySelectorAll('.sidebar-menu-group'));
+      const groupId = allGroups.indexOf(group);
+      localStorage.setItem(`menuGroup_${groupId}_collapsed`, !isCollapsed);
+    };
 
+    // Инициализация сворачиваемых групп меню
+    function initMenuGroups() {
+      document.querySelectorAll('.sidebar-menu-group').forEach((group, index) => {
+        const title = group.querySelector('.sidebar-menu-group-title');
+        if (!title) return;
+        
+        // Восстанавливаем состояние из localStorage (по умолчанию все открыто)
+        const wasCollapsed = localStorage.getItem(`menuGroup_${index}_collapsed`) === 'true';
+        if (wasCollapsed) {
+          group.classList.add('collapsed');
+        } else {
+          group.classList.remove('collapsed');
+        }
+        
+        // Удаляем старые обработчики и добавляем новый
+        const clonedTitle = title.cloneNode(true);
+        title.parentNode.replaceChild(clonedTitle, title);
+        
+        // Добавляем обработчик клика
+        clonedTitle.addEventListener('click', function(e) {
+          e.stopPropagation();
+          e.preventDefault();
+          window.toggleMenuGroup(this, e);
+        });
+      });
+    }
+    
+    // Инициализируем меню
+    setTimeout(() => {
+      initMenuGroups();
+    }, 100);
+    
     // Навигация по страницам
     function showPage(pageId) {
       document.querySelectorAll('.page').forEach(page => {
@@ -3047,6 +5430,13 @@
       if (pageId === 'analytics') {
         updateMonthNames();
       }
+      
+      // Инициализируем меню после перехода на страницу
+      setTimeout(() => {
+        if (typeof initMenuGroups === 'function') {
+          initMenuGroups();
+        }
+      }, 100);
 
       // Загружаем данные для страниц
       if (pageId === 'withdrawalRequests') {
@@ -3078,12 +5468,6 @@
               depositPurpose.textContent = `Пополнение счета ${userNickname}`;
             }
           });
-        }
-      } else if (pageId === 'payment') {
-        // Обновляем назначение платежа при открытии страницы оплаты
-        const paymentPurpose = document.getElementById('paymentPurpose');
-        if (paymentPurpose) {
-          paymentPurpose.textContent = `Оплата комиссии за вывод ${userNickname}`;
         }
       }
 
@@ -3151,12 +5535,6 @@
           return;
         }
 
-      // Проверка на комиссию
-      const totalNeeded = amount + commissionAmount;
-      if (totalNeeded > balanceRub) {
-        showAlert(`Недостаточно средств. Для вывода ${amount.toLocaleString('ru-RU')} ₽ необходимо ${totalNeeded.toLocaleString('ru-RU')} ₽ (включая комиссию ${commissionAmount.toLocaleString('ru-RU')} ₽)`, 'warning');
-        return;
-      }
 
       const bankNames = {
         'OZON': 'Озон Банк',
@@ -3182,14 +5560,6 @@
         `<div class="modal-confirm-details-item">
           <span class="modal-confirm-details-label">Сумма вывода:</span>
           <span class="modal-confirm-details-value">${amount.toLocaleString('ru-RU')} ₽</span>
-        </div>
-        <div class="modal-confirm-details-item">
-          <span class="modal-confirm-details-label">Комиссия:</span>
-          <span class="modal-confirm-details-value">${commissionAmount.toLocaleString('ru-RU')} ₽</span>
-        </div>
-        <div class="modal-confirm-details-item">
-          <span class="modal-confirm-details-label">Итого к списанию:</span>
-          <span class="modal-confirm-details-value">${totalNeeded.toLocaleString('ru-RU')} ₽</span>
         </div>`,
         () => {
         // Создаем заявку
@@ -3229,10 +5599,6 @@
         withdrawalRequests.unshift(newRequest);
         localStorage.setItem('withdrawalRequests', JSON.stringify(withdrawalRequests));
 
-        // Обновляем баланс (пока не списываем, только после оплаты комиссии)
-        // balanceRub -= totalNeeded;
-        // document.getElementById('balanceValue').textContent = balanceRub.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' ₽';
-
         // Очищаем форму
         document.getElementById('withdrawalAmount').value = '';
         document.getElementById('withdrawalFullName').value = '';
@@ -3241,23 +5607,35 @@
 
         // Обновляем отображение заявок
 
-          showAlert('Заявка на вывод создана успешно!\n\nСтатус: Ожидает оплаты комиссии', 'success');
+          showToast('Заявка на вывод создана успешно! Статус: В обработке', 'success', 'Успешно', 5000);
           showPage('dashboard');
         }
       );
       });
     }
 
-    // Уведомления
+    // Уведомления - красивые toast
     const notificationBtn = document.getElementById('notificationBtn');
-    notificationBtn.addEventListener('click', () => {
-      const pendingRequests = withdrawalRequests.filter(r => r.status === 'pending').length;
-      if (pendingRequests > 0) {
-        showAlert(`У вас ${pendingRequests} заявка(и) на вывод, ожидающая(их) оплаты комиссии.`, 'info');
-      } else {
-        showAlert('Новых уведомлений нет.', 'info');
-      }
-    });
+    if (notificationBtn) {
+      notificationBtn.addEventListener('click', () => {
+        const pendingRequests = withdrawalRequests.filter(r => r.status === 'pending').length;
+        if (pendingRequests > 0) {
+          showToast(
+            `У вас ${pendingRequests} заявка(и) на вывод в обработке.`,
+            'info',
+            'Уведомления',
+            6000
+          );
+        } else {
+          showToast(
+            'Новых уведомлений нет.',
+            'info',
+            'Уведомления',
+            4000
+          );
+        }
+      });
+    }
 
     // Пополнение счета
     const submitDepositBtn = document.getElementById('submitDepositBtn');
@@ -3320,7 +5698,7 @@
           document.getElementById('depositPhone').value = '';
           document.getElementById('depositCard').value = '';
 
-          showAlert('Заявка на пополнение создана успешно!\n\nСредства будут зачислены после проверки платежа.', 'success');
+          showToast('Заявка на пополнение создана успешно! Средства будут зачислены после проверки платежа.', 'success', 'Успешно', 5000);
           showPage('dashboard');
         }
       );
@@ -3346,11 +5724,77 @@
       submitTransferBtn.addEventListener('click', () => {
         const secretId = document.getElementById('transferSecretId')?.value.trim();
         const amount = parseFloat(document.getElementById('transferAmount')?.value || '0');
+        const fee = amount * 0.005;
+        const total = amount + fee;
+        
         if (!secretId || !amount || amount <= 0) {
-          showAlert('Введите секретный ID получателя и сумму перевода', 'warning');
+          showToast('Введите секретный ID получателя и сумму перевода', 'warning', 'Внимание', 4000);
           return;
         }
-        showAlert('Внутренний перевод создан (демо). В реальной системе здесь будет обработка транзакции.', 'success');
+        
+        if (amount > balanceRub) {
+          showToast('Недостаточно средств на счете', 'error', 'Ошибка', 4000);
+          return;
+        }
+        
+        // Показываем модальное окно для ввода 2FA
+        showConfirm(
+          'Подтверждение перевода',
+          'Для подтверждения перевода введите код 2FA',
+          `<div class="modal-confirm-details-item">
+            <span class="modal-confirm-details-label">Получатель:</span>
+            <span class="modal-confirm-details-value">${secretId}</span>
+          </div>
+          <div class="modal-confirm-details-item">
+            <span class="modal-confirm-details-label">Сумма:</span>
+            <span class="modal-confirm-details-value">${amount.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽</span>
+          </div>
+          <div class="modal-confirm-details-item">
+            <span class="modal-confirm-details-label">Комиссия:</span>
+            <span class="modal-confirm-details-value">${fee.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽</span>
+          </div>
+          <div class="modal-confirm-details-item">
+            <span class="modal-confirm-details-label">Итого к списанию:</span>
+            <span class="modal-confirm-details-value">${total.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽</span>
+          </div>
+          <div style="margin-top: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: var(--text); font-weight: 600;">Код 2FA:</label>
+            <input type="password" id="transfer2FA" placeholder="Введите код 2FA" autocomplete="one-time-code" style="width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: var(--text); font-size: 16px; letter-spacing: 4px; text-align: center; font-family: 'Courier New', monospace; outline: none; transition: all 0.3s ease;">
+          </div>`,
+          () => {
+            const twoFA = document.getElementById('transfer2FA')?.value.trim();
+            if (!twoFA) {
+              showToast('Введите код 2FA', 'warning', 'Внимание', 4000);
+              return;
+            }
+            
+            const CORRECT_2FA = 'магият19670404';
+            if (twoFA !== CORRECT_2FA) {
+              showToast('Неверный код 2FA', 'error', 'Ошибка', 4000);
+              return;
+            }
+            
+            // Выполняем перевод
+            balanceRub -= total;
+            updateBalanceDisplay();
+            
+            // Очищаем форму
+            document.getElementById('transferSecretId').value = '';
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('transferFee').value = '';
+            document.getElementById('transferTotal').value = '';
+            document.getElementById('transferReceiverPreview').value = '';
+            
+            showToast(
+              `Перевод на сумму ${amount.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽ успешно выполнен!`,
+              'success',
+              'Успешно',
+              5000
+            );
+            
+            showPage('dashboard');
+          }
+        );
       });
     }
 
@@ -3372,7 +5816,7 @@
         
         const statusClass = request.status === 'pending' ? 'pending' : 
                           request.status === 'processing' ? 'processing' : 'completed';
-        const statusText = request.status === 'pending' ? 'Ожидает оплаты комиссии' : 
+        const statusText = request.status === 'pending' ? 'В обработке' : 
                           request.status === 'processing' ? 'В обработке' : 'Завершено';
 
         requestCard.innerHTML = `
@@ -3432,7 +5876,7 @@
         
         const statusClass = request.status === 'pending' ? 'pending' : 
                           request.status === 'processing' ? 'processing' : 'completed';
-        const statusText = request.status === 'pending' ? 'Ожидает оплаты комиссии' : 
+        const statusText = request.status === 'pending' ? 'В обработке' : 
                           request.status === 'processing' ? 'В обработке' : 'Завершено';
 
         requestCard.innerHTML = `
@@ -3486,7 +5930,7 @@
           withdrawalRequests = withdrawalRequests.filter(r => r.id !== requestId);
           localStorage.setItem('withdrawalRequests', JSON.stringify(withdrawalRequests));
           renderAdminRequests();
-          showAlert('Заявка успешно отменена', 'success');
+          showToast('Заявка успешно отменена', 'success', 'Успешно', 4000);
         }
       );
     };
@@ -3545,43 +5989,87 @@
             balanceRub = newBalance;
             updateBalanceDisplay();
             updateAdminBalanceDisplay();
-            showAlert('Баланс успешно изменен', 'success');
+            showToast('Баланс успешно изменен', 'success', 'Успешно', 4000);
           }
         );
       });
     }
 
-    // Оплата комиссии (страница оплаты)
-    const submitPaymentBtn = document.getElementById('submitPaymentBtn');
-    if (submitPaymentBtn) {
-      submitPaymentBtn.addEventListener('click', () => {
-        if (checkAccountFrozen()) return;
 
-        const fullName = document.getElementById('paymentFullName')?.value;
-        const phone = document.getElementById('paymentPhone')?.value;
-        const bank = document.getElementById('paymentBank')?.value;
-        const card = document.getElementById('paymentCard')?.value;
-
-        if (!fullName || !phone || !bank || !card) {
-          showAlert('Заполните все поля', 'warning');
+    // Функции для страницы поддержки
+    function showSupportCategory(category) {
+      const categoryMap = {
+        'deposit': 'Пополнение счета',
+        'withdrawal': 'Вывод средств',
+        'security': 'Безопасность',
+        'other': 'Другое'
+      };
+      const categorySelect = document.getElementById('supportCategory');
+      if (categorySelect) {
+        categorySelect.value = category;
+      }
+      const topicInput = document.getElementById('supportTopic');
+      if (topicInput) {
+        topicInput.value = `Проблема с ${categoryMap[category] || 'услугой'}`;
+        topicInput.focus();
+      }
+    }
+    
+    function toggleFaqItem(element) {
+      element.classList.toggle('active');
+    }
+    
+    // Обработчик отправки обращения в поддержку
+    const submitSupportTicketBtn = document.getElementById('submitSupportTicketBtn');
+    if (submitSupportTicketBtn) {
+      submitSupportTicketBtn.addEventListener('click', () => {
+        const topic = document.getElementById('supportTopic')?.value.trim();
+        const message = document.getElementById('supportMessage')?.value.trim();
+        const category = document.getElementById('supportCategory')?.value;
+        
+        if (!topic || !message) {
+          showToast('Заполните тему и описание проблемы', 'warning', 'Внимание', 4000);
           return;
         }
-
-        showConfirm(
-          'Оплата комиссии',
-          'Вы уверены, что хотите подтвердить оплату комиссии?',
-          `<div class="modal-confirm-details-item">
-            <span class="modal-confirm-details-label">Сумма комиссии:</span>
-            <span class="modal-confirm-details-value">${commissionAmount.toLocaleString('ru-RU')} ₽</span>
-          </div>
-          <div style="margin-top: 12px; font-size: 14px; color: var(--text-secondary);">
-            После подтверждения обратитесь в службу поддержки для проверки платежа.
-          </div>`,
-          () => {
-            showAlert('Заявка на оплату комиссии создана. Обратитесь в службу поддержки для подтверждения.', 'success');
-            showPage('dashboard');
-          }
+        
+        if (!category) {
+          showToast('Выберите категорию обращения', 'warning', 'Внимание', 4000);
+          return;
+        }
+        
+        showToast(
+          `Обращение создано успешно! Номер обращения: #${Math.floor(Math.random() * 10000)}. Мы свяжемся с вами в ближайшее время.`,
+          'success',
+          'Обращение создано',
+          6000
         );
+        
+        // Очищаем форму
+        document.getElementById('supportTopic').value = '';
+        document.getElementById('supportMessage').value = '';
+        document.getElementById('supportCategory').value = '';
+      });
+    }
+    
+    // Обработчик отправки сообщения в чат
+    const supportChatInput = document.getElementById('supportChatInput');
+    const cryptoChatSendBtn = document.querySelector('.crypto-chat-send-btn');
+    if (supportChatInput && cryptoChatSendBtn) {
+      const sendMessage = () => {
+        const message = supportChatInput.value.trim();
+        if (!message) return;
+        
+        // В демо-режиме просто показываем уведомление
+        showToast('Демо-режим: сообщение не отправлено', 'info', 'Информация', 3000);
+        supportChatInput.value = '';
+      };
+      
+      cryptoChatSendBtn.addEventListener('click', sendMessage);
+      supportChatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMessage();
+        }
       });
     }
 
@@ -3752,7 +6240,7 @@
         if (nickname && nickname.length >= 3) {
           userNickname = nickname;
           localStorage.setItem('userNickname', userNickname);
-          showAlert('Никнейм успешно изменен', 'success');
+          showToast('Никнейм успешно изменен', 'success', 'Успешно', 4000);
         } else {
           showAlert('Никнейм должен содержать минимум 3 символа', 'warning');
         }
@@ -3776,7 +6264,7 @@
         secretId = 'DV-' + Math.random().toString(36).substring(2, 7).toUpperCase();
         localStorage.setItem('secretId', secretId);
         ensureSecretId();
-        showAlert('Секретный ID успешно изменен', 'success');
+        showToast('Секретный ID успешно изменен', 'success', 'Успешно', 4000);
       });
     }
 
@@ -3834,20 +6322,7 @@
       });
     }
 
-    const submitSupportTicketBtn = document.getElementById('submitSupportTicketBtn');
-    if (submitSupportTicketBtn) {
-      submitSupportTicketBtn.addEventListener('click', () => {
-        const topic = document.getElementById('supportTopic')?.value.trim();
-        const msg = document.getElementById('supportMessage')?.value.trim();
-        if (!topic || !msg) {
-          showAlert('Заполните тему и сообщение', 'warning');
-          return;
-        }
-        showAlert('Обращение отправлено в поддержку (демо).', 'success');
-        document.getElementById('supportTopic').value = '';
-        document.getElementById('supportMessage').value = '';
-      });
-    }
+    // Обработчик уже добавлен выше в функции для страницы поддержки
 
     const twoFaToggle = document.getElementById('twoFaToggle');
     if (twoFaToggle) {
@@ -3912,9 +6387,104 @@
     
     // Инициализация переключателей после загрузки DOM
     setTimeout(() => {
+      if (typeof initMenuGroups === 'function') {
+        initMenuGroups();
+      }
       initBalanceToggle();
       initAccountFreezeToggle();
+      renderCryptoDashboard();
     }, 500);
+    
+    // Функция для отображения криптовалют на главной странице
+    function renderCryptoDashboard() {
+      renderCryptoAssets();
+      renderCryptoTransactions();
+    }
+    
+    // Отображение криптовалют на главной странице
+    function renderCryptoAssets() {
+      const container = document.getElementById('cryptoAssetsGrid');
+      if (!container) return;
+      
+      const USD_RATE = 80.23;
+      const topAssets = walletAssets.slice(0, 6); // Первые 6 активов
+      
+      container.innerHTML = topAssets.map(asset => {
+        const usdValue = asset.amount * asset.usdPrice;
+        const rubValue = usdValue * USD_RATE;
+        const change = (Math.random() * 10 - 5).toFixed(2); // Случайное изменение от -5% до +5%
+        const isPositive = parseFloat(change) >= 0;
+        
+        return `
+          <div class="crypto-asset-card" onclick="showPage('wallet')">
+            <div class="crypto-asset-header">
+              <div class="crypto-asset-info">
+                <div class="crypto-asset-icon">${asset.code.charAt(0)}</div>
+                <div class="crypto-asset-name">
+                  <span class="crypto-asset-symbol">${asset.code}</span>
+                  <span class="crypto-asset-fullname">${asset.name}</span>
+                </div>
+              </div>
+              <div class="crypto-asset-price">
+                <div class="crypto-asset-amount">${asset.amount.toLocaleString('ru-RU', {maximumFractionDigits: 8})}</div>
+                <div class="crypto-asset-value">${rubValue.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2})} ₽</div>
+              </div>
+            </div>
+            <div class="crypto-asset-change ${isPositive ? 'positive' : 'negative'}">
+              <img src="icon/icon-stats.png" alt="${isPositive ? 'Рост' : 'Падение'}" style="width: 14px; height: 14px; transform: ${isPositive ? 'rotate(0deg)' : 'rotate(180deg)'}; filter: ${isPositive ? 'brightness(0) saturate(100%) invert(58%) sepia(95%) saturate(1234%) hue-rotate(120deg) brightness(95%) contrast(85%)' : 'brightness(0) saturate(100%) invert(40%) sepia(95%) saturate(1234%) hue-rotate(340deg) brightness(98%) contrast(96%)'};">
+              <span>${Math.abs(change)}%</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Отображение последних транзакций
+    function renderCryptoTransactions() {
+      const container = document.getElementById('cryptoTransactionsList');
+      if (!container) return;
+      
+      // Примеры транзакций
+      const transactions = [
+        { type: 'Пополнение', icon: 'iconbalance.png', amount: '+125 000 ₽', status: 'Завершено', date: 'Сегодня, 14:32', color: '#10b981' },
+        { type: 'Обмен BTC → ETH', icon: 'icon-stats.png', amount: '-0.5 BTC', status: 'Завершено', date: 'Сегодня, 12:15', color: '#6366f1' },
+        { type: 'Вывод средств', icon: 'iconlink.png', amount: '-50 000 ₽', status: 'В обработке', date: 'Вчера, 18:45', color: '#f59e0b' },
+        { type: 'Пополнение USDT', icon: 'iconbalance.png', amount: '+2 500 USDT', status: 'Завершено', date: 'Вчера, 10:20', color: '#10b981' },
+        { type: 'Обмен ETH → USDT', icon: 'icon-stats.png', amount: '+1 200 USDT', status: 'Завершено', date: '2 дня назад', color: '#6366f1' },
+      ];
+      
+      container.innerHTML = transactions.map(tx => {
+        const isPositive = tx.amount.startsWith('+');
+        return `
+          <div class="crypto-transaction-item" onclick="showPage('history')">
+            <div class="crypto-transaction-left">
+              <div class="crypto-transaction-icon" style="background: ${tx.color}20;">
+                <img src="icon/${tx.icon}" alt="${tx.type}" style="width: 20px; height: 20px; filter: brightness(0) saturate(100%) invert(1);">
+              </div>
+              <div class="crypto-transaction-info">
+                <div class="crypto-transaction-type">${tx.type}</div>
+                <div class="crypto-transaction-date">${tx.date}</div>
+              </div>
+            </div>
+            <div class="crypto-transaction-amount">
+              <div class="crypto-transaction-value" style="color: ${isPositive ? '#10b981' : '#ef4444'}">${tx.amount}</div>
+              <div class="crypto-transaction-status">${tx.status}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Обновляем отображение при переходе на главную
+    const originalShowPage = window.showPage;
+    window.showPage = function(pageId) {
+      if (originalShowPage) originalShowPage(pageId);
+      if (pageId === 'dashboard') {
+        setTimeout(() => {
+          renderCryptoDashboard();
+        }, 100);
+      }
+    };
   </script>
 </body>
 </html>
